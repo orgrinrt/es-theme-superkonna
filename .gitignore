@@ -1,0 +1,6 @@
+# Generated runtime files
+generated/*
+!generated/.gitkeep
+
+# Canvas background download marker (local enhancement, not shipped)
+assets/systems/.canvas-fetched
