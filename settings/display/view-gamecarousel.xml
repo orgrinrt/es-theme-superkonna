@@ -58,8 +58,13 @@
       <zIndex>2</zIndex>
       <delay>1</delay>
       <showSnapshotNoVideo>false</showSnapshotNoVideo>
-      <showSnapshotDelay>false</showSnapshotDelay>
+      <showSnapshotDelay>true</showSnapshotDelay>
+      <snapshotSource>thumbnail</snapshotSource>
+      <roundCorners>0.02</roundCorners>
       <effect>none</effect>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="0" duration="350" mode="easeOut"/>
+      </storyboard>
     </video>
 
     <!-- Game name (below screenshot) -->
@@ -96,8 +101,77 @@
       <zIndex>5</zIndex>
     </text>
 
+    <!-- Publisher (next to developer) -->
+    <text name="md_publisher">
+      <visible>true</visible>
+      <fontPath>${fontLight}</fontPath>
+      <pos>0.72 0.86</pos>
+      <size>0.25 ${fontSizeCaption-medium}</size>
+      <alignment>left</alignment>
+      <zIndex>5</zIndex>
+    </text>
+
+    <!-- Play time (formatted) -->
+    <text name="md_gametime" extra="true">
+      <text>{game:gametime.formatseconds()}</text>
+      <visible>true</visible>
+      <pos>0.5 0.92</pos>
+      <size>0.2 ${fontSizeCaption-medium}</size>
+      <fontPath>${fontLight}</fontPath>
+      <alignment>left</alignment>
+      <zIndex>5</zIndex>
+    </text>
+
+    <!-- Last played (relative) -->
+    <text name="md_lastplayed_rel" extra="true">
+      <text>{game:lastplayed.elapsed()}</text>
+      <visible>true</visible>
+      <pos>0.72 0.92</pos>
+      <size>0.25 ${fontSizeCaption-medium}</size>
+      <fontPath>${fontLight}</fontPath>
+      <alignment>left</alignment>
+      <zIndex>5</zIndex>
+    </text>
+
+    <!-- Badge row -->
+    <image name="badge_cheevos" extra="true">
+      <path>./assets/icons/trophy.svg</path>
+      <visible>{game:cheevos}</visible>
+      <pos>0.5 0.955</pos>
+      <maxSize>0.018 0.018</maxSize>
+      <origin>0 0.5</origin>
+      <zIndex>6</zIndex>
+    </image>
+
+    <image name="badge_mature" extra="true">
+      <path>./assets/icons/mature.svg</path>
+      <visible>!{game:kidGame}</visible>
+      <pos>0.522 0.955</pos>
+      <maxSize>0.018 0.018</maxSize>
+      <origin>0 0.5</origin>
+      <zIndex>6</zIndex>
+    </image>
+
+    <image name="badge_savestate" extra="true">
+      <path>./assets/icons/savestate.svg</path>
+      <visible>{game:hasSaveState}</visible>
+      <pos>0.544 0.955</pos>
+      <maxSize>0.018 0.018</maxSize>
+      <origin>0 0.5</origin>
+      <zIndex>6</zIndex>
+    </image>
+
+    <image name="badge_manual" extra="true">
+      <path>./assets/icons/manual.svg</path>
+      <visible>{game:hasManual}</visible>
+      <pos>0.566 0.955</pos>
+      <maxSize>0.018 0.018</maxSize>
+      <origin>0 0.5</origin>
+      <zIndex>6</zIndex>
+    </image>
+
     <!-- Hide everything else -->
-    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_publisher, md_players, md_lastplayed, md_playcount, md_description">
+    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_players, md_lastplayed, md_playcount, md_description">
       <visible>false</visible>
     </text>
 

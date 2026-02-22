@@ -89,6 +89,7 @@
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
         <animation property="opacity" from="0" to="1" begin="200" duration="200" mode="easeOut"/>
+        <animation property="scale" from="0.9" to="1" begin="200" duration="250" mode="Bump"/>
       </storyboard>
     </image>
 
@@ -112,9 +113,42 @@
       <zIndex>0</zIndex>
       <delay>0.5</delay>
       <showSnapshotNoVideo>false</showSnapshotNoVideo>
-      <showSnapshotDelay>false</showSnapshotDelay>
+      <showSnapshotDelay>true</showSnapshotDelay>
+      <snapshotSource>thumbnail</snapshotSource>
+      <roundCorners>0.02</roundCorners>
       <effect>none</effect>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="0" duration="300" mode="easeOut"/>
+      </storyboard>
     </video>
+
+    <!-- Badge row: below description, above game strip -->
+    <image name="badge_cheevos" extra="true">
+      <path>./assets/icons/trophy.svg</path>
+      <visible>{game:cheevos}</visible>
+      <pos>0.033333333 0.42</pos>
+      <maxSize>0.018 0.018</maxSize>
+      <origin>0 0.5</origin>
+      <zIndex>6</zIndex>
+    </image>
+
+    <image name="badge_mature" extra="true">
+      <path>./assets/icons/mature.svg</path>
+      <visible>!{game:kidGame}</visible>
+      <pos>0.055 0.42</pos>
+      <maxSize>0.018 0.018</maxSize>
+      <origin>0 0.5</origin>
+      <zIndex>6</zIndex>
+    </image>
+
+    <image name="badge_savestate" extra="true">
+      <path>./assets/icons/savestate.svg</path>
+      <visible>{game:hasSaveState}</visible>
+      <pos>0.077 0.42</pos>
+      <maxSize>0.018 0.018</maxSize>
+      <origin>0 0.5</origin>
+      <zIndex>6</zIndex>
+    </image>
 
     <!-- Game description: left of preview art -->
     <text name="md_description">

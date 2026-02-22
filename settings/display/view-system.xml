@@ -61,7 +61,7 @@
       <scrollSound>./assets/sounds/scroll.wav</scrollSound>
     </carousel>
 
-    <!-- System name: bottom-left with shadow + settle-in animation -->
+    <!-- System name: bottom-left with slide-up + fade settle-in -->
     <text name="systemName" extra="true">
       <text>${system.fullName}</text>
       <origin>0 1</origin>
@@ -73,12 +73,13 @@
       <alignment>left</alignment>
       <zIndex>50</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
-        <animation property="opacity" from="0" to="1" begin="300" duration="0" mode="linear"/>
+        <animation property="opacity" from="0" to="0" duration="250" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="300" duration="200" mode="easeOut"/>
+        <animation property="y" from="0.91" to="0.88" begin="300" duration="200" mode="easeOut"/>
       </storyboard>
     </text>
 
-    <!-- Game count: below system name, subtle settle-in -->
+    <!-- Game count: below system name, slide-up settle-in -->
     <text name="systemInfo">
       <origin>0 1</origin>
       <pos>0.04 0.92</pos>
@@ -89,14 +90,33 @@
       <lineSpacing>1</lineSpacing>
       <zIndex>50</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
-        <animation property="opacity" from="0" to="1" begin="350" duration="150" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="300" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="350" duration="200" mode="easeOut"/>
+        <animation property="y" from="0.95" to="0.92" begin="350" duration="200" mode="easeOut"/>
+      </storyboard>
+    </text>
+
+    <!-- System manufacturer + year (regular systems only) -->
+    <text name="systemManufacturer" extra="true">
+      <text>{system:manufacturer} · {system:releaseYear}</text>
+      <origin>0 1</origin>
+      <pos>0.04 0.96</pos>
+      <size>0.4 ${fontSizeCaption-medium}</size>
+      <alignment>left</alignment>
+      <fontPath>${fontLight}</fontPath>
+      <lineSpacing>1</lineSpacing>
+      <zIndex>50</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="350" mode="linear"/>
+        <animation property="opacity" from="0" to="0.6" begin="400" duration="200" mode="easeOut"/>
+        <animation property="y" from="0.98" to="0.96" begin="400" duration="200" mode="easeOut"/>
       </storyboard>
     </text>
 
     <!-- System logo SVG (used by carousel internally) -->
     <image name="logo">
       <path>./assets/logos/${system.theme}.svg</path>
+      <reflexion>0.4 0</reflexion>
     </image>
 
     <!-- Fallback text when no logo SVG exists -->
@@ -140,6 +160,17 @@
       <maxSize>0.04 0.04</maxSize>
       <zIndex>11</zIndex>
     </image>
+
+    <!-- RetroAchievements username: next to avatar, only when RA enabled -->
+    <text name="ra_user" extra="true" ifCheevos="true">
+      <text>{global:cheevosUser}</text>
+      <origin>0 0.5</origin>
+      <pos>0.062 0.032</pos>
+      <fontSize>${fontSizeCaption-medium}</fontSize>
+      <fontPath>${fontLight}</fontPath>
+      <lineSpacing>1</lineSpacing>
+      <zIndex>11</zIndex>
+    </text>
 
     <!-- Controller activity dots: after avatar -->
     <controllerActivity name="controllerActivity">
