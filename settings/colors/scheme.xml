@@ -59,7 +59,7 @@
     </datetime>
   </view>
 
-  <!-- Menu colors -->
+  <!-- Menu colors: console-feel modal with themed accents -->
   <view name="menu">
     <menuText name="menutext">
       <selectedColor>${onMainColor}</selectedColor>
@@ -73,7 +73,7 @@
     </menuTextSmall>
 
     <menuGroup name="menugroup">
-      <color>${sectColor}</color>
+      <color>${fgColor}${percent.80}</color>
       <separatorColor>${sectColor}${percent.40}</separatorColor>
       <backgroundColor>${cardColor}${percent.60}</backgroundColor>
     </menuGroup>
@@ -83,12 +83,34 @@
     </menuBackground>
 
     <menuText name="menufooter">
-      <color>${subtleColor}${percent.50}</color>
+      <color>${subtleColor}${percent.40}</color>
     </menuText>
 
     <menuText name="menutitle">
       <color>${fgColor}</color>
     </menuText>
+
+    <!-- Switch: accent when on, muted when off -->
+    <menuSwitch name="menuswitch">
+      <color>${mainColor}</color>
+      <colorOff>${subtleColor}${percent.30}</colorOff>
+    </menuSwitch>
+
+    <!-- Button: accent fill -->
+    <menuButton name="menubutton">
+      <color>${mainColor}</color>
+      <textColor>${onMainColor}</textColor>
+    </menuButton>
+
+    <!-- Text input: card background -->
+    <menuTextEdit name="menutextedit">
+      <color>${fgColor}</color>
+    </menuTextEdit>
+
+    <!-- Menu icons: subtle by default -->
+    <menuIcons name="menuicons">
+      <color>${subtleColor}${percent.60}</color>
+    </menuIcons>
   </view>
 
   <!-- Grid tile colors -->

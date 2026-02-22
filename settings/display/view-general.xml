@@ -99,42 +99,93 @@
     </datetime>
   </view>
 
-  <!-- Detailed view -->
+  <!-- Detailed view: game list left, media + metadata right -->
   <view name="detailed">
     <textlist name="gamelist">
       <size>0.466667 0.8</size>
       <size ifHelpPrompts="true">0.466667 0.725</size>
     </textlist>
 
+    <!-- Game screenshot: right-center, with fade-in on selection change -->
     <image name="md_image">
       <pos>0.733333 0.525</pos>
       <origin>0.5 0.5</origin>
       <maxSize>0.466667 0.55</maxSize>
       <zIndex>5</zIndex>
       <roundCorners>0.02</roundCorners>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="0" duration="300" mode="easeOut"/>
+      </storyboard>
     </image>
 
+    <!-- Game marquee/logo: above screenshot -->
     <image name="md_marquee">
       <pos>0.733333 0.25</pos>
       <origin>0.5 0.5</origin>
       <maxSize>0.4 0.175</maxSize>
       <zIndex>6</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="150" duration="200" mode="easeOut"/>
+      </storyboard>
     </image>
 
+    <!-- Star rating -->
     <rating name="md_rating">
       <origin>0 0</origin>
       <filledPath>./assets/icons/star.svg</filledPath>
       <unfilledPath>./assets/icons/star_border.svg</unfilledPath>
       <zIndex>5</zIndex>
+      <visible>true</visible>
+      <pos>0.533333 0.82</pos>
+      <size>0.1 0.03</size>
     </rating>
+
+    <!-- Show key metadata in detailed view -->
+    <text name="md_developer">
+      <visible>true</visible>
+      <pos>0.533333 0.86</pos>
+      <size>0.4 ${fontSizeCaption-medium}</size>
+      <alignment>left</alignment>
+    </text>
+
+    <text name="md_lbl_developer">
+      <visible>false</visible>
+    </text>
+
+    <text name="md_genre">
+      <visible>true</visible>
+      <pos>0.533333 0.89</pos>
+      <size>0.4 ${fontSizeCaption-medium}</size>
+      <alignment>left</alignment>
+    </text>
+
+    <text name="md_lbl_genre">
+      <visible>false</visible>
+    </text>
+
+    <text name="md_players">
+      <visible>true</visible>
+      <pos>0.533333 0.92</pos>
+      <size>0.2 ${fontSizeCaption-medium}</size>
+      <alignment>left</alignment>
+    </text>
+
+    <text name="md_lbl_players">
+      <visible>false</visible>
+    </text>
   </view>
 
-  <!-- Video view -->
+  <!-- Video view: full-screen video/art top, game list bottom -->
   <view name="video">
     <image name="md_marquee">
       <pos>0.2 0.1875</pos>
       <origin>0.5 0.5</origin>
       <maxSize>0.333333333 0.325</maxSize>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="200" duration="200" mode="easeOut"/>
+      </storyboard>
     </image>
 
     <image name="md_image">
@@ -142,6 +193,9 @@
       <pos>0.7 0.25</pos>
       <minSize>0.7 0.55</minSize>
       <zIndex>-1</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="0" duration="400" mode="easeOut"/>
+      </storyboard>
     </image>
 
     <video name="md_video">

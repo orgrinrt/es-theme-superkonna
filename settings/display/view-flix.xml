@@ -1,19 +1,38 @@
 <!--
   Theme: Superkonna
   Flix view: Netflix-style horizontal game browser
+  Layout: preview area (top 45%) + horizontal game strip (bottom 50%)
+  Three-zone composition:
+  1. Background art (selected game screenshot, full-bleed)
+  2. Overlay (semi-transparent darken, separates art from grid)
+  3. Horizontal game strip with edge fades + video preview
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
   <customView name="flix" inherits="grid">
+
+    <!-- === GAME GRID: Horizontal strip in lower half === -->
     <imagegrid name="gamegrid">
       <pos>0 0.475</pos>
+      <size>1 0.5</size>
+      <size ifHelpPrompts="true">1 0.46</size>
       <imageSource>thumb</imageSource>
-      <animateSelection>false</animateSelection>
-      <autoLayoutSelectedZoom>1.075</autoLayoutSelectedZoom>
       <scrollDirection>horizontal</scrollDirection>
+      <animateSelection>false</animateSelection>
+      <autoLayoutSelectedZoom>1.08</autoLayoutSelectedZoom>
+      <padding>0.065 0.0225</padding>
+      <margin>0.016666667 0.025</margin>
+      <scrollLoop>true</scrollLoop>
+      <zIndex>5</zIndex>
     </imagegrid>
+
+    <!-- Tile rendering: fit box art proportionally -->
+    <gridtile name="default, selected">
+      <selectionMode>image</selectionMode>
+      <imageSizeMode>maxSize</imageSizeMode>
+    </gridtile>
 
     <gridtile name="default">
       <imageColor>FFFFFFFF</imageColor>
@@ -23,6 +42,7 @@
       <backgroundCornerSize>0.02</backgroundCornerSize>
     </gridtile>
 
+    <!-- Rounded corners on cover art -->
     <image name="gridtile.image">
       <roundCorners>0.02</roundCorners>
     </image>
@@ -31,20 +51,59 @@
       <roundCorners>0.02</roundCorners>
     </image>
 
+    <!-- Favorite badge on tiles -->
+    <image name="gridtile.favorite">
+      <path>./assets/icons/favorite.png</path>
+      <pos>0 0</pos>
+      <maxSize>0.25 0.25</maxSize>
+      <origin>0 0</origin>
+    </image>
+
+    <!-- === EDGE FADES: Soft left/right bleed on game strip === -->
+    <image name="verticalFadeLeft,verticalFadeRight" extra="true">
+      <origin>0.5 0.5</origin>
+      <size>0.075 0.525</size>
+      <color>${bgColor}</color>
+      <path>./assets/fade-hor.png</path>
+      <zIndex>6</zIndex>
+    </image>
+
+    <image name="verticalFadeLeft" extra="true">
+      <pos>0.0375 0.7375</pos>
+    </image>
+
+    <image name="verticalFadeRight" extra="true">
+      <pos>0.9625 0.7375</pos>
+      <rotation>180</rotation>
+    </image>
+
+    <!-- === PREVIEW AREA: Top half === -->
+
+    <!-- Selected game marquee/logo (upper-left area) -->
     <image name="md_marquee">
       <pos>0.233333333 0.125</pos>
       <origin>0.5 0.5</origin>
       <maxSize>0.4 0.225</maxSize>
+      <zIndex>6</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="200" duration="200" mode="easeOut"/>
+      </storyboard>
     </image>
 
+    <!-- Background screenshot of selected game (full preview area) -->
     <image name="md_image">
       <origin>0.5 0.5</origin>
       <pos>0.7 0.25</pos>
       <minSize>0.7 0.55</minSize>
       <zIndex>-1</zIndex>
       <roundCorners>0.01</roundCorners>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="0" duration="400" mode="easeOut"/>
+      </storyboard>
     </image>
 
+    <!-- Video preview: plays after 0.5s delay over screenshot -->
     <video name="md_video">
       <origin>0.5 0.5</origin>
       <pos>0.7 0.25</pos>
@@ -56,6 +115,7 @@
       <effect>none</effect>
     </video>
 
+    <!-- Game description: left of preview art -->
     <text name="md_description">
       <visible>true</visible>
       <pos>0.033333333 0.25</pos>
@@ -63,8 +123,13 @@
       <fontPath>${fontBody}</fontPath>
       <lineSpacing>1.2</lineSpacing>
       <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="250" duration="200" mode="easeOut"/>
+      </storyboard>
     </text>
 
+    <!-- Hide all other metadata — flix is visual, not data-heavy -->
     <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_genre, md_players, md_lastplayed, md_playcount, md_name">
       <visible>false</visible>
     </text>
@@ -77,6 +142,7 @@
       <visible>false</visible>
     </rating>
 
+    <!-- Semi-transparent overlay between bg art and grid -->
     <image name="background_overlay" extra="true">
       <size>1 1</size>
       <origin>0 0</origin>
@@ -84,6 +150,7 @@
       <zIndex>4</zIndex>
     </image>
 
+    <!-- Tile label: game name below cover art -->
     <text name="gridtile">
       <size>1 0.2</size>
       <pos>0 0.75</pos>
@@ -92,13 +159,16 @@
       <lineSpacing>1.2</lineSpacing>
     </text>
 
+    <!-- Hide tile marquee (we show the full marquee in preview area) -->
     <image name="gridtile.marquee">
       <color>00000000</color>
     </image>
 
+    <!-- System name: top-left above game strip -->
     <text name="logoText">
       <origin>0 0.5</origin>
       <pos>0.033333333 0.45</pos>
     </text>
+
   </customView>
 </theme>

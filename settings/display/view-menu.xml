@@ -1,52 +1,64 @@
 <!--
   Theme: Superkonna
   Menu view: settings/configuration menu styling
+  Console-feel: semi-transparent backdrop, clean typography,
+  custom icons, themed switches and buttons.
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
   <view name="menu">
+    <!-- Main menu text: body font, clean readability -->
     <menuText name="menutext">
       <fontPath>${fontBody}</fontPath>
     </menuText>
 
+    <!-- Small text: descriptions, hints -->
     <menuTextSmall name="menutextsmall">
       <fontPath>${fontLight}</fontPath>
     </menuTextSmall>
 
+    <!-- Section group headers -->
     <menuGroup name="menugroup">
       <fontPath>${fontBody}</fontPath>
     </menuGroup>
 
+    <!-- Menu title: display font for visual weight -->
     <menuText name="menutitle">
       <fontPath>${fontDisplay}</fontPath>
     </menuText>
 
+    <!-- Menu background: full-screen shade behind modal -->
     <menuBackground name="menubg">
       <fadePath>./assets/shade.png</fadePath>
       <size>1 1</size>
     </menuBackground>
 
+    <!-- Button styling -->
     <menuButton name="menubutton">
       <path>./assets/button-normal.svg</path>
       <filledPath>./assets/button-hover.svg</filledPath>
       <cornerSize>8 8</cornerSize>
     </menuButton>
 
+    <!-- Toggle switch -->
     <menuSwitch name="menuswitch">
       <pathOn>./assets/switch-on.svg</pathOn>
       <pathOff>./assets/switch-off.svg</pathOff>
     </menuSwitch>
 
+    <!-- Footer: light font, subtle -->
     <menuText name="menufooter">
-      <fontPath>${fontDisplay}</fontPath>
+      <fontPath>${fontLight}</fontPath>
     </menuText>
 
+    <!-- Text input fields -->
     <menuTextEdit name="menutextedit">
-      <fontPath>${fontDisplay}</fontPath>
+      <fontPath>${fontBody}</fontPath>
     </menuTextEdit>
 
+    <!-- Custom menu section icons -->
     <menuIcons name="menuicons">
       <iconSystem>./assets/icons/cog.svg</iconSystem>
       <iconUpdates>./assets/icons/update.svg</iconUpdates>

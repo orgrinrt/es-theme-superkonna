@@ -6,15 +6,18 @@
 <theme>
   <formatVersion>7</formatVersion>
 
+  <!-- Inspired by SNES/SFC console colors:
+       Dark charcoal body, purple accents from buttons,
+       lavender-gray from the controller shell -->
   <variables>
-    <fgColor>FFFFFF</fgColor>
-    <bgColor>2C2C54</bgColor>
-    <mainColor>6C5CE7</mainColor>
+    <fgColor>E8E8F0</fgColor>
+    <bgColor>1E1E30</bgColor>
+    <mainColor>7B68AE</mainColor>
     <onMainColor>FFFFFF</onMainColor>
-    <sectColor>474787</sectColor>
-    <cardColor>3B3B7A</cardColor>
-    <shadowColor>000000</shadowColor>
-    <subtleColor>FFFFFF</subtleColor>
+    <sectColor>4A4577</sectColor>
+    <cardColor>2A2A45</cardColor>
+    <shadowColor>0A0A15</shadowColor>
+    <subtleColor>B8B8D0</subtleColor>
   </variables>
 
   <include>./../dark-base.xml</include>
