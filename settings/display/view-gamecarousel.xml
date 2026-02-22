@@ -47,6 +47,7 @@
       <roundCorners>0.02</roundCorners>
       <storyboard>
         <animation property="opacity" from="0" to="1" begin="0" duration="350" mode="easeOut"/>
+        <animation property="scale" from="0.97" to="1" begin="0" duration="300" mode="Bump"/>
       </storyboard>
     </image>
 
@@ -79,58 +80,90 @@
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
         <animation property="opacity" from="0" to="1" begin="200" duration="200" mode="easeOut"/>
+        <animation property="y" from="0.83" to="0.82" begin="200" duration="200" mode="easeOut"/>
       </storyboard>
     </text>
 
-    <!-- Developer + genre (below game name) -->
+    <!-- Star rating: compact, right of game name area -->
+    <rating name="md_rating">
+      <visible>true</visible>
+      <origin>0 0</origin>
+      <filledPath>./assets/icons/star.svg</filledPath>
+      <unfilledPath>./assets/icons/star_border.svg</unfilledPath>
+      <pos>0.5 0.85</pos>
+      <size>0.07 0.02</size>
+      <zIndex>5</zIndex>
+    </rating>
+
+    <!-- Developer + genre (below rating) -->
     <text name="md_developer">
       <visible>true</visible>
       <fontPath>${fontLight}</fontPath>
-      <pos>0.5 0.86</pos>
-      <size>0.45 ${fontSizeCaption-medium}</size>
+      <pos>0.5 0.875</pos>
+      <size>0.2 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
+        <animation property="opacity" from="0" to="0.8" begin="250" duration="200" mode="easeOut"/>
+      </storyboard>
     </text>
 
     <text name="md_genre">
       <visible>true</visible>
       <fontPath>${fontLight}</fontPath>
-      <pos>0.5 0.89</pos>
-      <size>0.45 ${fontSizeCaption-medium}</size>
+      <pos>0.5 0.9</pos>
+      <size>0.2 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="140" mode="linear"/>
+        <animation property="opacity" from="0" to="0.8" begin="280" duration="200" mode="easeOut"/>
+      </storyboard>
     </text>
 
     <!-- Publisher (next to developer) -->
     <text name="md_publisher">
       <visible>true</visible>
       <fontPath>${fontLight}</fontPath>
-      <pos>0.72 0.86</pos>
+      <pos>0.72 0.875</pos>
       <size>0.25 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
+        <animation property="opacity" from="0" to="0.7" begin="250" duration="200" mode="easeOut"/>
+      </storyboard>
     </text>
 
     <!-- Play time (formatted) -->
     <text name="md_gametime" extra="true">
       <text>{game:gametime.formatseconds()}</text>
       <visible>true</visible>
-      <pos>0.5 0.92</pos>
+      <pos>0.5 0.925</pos>
       <size>0.2 ${fontSizeCaption-medium}</size>
       <fontPath>${fontLight}</fontPath>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="160" mode="linear"/>
+        <animation property="opacity" from="0" to="0.6" begin="310" duration="200" mode="easeOut"/>
+      </storyboard>
     </text>
 
     <!-- Last played (relative) -->
     <text name="md_lastplayed_rel" extra="true">
       <text>{game:lastplayed.elapsed()}</text>
       <visible>true</visible>
-      <pos>0.72 0.92</pos>
+      <pos>0.72 0.925</pos>
       <size>0.25 ${fontSizeCaption-medium}</size>
       <fontPath>${fontLight}</fontPath>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="160" mode="linear"/>
+        <animation property="opacity" from="0" to="0.6" begin="310" duration="200" mode="easeOut"/>
+      </storyboard>
     </text>
 
     <!-- Badge row -->
@@ -179,9 +212,15 @@
       <visible>false</visible>
     </datetime>
 
-    <rating name="md_rating">
-      <visible>false</visible>
-    </rating>
+    <!-- Bottom vignette: dark for text legibility below screenshots -->
+    <image name="bottom_vignette" extra="true">
+      <path>./assets/fade-ver.png</path>
+      <size>1 0.35</size>
+      <origin>0 1</origin>
+      <pos>0 1</pos>
+      <zIndex>0</zIndex>
+      <rotation>180</rotation>
+    </image>
 
     <!-- Background -->
     <image name="background">

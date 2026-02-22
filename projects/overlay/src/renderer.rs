@@ -59,21 +59,40 @@ impl Renderer {
 
         let opacity_byte = (opacity * 255.0) as u8;
 
-        // Background
-        draw_rounded_rect(&mut pixmap, 2.0, 2.0, w as f32 - 4.0, h as f32 - 4.0, 12.0, self.card.with_alpha((self.card.a as f32 * opacity) as u8));
+        // Drop shadow (subtle offset)
+        draw_rounded_rect(&mut pixmap, 4.0, 4.0, w as f32 - 4.0, h as f32 - 4.0, 14.0,
+            Color8 { r: 0, g: 0, b: 0, a: (60.0 * opacity) as u8 });
+
+        // Background card
+        draw_rounded_rect(&mut pixmap, 2.0, 2.0, w as f32 - 6.0, h as f32 - 6.0, 12.0,
+            self.card.with_alpha((self.card.a as f32 * opacity) as u8));
 
         // Accent left strip
-        draw_rounded_rect(&mut pixmap, 2.0, 2.0, 6.0, h as f32 - 4.0, 3.0, self.accent.with_alpha((self.accent.a as f32 * opacity) as u8));
+        draw_rounded_rect(&mut pixmap, 2.0, 2.0, 6.0, h as f32 - 6.0, 3.0,
+            self.accent.with_alpha((self.accent.a as f32 * opacity) as u8));
 
-        // Trophy circle
-        draw_circle(&mut pixmap, 36.0, h as f32 / 2.0, 18.0, self.accent.with_alpha((200.0 * opacity) as u8));
+        // Trophy circle with gradient effect (inner brighter)
+        draw_circle(&mut pixmap, 38.0, h as f32 / 2.0, 20.0,
+            self.accent.with_alpha((180.0 * opacity) as u8));
+        draw_circle(&mut pixmap, 38.0, h as f32 / 2.0, 14.0,
+            self.accent.with_alpha((220.0 * opacity) as u8));
+
+        // Trophy icon (star character)
+        rasterize_text(&mut pixmap, "\u{2605}", &self.display_font, 20.0, 28.0,
+            h as f32 / 2.0 - 10.0, self.on_accent.with_alpha(opacity_byte));
+
+        // "ACHIEVEMENT UNLOCKED" header
+        rasterize_text(&mut pixmap, "ACHIEVEMENT UNLOCKED", &self.light_font, 10.0, 66.0,
+            h as f32 / 2.0 - 26.0, self.fg.with_alpha(((opacity * 0.5) * 255.0) as u8));
 
         // Title
-        rasterize_text(&mut pixmap, title, &self.display_font, 22.0, 64.0, h as f32 / 2.0 - 14.0, self.fg.with_alpha(opacity_byte));
+        rasterize_text(&mut pixmap, title, &self.display_font, 20.0, 66.0,
+            h as f32 / 2.0 - 6.0, self.fg.with_alpha(opacity_byte));
 
         // Description
         if !description.is_empty() {
-            rasterize_text(&mut pixmap, description, &self.light_font, 16.0, 64.0, h as f32 / 2.0 + 14.0, self.fg.with_alpha(((opacity * 0.7) * 255.0) as u8));
+            rasterize_text(&mut pixmap, description, &self.light_font, 14.0, 66.0,
+                h as f32 / 2.0 + 18.0, self.fg.with_alpha(((opacity * 0.7) * 255.0) as u8));
         }
 
         pixmap_to_argb(&pixmap)

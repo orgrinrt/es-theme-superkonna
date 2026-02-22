@@ -191,6 +191,19 @@
       <imagePath>./assets/pin.svg</imagePath>
     </controllerActivity>
 
+    <!-- Profile badge: user name + balance, updated by scripts/update-profile.sh
+         Uses SVG with baked text since ES can't read text files dynamically. -->
+    <image name="profile_badge" extra="true">
+      <path>./generated/profile-badge.svg</path>
+      <origin>0 0</origin>
+      <pos>0.016 0.015</pos>
+      <maxSize>0.15 0.025</maxSize>
+      <zIndex>11</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0.9" begin="200" duration="500" mode="easeOut"/>
+      </storyboard>
+    </image>
+
     <!-- Clock: top-right -->
     <text name="clock">
       <origin>1 0</origin>

@@ -164,18 +164,39 @@
       </storyboard>
     </text>
 
-    <!-- Hide all other metadata — flix is visual, not data-heavy -->
-    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_genre, md_players, md_lastplayed, md_playcount, md_name">
+    <!-- Genre: below marquee in preview area -->
+    <text name="md_genre">
+      <visible>true</visible>
+      <pos>0.033333333 0.21</pos>
+      <size>0.4 ${fontSizeCaption-medium}</size>
+      <fontPath>${fontLight}</fontPath>
+      <alignment>left</alignment>
+      <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
+        <animation property="opacity" from="0" to="0.7" begin="300" duration="200" mode="easeOut"/>
+      </storyboard>
+    </text>
+
+    <!-- Rating: subtle stars in preview area -->
+    <rating name="md_rating">
+      <visible>true</visible>
+      <origin>0 0</origin>
+      <filledPath>./assets/icons/star.svg</filledPath>
+      <unfilledPath>./assets/icons/star_border.svg</unfilledPath>
+      <pos>0.033333333 0.175</pos>
+      <size>0.08 0.025</size>
+      <zIndex>5</zIndex>
+    </rating>
+
+    <!-- Hide remaining metadata labels -->
+    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_players, md_lastplayed, md_playcount, md_name">
       <visible>false</visible>
     </text>
 
     <datetime name="md_releasedate, md_lastplayed">
       <visible>false</visible>
     </datetime>
-
-    <rating name="md_rating">
-      <visible>false</visible>
-    </rating>
 
     <!-- Semi-transparent overlay between bg art and grid -->
     <image name="background_overlay" extra="true">

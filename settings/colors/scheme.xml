@@ -189,6 +189,32 @@
     </image>
   </view>
 
+  <!-- Gamecarousel vignette + overlay -->
+  <view name="gamecarousel">
+    <image name="bottom_vignette" extra="true">
+      <color>${shadowColor}</color>
+    </image>
+
+    <image name="background_overlay" extra="true">
+      <color>${bgColor}</color>
+    </image>
+
+    <rating name="md_rating">
+      <color>${mainColor}</color>
+      <unfilledColor>${subtleColor}${percent.20}</unfilledColor>
+    </rating>
+
+    <text name="md_name">
+      <color>${fgColor}${percent.90}</color>
+      <glowColor>${shadowColor}${percent.30}</glowColor>
+      <glowSize>2</glowSize>
+    </text>
+
+    <text name="md_developer, md_publisher, md_genre, md_gametime, md_lastplayed_rel">
+      <color>${fgColor}${percent.70}</color>
+    </text>
+  </view>
+
   <!-- Screen overlay: clock, battery, controller activity -->
   <view name="screen">
     <text name="clock">

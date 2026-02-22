@@ -157,6 +157,10 @@
       <visible>true</visible>
       <pos>0.533333 0.82</pos>
       <size>0.1 0.03</size>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="250" duration="200" mode="easeOut"/>
+      </storyboard>
     </rating>
 
     <!-- Show key metadata in detailed view -->
@@ -165,6 +169,10 @@
       <pos>0.533333 0.86</pos>
       <size>0.4 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
+        <animation property="opacity" from="0" to="0.85" begin="280" duration="200" mode="easeOut"/>
+      </storyboard>
     </text>
 
     <text name="md_lbl_developer">
@@ -176,6 +184,10 @@
       <pos>0.533333 0.89</pos>
       <size>0.4 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="140" mode="linear"/>
+        <animation property="opacity" from="0" to="0.85" begin="310" duration="200" mode="easeOut"/>
+      </storyboard>
     </text>
 
     <text name="md_lbl_genre">
@@ -187,6 +199,10 @@
       <pos>0.533333 0.92</pos>
       <size>0.2 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="160" mode="linear"/>
+        <animation property="opacity" from="0" to="0.75" begin="340" duration="200" mode="easeOut"/>
+      </storyboard>
     </text>
 
     <text name="md_lbl_players">
@@ -214,6 +230,10 @@
       <pos>0.7 0.86</pos>
       <size>0.25 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
+        <animation property="opacity" from="0" to="0.75" begin="280" duration="200" mode="easeOut"/>
+      </storyboard>
     </text>
 
     <!-- Play time (formatted) -->
@@ -225,6 +245,10 @@
       <fontPath>${fontLight}</fontPath>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="160" mode="linear"/>
+        <animation property="opacity" from="0" to="0.65" begin="310" duration="200" mode="easeOut"/>
+      </storyboard>
     </text>
 
     <!-- Last played (relative) -->
@@ -236,6 +260,10 @@
       <fontPath>${fontLight}</fontPath>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="180" mode="linear"/>
+        <animation property="opacity" from="0" to="0.55" begin="340" duration="200" mode="easeOut"/>
+      </storyboard>
     </text>
 
     <!-- Badge row: trophy, mature, savestate, manual -->
@@ -246,6 +274,9 @@
       <maxSize>0.022 0.022</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="200" duration="250" mode="easeOut"/>
+      </storyboard>
     </image>
 
     <image name="badge_mature" extra="true">
@@ -255,6 +286,9 @@
       <maxSize>0.022 0.022</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="220" duration="250" mode="easeOut"/>
+      </storyboard>
     </image>
 
     <image name="badge_savestate" extra="true">
@@ -264,6 +298,9 @@
       <maxSize>0.022 0.022</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="240" duration="250" mode="easeOut"/>
+      </storyboard>
     </image>
 
     <image name="badge_manual" extra="true">
@@ -273,6 +310,9 @@
       <maxSize>0.022 0.022</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="260" duration="250" mode="easeOut"/>
+      </storyboard>
     </image>
   </view>
 
