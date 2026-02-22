@@ -37,8 +37,9 @@ impl OverlayWindow {
             .map_err(|e| e.to_string())?;
 
         let window = conn.generate_id().map_err(|e| e.to_string())?;
-        let x = (screen_width - width - 20) as i16;
-        let y = 20_i16;
+        // Position at origin for full-screen overlay; popup compositing handles placement
+        let x = 0_i16;
+        let y = 0_i16;
 
         let values = CreateWindowAux::new()
             .override_redirect(1)

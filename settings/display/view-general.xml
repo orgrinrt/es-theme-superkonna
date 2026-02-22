@@ -125,14 +125,14 @@
 
     <!-- Game screenshot: right-center, Bump scale on selection change -->
     <image name="md_image">
-      <pos>0.733333 0.525</pos>
+      <pos>0.733333 0.5</pos>
       <origin>0.5 0.5</origin>
-      <maxSize>0.466667 0.55</maxSize>
+      <maxSize>0.466667 0.50</maxSize>
       <zIndex>5</zIndex>
       <roundCorners>0.02</roundCorners>
       <storyboard>
         <animation property="opacity" from="0" to="1" begin="0" duration="300" mode="easeOut"/>
-        <animation property="scale" from="0.95" to="1" begin="0" duration="300" mode="Bump"/>
+        <animation property="scale" from="0.96" to="1" begin="0" duration="350" mode="Bump"/>
       </storyboard>
     </image>
 
@@ -191,6 +191,21 @@
 
     <text name="md_lbl_players">
       <visible>false</visible>
+    </text>
+
+    <!-- Game description: below game list, right-aligned area -->
+    <text name="md_description">
+      <visible>true</visible>
+      <pos>0.033333 0.78</pos>
+      <size>0.433333 0.12</size>
+      <fontPath>${fontLight}</fontPath>
+      <lineSpacing>1.2</lineSpacing>
+      <alignment>left</alignment>
+      <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
+        <animation property="opacity" from="0" to="0.7" begin="200" duration="250" mode="easeOut"/>
+      </storyboard>
     </text>
 
     <!-- Publisher -->

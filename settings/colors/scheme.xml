@@ -31,6 +31,7 @@
       <selectorColor>${mainColor}</selectorColor>
       <primaryColor>${fgColor}</primaryColor>
       <secondaryColor>${fgColor}${percent.70}</secondaryColor>
+      <selectorGradientColor>${mainColor}${percent.60}</selectorGradientColor>
     </textlist>
 
     <rating name="md_rating">
@@ -133,6 +134,11 @@
     <text name="gridtile:selected">
       <color>${fgColor}</color>
     </text>
+
+    <!-- Flix top vignette -->
+    <image name="top_vignette" extra="true">
+      <color>${bgColor}</color>
+    </image>
   </customView>
 
   <!-- System carousel colors -->
@@ -157,6 +163,17 @@
     <image name="background_overlay" extra="true">
       <color>${bgColor}</color>
     </image>
+
+    <!-- Bottom vignette: dark for text legibility on system view -->
+    <image name="bottom_vignette" extra="true">
+      <color>${shadowColor}</color>
+    </image>
+
+    <text name="systemManufacturer">
+      <color>${subtleColor}${percent.40}</color>
+      <glowColor>${shadowColor}${percent.30}</glowColor>
+      <glowSize>2</glowSize>
+    </text>
 
     <text name="logoText">
       <color>${fgColor}</color>

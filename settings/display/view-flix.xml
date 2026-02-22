@@ -20,7 +20,7 @@
       <size ifHelpPrompts="true">1 0.46</size>
       <imageSource>thumb</imageSource>
       <scrollDirection>horizontal</scrollDirection>
-      <animateSelection>false</animateSelection>
+      <animateSelection>true</animateSelection>
       <autoLayoutSelectedZoom>1.08</autoLayoutSelectedZoom>
       <padding>0.065 0.0225</padding>
       <margin>0.016666667 0.025</margin>
@@ -180,6 +180,15 @@
     <!-- Semi-transparent overlay between bg art and grid -->
     <image name="background_overlay" extra="true">
       <size>1 1</size>
+      <origin>0 0</origin>
+      <pos>0 0</pos>
+      <zIndex>4</zIndex>
+    </image>
+
+    <!-- Top vignette: subtle fade for preview area text -->
+    <image name="top_vignette" extra="true">
+      <path>./assets/fade-ver.png</path>
+      <size>1 0.3</size>
       <origin>0 0</origin>
       <pos>0 0</pos>
       <zIndex>4</zIndex>

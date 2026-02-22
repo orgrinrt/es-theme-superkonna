@@ -16,7 +16,8 @@
       <size>1 0.8</size>
       <size ifHelpPrompts="true">1 0.725</size>
       <padding>0.066666667 0.025</padding>
-      <autoLayoutSelectedZoom>1.04</autoLayoutSelectedZoom>
+      <autoLayoutSelectedZoom>1.06</autoLayoutSelectedZoom>
+      <animateSelection>true</animateSelection>
       <zIndex>5</zIndex>
       <scrollSound>./assets/sounds/tick.wav</scrollSound>
     </imagegrid>
@@ -46,10 +47,11 @@
       <imageColor>FFFFFFFF</imageColor>
     </gridtile>
 
-    <!-- Selected tile: subtle highlight -->
+    <!-- Selected tile: accent highlight with glow -->
     <gridtile name="selected">
       <backgroundCornerSize>0.05</backgroundCornerSize>
       <imageColor>FFFFFFFF</imageColor>
+      <selectionMode>image</selectionMode>
     </gridtile>
 
     <!-- Rounded corners on all cover art -->
@@ -59,6 +61,7 @@
 
     <image name="gridtile.image:selected">
       <roundCorners>0.02</roundCorners>
+      <saturation>1.1</saturation>
     </image>
 
     <!-- Favorite badge -->

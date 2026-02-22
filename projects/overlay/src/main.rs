@@ -19,7 +19,7 @@ use std::path::PathBuf;
 use std::sync::mpsc;
 use std::time::{Duration, Instant};
 
-use log::{error, info, warn};
+use log::{debug, error, info, warn};
 
 const SOCKET_PATH: &str = "/tmp/superkonna-overlay.sock";
 
@@ -94,7 +94,7 @@ fn main() {
 
     let (tx, rx) = mpsc::channel::<Event>();
 
-    // Spawn log watcher thread
+    // Spawn log watcher thread with relay
     {
         let tx = tx.clone();
         let watcher_log_path = log_path.clone();
@@ -114,7 +114,7 @@ fn main() {
     }
     info!("Log watcher started");
 
-    // Spawn socket listener thread
+    // Spawn socket listener thread with relay
     {
         let tx = tx.clone();
         let socket_path = SOCKET_PATH.to_string();
@@ -148,6 +148,7 @@ fn main() {
 
         // Drain incoming events (non-blocking)
         while let Ok(event) = rx.try_recv() {
+            debug!("Main loop received event");
             match event {
                 Event::Achievement(ach) => {
                     info!("Achievement: {} — {}", ach.title, ach.description);
@@ -204,6 +205,7 @@ fn main() {
                         }
                     }
                     socket::SocketCommand::Popup { title, description } => {
+                        info!("Popup received via socket: {title} | {description}");
                         popup_queue.push(popup::Popup::new(title, description));
                     }
                 },
