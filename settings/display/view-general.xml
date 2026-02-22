@@ -6,12 +6,22 @@
 <theme>
   <formatVersion>7</formatVersion>
 
-  <!-- Help system + border overlay (all views) -->
+  <!-- Bottom bar: background strip + help system (all views) -->
   <view name="system, basic, detailed, grid, video">
+    <!-- Bottom bar background strip -->
+    <image name="bottombar_bg" extra="true">
+      <path>./assets/bottombar-bg.png</path>
+      <pos>0 1</pos>
+      <origin>0 1</origin>
+      <size>1 0.065</size>
+      <zIndex>90</zIndex>
+    </image>
+
+    <!-- Help prompts: left-aligned in bottom bar -->
     <helpsystem name="help">
       <fontPath>${fontUI}</fontPath>
       <origin>0 0.5</origin>
-      <pos>0.016666667 0.96</pos>
+      <pos>0.02 0.965</pos>
     </helpsystem>
   </view>
 

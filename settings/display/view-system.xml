@@ -1,25 +1,34 @@
 <!--
   Theme: Superkonna
   System view: carousel, background, system info
-  Screen view: top bar (clock, battery, controllers)
+  Screen view: top bar (avatar, clock, battery, controllers)
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
-  <!-- System carousel view -->
+  <!-- ==========================================
+       SYSTEM VIEW: Carousel + per-system art
+       Three-layer composition:
+       1. Background art (full-screen, per-system)
+       2. Overlay (semi-transparent darken)
+       3. Carousel (oversized Alekfull-NX geometry)
+       ========================================== -->
   <view name="system">
-    <carousel name="systemcarousel">
-      <origin>0.5 0</origin>
-      <pos>0.5 0</pos>
-      <defaultTransition>slide</defaultTransition>
-      <systemInfoDelay>300</systemInfoDelay>
-      <logoSize>0.25 0.25</logoSize>
-      <logoScale>1.4</logoScale>
-      <zIndex>10</zIndex>
-    </carousel>
 
-    <!-- Semi-transparent overlay on top of system art -->
+    <!-- Layer 1: Per-system background artwork -->
+    <image name="cover" extra="true">
+      <size>1 0</size>
+      <origin>0 0.5</origin>
+      <pos>0 0.35</pos>
+      <minSize>1 1</minSize>
+      <zIndex>-9</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="0" duration="800" mode="easeOut"/>
+      </storyboard>
+    </image>
+
+    <!-- Layer 2: Semi-transparent overlay on top of system art -->
     <image name="background_overlay" extra="true">
       <size>1 1</size>
       <origin>0 0</origin>
@@ -27,38 +36,59 @@
       <zIndex>-7</zIndex>
     </image>
 
-    <!-- System name with shadow + settle-in animation -->
+    <!-- Layer 3: Oversized carousel (Alekfull-NX geometry)
+         pos: -0.66 -0.10 makes the carousel 176% of screen width,
+         centering ~3-4 visible logos while items trail off-screen.
+         This creates the signature "big, immersive" feel. -->
+    <carousel name="systemcarousel">
+      <type>horizontal</type>
+      <pos>-0.660 -0.10</pos>
+      <size>1.76 1</size>
+      <logoScale>1.12</logoScale>
+      <logoSize>0.28 0.28</logoSize>
+      <color>00000000</color>
+      <maxLogoCount>10</maxLogoCount>
+      <zIndex>42</zIndex>
+      <logoAlignment>bottom</logoAlignment>
+      <defaultTransition>slide</defaultTransition>
+      <systemInfoDelay>300</systemInfoDelay>
+      <scrollSound>./assets/sounds/scroll.wav</scrollSound>
+    </carousel>
+
+    <!-- System name: bottom-left with shadow + settle-in animation -->
     <text name="systemName" extra="true">
       <text>${system.fullName}</text>
-      <origin>0 0</origin>
-      <size>0.866667 ${fontSizeH1-medium}</size>
+      <origin>0 1</origin>
+      <pos>0.04 0.88</pos>
+      <size>0.6 ${fontSizeH1-medium}</size>
       <fontPath>${fontDisplay}</fontPath>
       <forceUppercase>1</forceUppercase>
       <lineSpacing>1</lineSpacing>
       <alignment>left</alignment>
-      <zIndex>15</zIndex>
+      <zIndex>50</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
         <animation property="opacity" from="0" to="1" begin="300" duration="0" mode="linear"/>
       </storyboard>
     </text>
 
-    <!-- Game count with settle-in delay -->
+    <!-- Game count: below system name, subtle settle-in -->
     <text name="systemInfo">
-      <origin>0 0</origin>
-      <size>0.866667 ${fontSizeBody-medium}</size>
+      <origin>0 1</origin>
+      <pos>0.04 0.92</pos>
+      <size>0.4 ${fontSizeBody-medium}</size>
       <alignment>left</alignment>
       <forceUppercase>1</forceUppercase>
       <fontPath>${fontBody}</fontPath>
       <lineSpacing>1</lineSpacing>
-      <zIndex>15</zIndex>
+      <zIndex>50</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
         <animation property="opacity" from="0" to="1" begin="350" duration="150" mode="easeOut"/>
       </storyboard>
     </text>
 
-    <!-- System logo SVG -->
+    <!-- System logo SVG (used by carousel internally) -->
     <image name="logo">
       <path>./assets/logos/${system.theme}.svg</path>
     </image>
@@ -69,16 +99,6 @@
       <fontPath>${fontBody}</fontPath>
     </text>
 
-    <!-- Per-system background artwork -->
-    <image name="cover" extra="true">
-      <size>1 0</size>
-      <origin>0 0.5</origin>
-      <pos>0 0.25</pos>
-      <zIndex>-9</zIndex>
-      <storyboard>
-        <animation property="opacity" from="0" to="1" begin="0" duration="800" mode="easeOut"/>
-      </storyboard>
-    </image>
   </view>
 
   <!-- OSD background (all game views) -->
@@ -91,32 +111,55 @@
     </image>
   </view>
 
-  <!-- Screen view: top bar overlay (persistent across all views) -->
+  <!-- ==========================================
+       SCREEN VIEW: Top bar overlay
+       Persistent across all views.
+       ========================================== -->
   <view name="screen">
+
+    <!-- Top bar background: subtle gradient strip -->
+    <image name="topbar_bg" extra="true">
+      <path>./assets/topbar-bg.png</path>
+      <pos>0 0</pos>
+      <origin>0 0</origin>
+      <size>1 0.065</size>
+      <zIndex>9</zIndex>
+    </image>
+
+    <!-- User avatar: top-left -->
+    <image name="avatar" extra="true">
+      <path>./assets/profile/avatar-default.png</path>
+      <pos>0.016 0.012</pos>
+      <origin>0 0</origin>
+      <maxSize>0.04 0.04</maxSize>
+      <zIndex>11</zIndex>
+    </image>
+
+    <!-- Controller activity dots: after avatar -->
+    <controllerActivity name="controllerActivity">
+      <origin>0 0.5</origin>
+      <pos>0.065 0.032</pos>
+      <size>0.018</size>
+      <itemSpacing>0.004</itemSpacing>
+      <imagePath>./assets/pin.svg</imagePath>
+    </controllerActivity>
+
     <!-- Clock: top-right -->
     <text name="clock">
       <origin>1 0</origin>
-      <pos>0.98 0.02</pos>
+      <pos>0.984 0.015</pos>
       <fontSize>${fontSizeCaption-medium}</fontSize>
       <fontPath>${fontLight}</fontPath>
       <lineSpacing>1</lineSpacing>
       <alignment>right</alignment>
     </text>
 
-    <!-- Battery indicator: next to clock -->
+    <!-- Battery indicator: left of clock -->
     <batteryIndicator name="batteryIndicator">
       <origin>1 0</origin>
-      <pos>0.945 0.025</pos>
-      <size>0.02</size>
+      <pos>0.94 0.018</pos>
+      <size>0.018</size>
     </batteryIndicator>
 
-    <!-- Controller activity dots: top-left -->
-    <controllerActivity name="controllerActivity">
-      <origin>0 0</origin>
-      <pos>0.016666 0.025</pos>
-      <size>0.02</size>
-      <itemSpacing>0.004</itemSpacing>
-      <imagePath>./assets/pin.svg</imagePath>
-    </controllerActivity>
   </view>
 </theme>
