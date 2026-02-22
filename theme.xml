@@ -2,6 +2,8 @@
   Theme: Superkonna
   A custom ES theme for Batocera.
   Forked from Elementerial by mluizvitor (MIT License).
+  Button icons: Kenney Input Prompts (CC0)
+  UI sounds: Kenney Interface Sounds (CC0)
 -->
 
 <theme>
@@ -15,6 +17,7 @@
     <include name="light" displayName="Light">./settings/colors/light/main.xml</include>
     <include name="pastel" displayName="Pastel">./settings/colors/pastel/main.xml</include>
     <include name="snes" displayName="SNES">./settings/colors/snes/main.xml</include>
+    <include name="custom" displayName="Custom (edit this file)">./settings/colors/custom/main.xml</include>
   </subset>
 
   <!-- Font size selection -->
@@ -31,6 +34,12 @@
     <include name="hidden" displayName="Hidden">./settings/display/statusbar/hidden.xml</include>
   </subset>
 
+  <!-- Aspect ratio -->
+  <subset name="Aspect Ratio" displayName="Aspect Ratio">
+    <include name="16-9" displayName="16:9 (default)">./settings/aspect/16-9.xml</include>
+    <include name="4-3" displayName="4:3">./settings/aspect/4-3.xml</include>
+  </subset>
+
   <!-- Apply color scheme to all elements -->
   <include>./settings/colors/scheme.xml</include>
 
@@ -39,6 +48,7 @@
   <include>./settings/display/view-system.xml</include>
   <include>./settings/display/view-grid.xml</include>
   <include>./settings/display/view-flix.xml</include>
+  <include>./settings/display/view-gamecarousel.xml</include>
   <include>./settings/display/view-menu.xml</include>
 
 </theme>

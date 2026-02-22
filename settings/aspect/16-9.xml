@@ -1,0 +1,9 @@
+<!--
+  Theme: Superkonna
+  Aspect ratio: 16:9 (default, no overrides needed)
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+  <!-- 16:9 is the base layout — all positions defined in view files target this ratio -->
+</theme>

@@ -18,6 +18,7 @@
       <padding>0.066666667 0.025</padding>
       <autoLayoutSelectedZoom>1.04</autoLayoutSelectedZoom>
       <zIndex>5</zIndex>
+      <scrollSound>./assets/sounds/tick.wav</scrollSound>
     </imagegrid>
 
     <!-- System name header -->

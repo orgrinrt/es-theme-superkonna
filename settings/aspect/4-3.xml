@@ -1,0 +1,83 @@
+<!--
+  Theme: Superkonna
+  Aspect ratio: 4:3 overrides
+  Adjusts positions and sizes for narrower screens.
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <!-- System carousel: tighten oversized geometry for 4:3 -->
+  <view name="system">
+    <carousel name="systemcarousel">
+      <pos>-0.40 -0.10</pos>
+      <size>1.40 1</size>
+      <logoSize>0.24 0.24</logoSize>
+      <maxLogoCount>7</maxLogoCount>
+    </carousel>
+
+    <text name="systemName" extra="true">
+      <pos>0.05 0.86</pos>
+      <size>0.7 ${fontSizeH1-medium}</size>
+    </text>
+
+    <text name="systemInfo">
+      <pos>0.05 0.91</pos>
+      <size>0.5 ${fontSizeBody-medium}</size>
+    </text>
+  </view>
+
+  <!-- Detailed view: pull media panel closer -->
+  <view name="detailed">
+    <textlist name="gamelist">
+      <size>0.5 0.8</size>
+      <size ifHelpPrompts="true">0.5 0.725</size>
+    </textlist>
+
+    <image name="md_image">
+      <pos>0.75 0.525</pos>
+      <maxSize>0.45 0.5</maxSize>
+    </image>
+
+    <image name="md_marquee">
+      <pos>0.75 0.25</pos>
+      <maxSize>0.35 0.15</maxSize>
+    </image>
+  </view>
+
+  <!-- Flix view: wider padding, slightly smaller grid -->
+  <customView name="flix" inherits="grid">
+    <imagegrid name="gamegrid">
+      <padding>0.05 0.025</padding>
+    </imagegrid>
+
+    <image name="md_marquee">
+      <maxSize>0.35 0.2</maxSize>
+    </image>
+
+    <video name="md_video">
+      <minSize>0.55 0.45</minSize>
+    </video>
+  </customView>
+
+  <!-- Game carousel: slightly tighter for 4:3 -->
+  <view name="gamecarousel">
+    <gamecarousel name="gamecarousel">
+      <pos>-0.25 0</pos>
+      <logoSize>0.16 0.24</logoSize>
+      <maxLogoCount>5</maxLogoCount>
+    </gamecarousel>
+
+    <image name="md_image">
+      <pos>0.68 0.45</pos>
+      <maxSize>0.45 0.6</maxSize>
+    </image>
+  </view>
+
+  <!-- Top bar: tighter spacing for 4:3 -->
+  <view name="screen">
+    <image name="topbar_bg" extra="true">
+      <size>1 0.07</size>
+    </image>
+  </view>
+</theme>

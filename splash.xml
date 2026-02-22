@@ -1,49 +1,48 @@
 <!--
-  Theme: Albedo
-  Author: mluizvitor
+  Theme: Superkonna
+  Splash screen: shown during ES boot
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
   <view name="splash">
-    
-    <!-- Bloco que define a cor de fundo da tela de splash -->
+    <!-- Background color -->
     <splash name="splash">
-      <backgroundColor>000000</backgroundColor>
+      <backgroundColor>${bgColor}</backgroundColor>
     </splash>
 
-    <!-- Bloco para imagem de fundo da splash (mantido padrão para portabilidade) -->
+    <!-- Splash image (optional, falls back to color if missing) -->
     <image name="background">
       <path>./splash.png</path>
       <minSize>1 1</minSize>
       <origin>0.5 0.5</origin>
       <pos>0.5 0.5</pos>
     </image>
-    
-    <!-- Bloco que define a barra de progresso inativa -->
+
+    <!-- Progress bar (bottom edge, thin line) -->
     <image name="progressbar">
-      <color>000000</color>
+      <color>${bgColor}</color>
       <origin>0.5 1</origin>
       <pos>0.5 1</pos>
-      <maxSize>1 0.00625</maxSize>
-      <minSize>1 0.00625</minSize>
+      <maxSize>1 0.005</maxSize>
+      <minSize>1 0.005</minSize>
     </image>
 
-    <!-- Bloco que define a barra de progresso ativa -->
+    <!-- Active progress bar: accent color -->
     <image name="progressbar:active">
-      <color>AAAAAA</color>
+      <color>${mainColor}</color>
       <tile>true</tile>
     </image>
 
-    <!-- Bloco que exibe o texto de carregamento centralizado na tela -->
+    <!-- Loading text: clean, centered -->
     <text name="label">
       <alignment>center</alignment>
-      <fontPath>./assets/fonts/Inter/Inter-Regular.otf</fontPath>
-      <fontSize>0.0375</fontSize>
-      <color>ffffff</color>
+      <fontPath>${fontLight}</fontPath>
+      <fontSize>0.03</fontSize>
+      <color>${fgColor}${percent.60}</color>
       <origin>0.5 1</origin>
-      <pos>0.5 0.95</pos>
+      <pos>0.5 0.96</pos>
     </text>
   </view>
 </theme>

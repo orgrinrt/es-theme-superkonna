@@ -25,6 +25,22 @@
     </helpsystem>
   </view>
 
+  <!-- Navigation sounds (all views) -->
+  <view name="system, basic, detailed, grid, video">
+    <sound name="back">
+      <path>./assets/sounds/back.wav</path>
+    </sound>
+    <sound name="select">
+      <path>./assets/sounds/select.wav</path>
+    </sound>
+    <sound name="launch">
+      <path>./assets/sounds/launch.wav</path>
+    </sound>
+    <sound name="favorite">
+      <path>./assets/sounds/favorite.wav</path>
+    </sound>
+  </view>
+
   <!-- Shared game list view settings -->
   <view name="basic, detailed, grid, video">
     <text name="logoText">
@@ -39,6 +55,7 @@
       <alignment>left</alignment>
       <origin>0 0</origin>
       <zIndex>5</zIndex>
+      <scrollSound>./assets/sounds/tick.wav</scrollSound>
     </textlist>
 
     <image name="background">

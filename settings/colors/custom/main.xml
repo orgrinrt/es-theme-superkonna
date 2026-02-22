@@ -1,0 +1,42 @@
+<!--
+  Theme: Superkonna
+  Palette: Custom (user-editable)
+  Edit these hex values to create your own color scheme!
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <variables>
+    <!-- ========================================
+         EDIT THESE COLORS TO CUSTOMIZE THE THEME
+         All values are 6-digit hex (RRGGBB)
+         ======================================== -->
+
+    <!-- Main text color -->
+    <fgColor>FFFFFF</fgColor>
+
+    <!-- Background color (main screen fill) -->
+    <bgColor>1A1A2E</bgColor>
+
+    <!-- Accent color (selection highlights, active elements) -->
+    <mainColor>E94560</mainColor>
+
+    <!-- Text color ON accent backgrounds -->
+    <onMainColor>FFFFFF</onMainColor>
+
+    <!-- Section/header color (menu groups, dividers) -->
+    <sectColor>0F3460</sectColor>
+
+    <!-- Card/panel background color (menus, overlays) -->
+    <cardColor>16213E</cardColor>
+
+    <!-- Shadow/glow base color -->
+    <shadowColor>000000</shadowColor>
+
+    <!-- Subtle/muted text base color (used with opacity) -->
+    <subtleColor>FFFFFF</subtleColor>
+  </variables>
+
+  <include>./../dark-base.xml</include>
+</theme>

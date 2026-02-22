@@ -16,8 +16,11 @@
        ========================================== -->
   <view name="system">
 
-    <!-- Layer 1: Per-system background artwork -->
+    <!-- Layer 1: Per-system background artwork
+         Path convention: assets/systems/{system.theme}.webp (or .jpg/.png)
+         Falls back gracefully if image doesn't exist. -->
     <image name="cover" extra="true">
+      <path>./assets/systems/${system.theme}.webp</path>
       <size>1 0</size>
       <origin>0 0.5</origin>
       <pos>0 0.35</pos>
@@ -52,6 +55,9 @@
       <logoAlignment>bottom</logoAlignment>
       <defaultTransition>slide</defaultTransition>
       <systemInfoDelay>300</systemInfoDelay>
+      <minLogoOpacity>0.4</minLogoOpacity>
+      <logoRotation>0</logoRotation>
+      <logoRotationOrigin>0.5 0.5</logoRotationOrigin>
       <scrollSound>./assets/sounds/scroll.wav</scrollSound>
     </carousel>
 
@@ -154,10 +160,30 @@
       <alignment>right</alignment>
     </text>
 
+    <!-- Weather: file-swap icon, updated by scripts/update-weather.sh
+         Shows temperature + condition icon. If file doesn't exist, invisible. -->
+    <image name="weather_icon" extra="true">
+      <path>./generated/weather-icon.svg</path>
+      <origin>1 0</origin>
+      <pos>0.91 0.015</pos>
+      <maxSize>0.025 0.025</maxSize>
+      <zIndex>11</zIndex>
+    </image>
+
+    <text name="weather_temp" extra="true">
+      <text> </text>
+      <origin>1 0</origin>
+      <pos>0.885 0.015</pos>
+      <fontSize>${fontSizeCaption-medium}</fontSize>
+      <fontPath>${fontLight}</fontPath>
+      <alignment>right</alignment>
+      <zIndex>11</zIndex>
+    </text>
+
     <!-- Battery indicator: left of clock -->
     <batteryIndicator name="batteryIndicator">
       <origin>1 0</origin>
-      <pos>0.94 0.018</pos>
+      <pos>0.855 0.018</pos>
       <size>0.018</size>
     </batteryIndicator>
 

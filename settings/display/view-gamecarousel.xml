@@ -1,0 +1,128 @@
+<!--
+  Theme: Superkonna
+  Game carousel view: vertical wheel of game marquees
+  Classic arcade-style wheel layout with video preview.
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <view name="gamecarousel">
+
+    <!-- Vertical wheel of game marquees (left side) -->
+    <gamecarousel name="gamecarousel">
+      <type>vertical_wheel</type>
+      <pos>-0.35 0</pos>
+      <size>1 1</size>
+      <color>00000000</color>
+      <logoScale>1.25</logoScale>
+      <logoSize>0.18 0.28</logoSize>
+      <logoRotation>7</logoRotation>
+      <logoRotationOrigin>-2.5 0.3</logoRotationOrigin>
+      <logoAlignment>center</logoAlignment>
+      <maxLogoCount>7</maxLogoCount>
+      <minLogoOpacity>0.35</minLogoOpacity>
+      <imageSource>marquee</imageSource>
+      <scrollSound>./assets/sounds/scroll.wav</scrollSound>
+      <zIndex>43</zIndex>
+    </gamecarousel>
+
+    <!-- System name header -->
+    <text name="logoText">
+      <fontPath>${fontDisplay}</fontPath>
+      <forceUppercase>1</forceUppercase>
+      <alignment>left</alignment>
+      <origin>0 0.5</origin>
+      <pos>0.033333 0.065</pos>
+      <size>0.4 ${fontSizeH2-medium}</size>
+      <zIndex>5</zIndex>
+    </text>
+
+    <!-- Selected game screenshot (right side, large) -->
+    <image name="md_image">
+      <origin>0.5 0.5</origin>
+      <pos>0.7 0.45</pos>
+      <maxSize>0.5 0.65</maxSize>
+      <zIndex>1</zIndex>
+      <roundCorners>0.02</roundCorners>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="0" duration="350" mode="easeOut"/>
+      </storyboard>
+    </image>
+
+    <!-- Video preview over screenshot -->
+    <video name="md_video">
+      <origin>0.5 0.5</origin>
+      <pos>0.7 0.45</pos>
+      <maxSize>0.5 0.65</maxSize>
+      <zIndex>2</zIndex>
+      <delay>1</delay>
+      <showSnapshotNoVideo>false</showSnapshotNoVideo>
+      <showSnapshotDelay>false</showSnapshotDelay>
+      <effect>none</effect>
+    </video>
+
+    <!-- Game name (below screenshot) -->
+    <text name="md_name">
+      <visible>true</visible>
+      <fontPath>${fontBody}</fontPath>
+      <pos>0.5 0.82</pos>
+      <origin>0 0</origin>
+      <size>0.45 ${fontSizeBody-medium}</size>
+      <alignment>left</alignment>
+      <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="200" duration="200" mode="easeOut"/>
+      </storyboard>
+    </text>
+
+    <!-- Developer + genre (below game name) -->
+    <text name="md_developer">
+      <visible>true</visible>
+      <fontPath>${fontLight}</fontPath>
+      <pos>0.5 0.86</pos>
+      <size>0.45 ${fontSizeCaption-medium}</size>
+      <alignment>left</alignment>
+      <zIndex>5</zIndex>
+    </text>
+
+    <text name="md_genre">
+      <visible>true</visible>
+      <fontPath>${fontLight}</fontPath>
+      <pos>0.5 0.89</pos>
+      <size>0.45 ${fontSizeCaption-medium}</size>
+      <alignment>left</alignment>
+      <zIndex>5</zIndex>
+    </text>
+
+    <!-- Hide everything else -->
+    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_publisher, md_players, md_lastplayed, md_playcount, md_description">
+      <visible>false</visible>
+    </text>
+
+    <datetime name="md_releasedate, md_lastplayed">
+      <visible>false</visible>
+    </datetime>
+
+    <rating name="md_rating">
+      <visible>false</visible>
+    </rating>
+
+    <!-- Background -->
+    <image name="background">
+      <pos>0 0</pos>
+      <origin>0 0</origin>
+      <size>1 1</size>
+      <zIndex>-10</zIndex>
+    </image>
+
+    <image name="background_overlay" extra="true">
+      <size>1 1</size>
+      <origin>0 0</origin>
+      <pos>0 0</pos>
+      <zIndex>-4</zIndex>
+    </image>
+
+  </view>
+</theme>

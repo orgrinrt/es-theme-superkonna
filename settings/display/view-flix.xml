@@ -26,6 +26,7 @@
       <margin>0.016666667 0.025</margin>
       <scrollLoop>true</scrollLoop>
       <zIndex>5</zIndex>
+      <scrollSound>./assets/sounds/tick.wav</scrollSound>
     </imagegrid>
 
     <!-- Tile rendering: fit box art proportionally -->
