@@ -1,0 +1,19 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <subset name="Style" displayName="Style">
+    <include name="dark" displayName="Dark">./scheme-dark.xml</include>
+    <include name="light" displayName="Light">./scheme-light.xml</include>
+  </subset>
+
+  <subset name="Default icons style" displayName="Default icons style">
+    <include name="Square" displayName="Square">./ratio-square.xml</include>
+    <include name="Steam" displayName="Steam">./ratio-steam.xml</include>
+  </subset>
+
+</theme>

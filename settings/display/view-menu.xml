@@ -1,0 +1,79 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <!-- View do menu de configurações do sistema -->
+  <view name="menu">
+    <!-- Texto padrão do menu -->
+    <menuText name="menutext">
+      <fontPath>${fontRegular}</fontPath>
+    </menuText>
+
+    <!-- Texto pequeno do menu -->
+    <menuTextSmall name="menutextsmall">
+      <fontPath>${fontLight}</fontPath>
+    </menuTextSmall>
+
+    <!-- Grupo de itens do menu -->
+    <menuGroup name="menugroup">
+      <fontPath>${fontRegular}</fontPath>
+    </menuGroup>
+
+    <!-- Título do menu -->
+    <menuText name="menutitle">
+      <fontPath>${fontBold}</fontPath>
+    </menuText>
+
+    <!-- Fundo do menu -->
+    <menuBackground name="menubg">
+      <fadePath>./assets/shade.png</fadePath>
+      <size>1 1</size>
+    </menuBackground>
+
+    <!-- Botão do menu -->
+    <menuButton name="menubutton">
+      <path>./assets/button-normal.svg</path>
+      <filledPath>./assets/button-hover.svg</filledPath>
+      <cornerSize>8 8</cornerSize>
+    </menuButton>
+
+    <!-- Switch do menu -->
+    <menuSwitch name="menuswitch">
+      <pathOn>./assets/switch-on.svg</pathOn>
+      <pathOff>./assets/switch-off.svg</pathOff>
+    </menuSwitch>
+
+    <!-- Texto do rodapé do menu -->
+    <menuText name="menufooter">
+      <fontPath>${fontBold}</fontPath>
+    </menuText>
+
+    <!-- Campo de edição de texto do menu -->
+    <menuTextEdit name="menutextedit">
+      <fontPath>${fontBold}</fontPath>
+    </menuTextEdit>
+
+    <!-- Ícones do menu -->
+    <menuIcons name="menuicons">
+      <iconSystem>./assets/icons/cog.svg</iconSystem>
+      <iconUpdates>./assets/icons/update.svg</iconUpdates>
+      <iconControllers>./assets/icons/gamepad-round.svg</iconControllers>
+      <iconGames>./assets/icons/gamepad-square.svg</iconGames>
+      <iconUI>./assets/icons/brush.svg</iconUI>
+      <iconSound>./assets/icons/volume-high.svg</iconSound>
+      <iconNetwork>./assets/icons/wifi-strength-3.svg</iconNetwork>
+      <iconScraper>./assets/icons/image.svg</iconScraper>
+      <iconAdvanced>./assets/icons/library-shelves.svg</iconAdvanced>
+      <iconQuit>./assets/icons/exit-to-app.svg</iconQuit>
+      <iconRetroachievements>./assets/icons/trophy.svg</iconRetroachievements>
+      <iconKodi>./assets/icons/kodi.svg</iconKodi>
+      <iconRestart>./assets/icons/restart.svg</iconRestart>
+      <iconShutdown>./assets/icons/power.svg</iconShutdown>
+      <iconFastShutdown>./assets/icons/power.svg</iconFastShutdown>
+    </menuIcons>
+  </view>
+</theme>

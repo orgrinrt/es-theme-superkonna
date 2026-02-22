@@ -1,0 +1,16 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <!-- CustomView "elementflix" que exibe as imagens das caixas dos jogos esticadas para preencher o tile -->
+  <customView name="elementflix" inherits="grid">
+    <gridtile name="default, selected">
+      <selectionMode>image</selectionMode>
+      <imageSizeMode>size</imageSizeMode>
+    </gridtile>
+  </customView>
+</theme>

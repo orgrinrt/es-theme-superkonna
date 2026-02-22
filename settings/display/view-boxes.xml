@@ -1,0 +1,50 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <!-- CustomView "boxes" que exibe uma grid horizontal de imagens com seleção e título centralizado -->
+  <customView name="boxes" inherits="grid">
+    <imagegrid name="gamegrid">
+      <size>1 0.775</size>
+      <size ifHelpPrompts="true">1 0.725</size>
+      <scrollDirection>horizontal</scrollDirection>
+      <scrollLoop>false</scrollLoop>
+      <imageSource>image</imageSource>
+      <autoLayoutSelectedZoom>1.075</autoLayoutSelectedZoom>
+    </imagegrid>
+
+    <gridtile name="default, selected">
+      <selectionMode>full</selectionMode>
+      <imageSizeMode>minSize</imageSizeMode>
+    </gridtile>
+
+    <gridtile name="default">
+      <backgroundColor>00000000</backgroundColor>
+      <imageColor>aaaaaaFF</imageColor>
+    </gridtile>
+
+    <image name="gridtile.marquee">
+      <color>FFFFFFFF</color>
+      <pos>0.5 0.5</pos>
+      <origin>0.5 0.5</origin>
+      <maxSize>0.65 0.65</maxSize>
+    </image>
+
+    <image name="gridtile.marquee:selected">
+      <color>FFFFFFFF</color>
+      <maxSize>0.8 0.8</maxSize>
+    </image>
+
+    <text name="gridtile">
+      <size>1 0.2</size>
+      <pos>0 0.7</pos>
+      <fontPath>${fontRegular}</fontPath>
+      <alignment>center</alignment>
+      <lineSpacing>1.2</lineSpacing>
+    </text>
+  </customView>
+</theme>

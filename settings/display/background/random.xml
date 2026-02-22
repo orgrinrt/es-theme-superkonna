@@ -1,0 +1,32 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <!-- View que exibe a imagem de fundo do sistema na tela principal, podendo ser aleatória -->
+  <view name="system">
+    <image name="cover" extra="true">
+      <path>./assets/systems/${system.theme}.webp</path>
+      <path>{random:image}</path>
+    </image>
+  </view>
+
+  <!-- View que exibe a imagem de fundo do sistema nas telas de lista, detalhes, grid e vídeo, podendo ser aleatória -->
+  <view name="basic, detailed, grid, video">
+    <image name="cover_list" extra="true">
+      <path>./assets/systems/${system.theme}.webp</path>
+      <path>{random:image}</path>
+    </image>
+  </view>
+
+  <!-- CustomView "elementflix" que exibe a imagem de fundo do sistema na grid personalizada, podendo ser aleatória -->
+  <customView name="elementflix" inherits="grid">
+    <image name="cover_list" extra="true">
+      <path>./assets/systems/${system.theme}.webp</path>
+      <path>{random:image}</path>
+    </image>
+  </customView>
+</theme>

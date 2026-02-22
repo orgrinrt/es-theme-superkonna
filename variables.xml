@@ -1,0 +1,49 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <variables>
+    <!-- Tamanhos de fonte para títulos e textos no modo médio -->
+    <fontSizeH1-medium>0.06</fontSizeH1-medium>
+    <fontSizeH2-medium>0.05</fontSizeH2-medium>
+    <fontSizeH3-medium>0.04375</fontSizeH3-medium>
+    <fontSizeBody-medium>0.035</fontSizeBody-medium>
+    <fontSizeCaption-medium>0.028125</fontSizeCaption-medium>
+
+    <!-- Tamanhos de fonte para títulos e textos no modo grande -->
+    <fontSizeH1-large>0.06875</fontSizeH1-large>
+    <fontSizeH2-large>0.05625</fontSizeH2-large>
+    <fontSizeH3-large>0.046875</fontSizeH3-large>
+    <fontSizeBody-large>0.040625</fontSizeBody-large>
+    <fontSizeCaption-large>0.03125</fontSizeCaption-large>
+
+    <!-- Tamanhos de fonte para títulos e textos no modo pequeno -->
+    <fontSizeH1-small>0.05625</fontSizeH1-small>
+    <fontSizeH2-small>0.04375</fontSizeH2-small>
+    <fontSizeH3-small>0.0375</fontSizeH3-small>
+    <fontSizeBody-small>0.03</fontSizeBody-small>
+    <fontSizeCaption-small>0.028125</fontSizeCaption-small>
+    
+    <!-- Caminhos para arquivos de fonte utilizados no tema -->
+    <fontRegular>./assets/fonts/Inter/Inter-Regular.otf</fontRegular>
+    <fontBold>./assets/fonts/Inter/Inter-Bold.otf</fontBold>
+    <fontLight>./assets/fonts/Inter/Inter-Light.otf</fontLight>
+    <fontHelper>./assets/fonts/RobotoCondensed/RobotoCondensed-Regular.ttf</fontHelper>
+
+    <!-- Valores hexadecimais para opacidade em porcentagem -->
+    <percent.90>E6</percent.90>
+    <percent.80>CC</percent.80>
+    <percent.70>B3</percent.70>
+    <percent.60>99</percent.60>
+    <percent.50>80</percent.50>
+    <percent.40>66</percent.40>
+    <percent.30>4D</percent.30>
+    <percent.20>33</percent.20>
+    <percent.10>1A</percent.10>
+    <percent.5>0D</percent.5>
+  </variables>
+</theme>

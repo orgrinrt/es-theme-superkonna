@@ -1,0 +1,20 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <variables>
+    <fgColor>1f2428</fgColor>
+
+    <mainColor>ED5353</mainColor>
+    <onMainColor>FFEBEB</onMainColor>
+
+    <bgColor>FFEBEB</bgColor>
+    <sectColor>a10705</sectColor>
+  </variables>
+
+  <include>./../light.xml</include>
+</theme>

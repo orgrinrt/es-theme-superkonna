@@ -1,0 +1,49 @@
+<!--
+  Theme: Albedo
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <view name="splash">
+    
+    <!-- Bloco que define a cor de fundo da tela de splash -->
+    <splash name="splash">
+      <backgroundColor>000000</backgroundColor>
+    </splash>
+
+    <!-- Bloco para imagem de fundo da splash (mantido padrão para portabilidade) -->
+    <image name="background">
+      <path>./splash.png</path>
+      <minSize>1 1</minSize>
+      <origin>0.5 0.5</origin>
+      <pos>0.5 0.5</pos>
+    </image>
+    
+    <!-- Bloco que define a barra de progresso inativa -->
+    <image name="progressbar">
+      <color>000000</color>
+      <origin>0.5 1</origin>
+      <pos>0.5 1</pos>
+      <maxSize>1 0.00625</maxSize>
+      <minSize>1 0.00625</minSize>
+    </image>
+
+    <!-- Bloco que define a barra de progresso ativa -->
+    <image name="progressbar:active">
+      <color>AAAAAA</color>
+      <tile>true</tile>
+    </image>
+
+    <!-- Bloco que exibe o texto de carregamento centralizado na tela -->
+    <text name="label">
+      <alignment>center</alignment>
+      <fontPath>./assets/fonts/Inter/Inter-Regular.otf</fontPath>
+      <fontSize>0.0375</fontSize>
+      <color>ffffff</color>
+      <origin>0.5 1</origin>
+      <pos>0.5 0.95</pos>
+    </text>
+  </view>
+</theme>

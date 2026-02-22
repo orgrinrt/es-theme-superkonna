@@ -1,0 +1,183 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <!-- View que configura as cores da barra de ajuda e do fundo em todos os modos -->
+  <view name="system, basic, detailed, grid, video">
+    <helpsystem name="help">
+      <textColor>${fgColor}</textColor>
+      <iconColor>${sectColor}</iconColor>
+    </helpsystem>
+
+    <image name="background">
+      <color>${bgColor}</color>
+    </image>
+  </view>
+
+  <!-- View que configura as cores das listas de jogos, textos e overlays -->
+  <view name="basic, detailed, grid, video">
+    <text name="logoText, md_name">
+      <color>${fgColor}${percent.90}</color>
+      <glowColor>${bgColor}${percent.10}</glowColor>
+      <glowSize>1</glowSize>
+    </text>
+
+    <textlist name="gamelist">
+      <selectedColor>${onMainColor}</selectedColor>
+      <selectorColor>${mainColor}</selectorColor>
+      <primaryColor>${fgColor}</primaryColor>
+      <secondaryColor>${fgColor}</secondaryColor>
+    </textlist>
+
+    <rating name="md_rating">
+      <color>${sectColor}</color>
+      <unfilledColor>${sectColor}</unfilledColor>
+    </rating>
+
+    <image name="background_overlay" extra="true">
+      <color>${bgColor}</color>
+    </image>
+
+    <text name="md_name">
+      <color>${fgColor}${percent.90}</color>
+      <textColor>${fgColor}${percent.90}</textColor>
+    </text>
+
+    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_genre, md_players, md_lastplayed, md_playcount, md_description">
+      <color>${fgColor}${percent.90}</color>
+      <textColor>${fgColor}${percent.90}</textColor>
+    </text>
+
+    <datetime name="md_releasedate, md_lastplayed">
+      <color>${fgColor}${percent.90}</color>
+      <textColor>${fgColor}${percent.90}</textColor>
+    </datetime>
+  </view>
+
+  <!-- View que configura as cores do menu de configurações -->
+  <view name="menu">
+    <menuText name="menutext">
+      <selectedColor>${onMainColor}</selectedColor>
+      <selectorColor>${mainColor}</selectorColor>
+      <color>${fgColor}</color>
+      <separatorColor>${fgColor}${percent.5}</separatorColor>
+    </menuText>
+
+    <menuTextSmall name="menutextsmall">
+      <color>${sectColor}</color>
+    </menuTextSmall>
+
+    <menuGroup name="menugroup">
+      <color>${sectColor}</color>
+      <separatorColor>${sectColor}${percent.60}</separatorColor>
+      <backgroundColor>${sectColor}${percent.10}</backgroundColor>
+    </menuGroup>
+
+    <menuBackground name="menubg">
+      <color>${bgColor}</color>
+    </menuBackground>
+
+    <menuText name="menufooter">
+      <color>${fgColor}${percent.80}</color>
+    </menuText>
+
+    <menuText name="menutitle">
+      <color>${fgColor}</color>
+    </menuText>
+  </view>
+
+  <!-- View que configura as cores dos tiles da grid -->
+  <view name="grid">
+    <text name="gridtile">
+      <color>${fgColor}</color>
+    </text>
+
+    <text name="gridtile:selected">
+      <color>${onMainColor}</color>
+    </text>
+  </view>
+
+  <!-- CustomView "boxes" que configura as cores dos tiles na grid personalizada -->
+  <customView name="boxes" inherits="grid">
+    <text name="gridtile">
+      <color>FFFFFF</color>
+      <backgroundColor>000000${percent.80}</backgroundColor>
+    </text>
+
+    <text name="gridtile:selected">
+      <color>FFFFFF</color>
+    </text>
+  </customView>
+
+  <!-- CustomView "elementflix" que configura as cores dos tiles na grid estilo Netflix -->
+  <customView name="elementflix" inherits="grid">
+    <text name="gridtile">
+      <color>${fgColor}${percent.80}</color>
+    </text>
+
+    <text name="gridtile:selected">
+      <color>${fgColor}</color>
+    </text>
+  </customView>
+
+  <!-- View que configura as cores do carrossel, nome do sistema e informações -->
+  <view name="system">
+    <carousel name="systemcarousel">
+      <color>${bgColor}00</color>
+    </carousel>
+
+    <text name="systemName">
+      <color>${fgColor}${percent.90}</color>
+      <glowColor>${bgColor}${percent.10}</glowColor>
+      <glowSize>1</glowSize>
+    </text>
+
+    <text name="systemInfo">
+      <color>${fgColor}${percent.90}</color>
+      <glowColor>${bgColor}${percent.10}</glowColor>
+      <glowSize>1</glowSize>
+    </text>
+
+    <image name="cover_fallback" extra="true">
+      <color>${bgColor}</color>
+    </image>
+
+    <image name="background_overlay" extra="true">
+      <color>${bgColor}</color>
+    </image>
+
+    <text name="logoText">
+      <color>${fgColor}</color>
+      <glowColor>${mainColor}${percent.10}</glowColor>
+      <glowSize>1</glowSize>
+    </text>
+  </view>
+
+  <!-- View que configura a cor do fundo do OSD nos modos sistema, básico, detalhado e grid -->
+  <view name="system, basic, detailed, grid">
+    <image name="osdBackground" extra="true">
+      <color>000000</color>
+    </image>
+  </view>
+
+  <!-- View que configura as cores do relógio, indicador de bateria e atividade do controle -->
+  <view name="screen">
+    <text name="clock">
+      <color>FFFFFF</color>
+    </text>
+
+    <batteryIndicator name="batteryIndicator">
+      <color>FFFFFF</color>
+    </batteryIndicator>
+
+    <controllerActivity name="controllerActivity">
+      <color>${fgColor}${percent.30}</color>
+      <activityColor>${mainColor}${percent.70}</activityColor>
+      <hotkeyColor>${mainColor}</hotkeyColor>
+    </controllerActivity>
+  </view>
+</theme>

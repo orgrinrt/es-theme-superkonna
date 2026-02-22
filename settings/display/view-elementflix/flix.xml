@@ -1,0 +1,116 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <!-- Subset que permite escolher o estilo da arte da caixa dos jogos na grid elementflix -->
+  <subset name="BoxArtStyle" displayName="Box art style" appliesTo="elementflix">
+    <include name="cover" displayName="Cover">./flix-box-cover.xml</include>
+    <include name="fit" displayName="Fit">./flix-box-fit.xml</include>
+    <include name="stretch" displayName="Stretch (not recommended)">./flix-box-stretch.xml</include>
+  </subset>
+
+  <!-- Subset que permite escolher a direção da grid elementflix -->
+  <subset name="GridDirection" displayName="Grid direction" appliesTo="elementflix">
+    <include name="horizontal" displayName="Horizontal">./flix-grid-horizontal.xml</include>
+    <include name="vertical" displayName="Vertical">./flix-grid-vertical.xml</include>
+  </subset>
+
+  <!-- CustomView "elementflix" que exibe uma grid customizada para navegação estilo Netflix -->
+  <customView name="elementflix" inherits="grid">
+    <imagegrid name="gamegrid">
+      <pos>0 0.475</pos>
+      <imageSource>thumb</imageSource>
+      <animateSelection>false</animateSelection>
+      <autoLayoutSelectedZoom>1.075</autoLayoutSelectedZoom>
+    </imagegrid>
+
+    <gridtile name="default">
+      <imageColor>FFFFFFFF</imageColor>
+    </gridtile>
+
+    <image name="md_marquee">
+      <pos>0.233333333 0.125</pos>
+      <origin>0.5 0.5</origin>
+      <maxSize>0.4 0.225</maxSize>
+    </image>
+
+    <image name="md_image">
+      <origin>0.5 0.5</origin>
+      <pos>0.7 0.25</pos>
+      <minSize>0.7 0.55</minSize>
+      <zIndex>-1</zIndex>
+    </image>
+
+    <video name="md_video">
+      <origin>0.5 0.5</origin>
+      <pos>0.7 0.25</pos>
+      <minSize>0.6 0.5</minSize>
+      <zIndex>0</zIndex>
+      <delay>1</delay>
+      <showSnapshotNoVideo>false</showSnapshotNoVideo>
+      <showSnapshotDelay>false</showSnapshotDelay>
+      <effect>none</effect>
+    </video>
+
+    <text name="md_description">
+      <visible>true</visible>
+      <pos>0.033333333 0.25</pos>
+      <size>0.433333333 0.15</size>
+      <fontPath>${fontRegular}</fontPath>
+      <lineSpacing>1.1</lineSpacing>
+      <zIndex>5</zIndex>
+    </text>
+
+    <gridtile name="selected">
+      <backgroundCornerSize>0</backgroundCornerSize>
+    </gridtile>
+
+    <image name="gridtile.image">
+      <roundCorners>0</roundCorners>
+    </image>
+
+    <image name="gridtile.image:selected">
+      <roundCorners>0</roundCorners>
+    </image>
+
+    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_genre, md_players, md_lastplayed, md_playcount, md_name">
+      <visible>false</visible>
+    </text>
+
+    <datetime name="md_releasedate, md_lastplayed">
+      <visible>false</visible>
+    </datetime>
+
+    <rating name="md_rating">
+      <visible>false</visible>
+    </rating>
+
+    <image name="background_overlay" extra="true">
+      <size>1 1</size>
+      <origin>0 0</origin>
+      <pos>0 0</pos>
+      <zIndex>4</zIndex>
+    </image>
+
+    <text name="gridtile">
+      <size>1 0.2</size>
+      <pos>0 0.75</pos>
+      <fontPath>${fontRegular}</fontPath>
+      <alignment>center</alignment>
+      <lineSpacing>1.2</lineSpacing>
+    </text>
+
+    <image name="gridtile.marquee">
+      <color>00000000</color>
+    </image>
+
+    <text name="logoText">
+      <origin>0 0.5</origin>
+      <pos>0.033333333 0.45</pos>
+    </text>
+  </customView>
+</theme>

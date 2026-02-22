@@ -1,0 +1,16 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <!-- CustomView "elementflix" que exibe as imagens das caixas dos jogos ocupando todo o tile -->
+  <customView name="elementflix" inherits="grid">
+    <gridtile name="default, selected">
+      <selectionMode>full</selectionMode>
+      <imageSizeMode>minSize</imageSizeMode>
+    </gridtile>
+  </customView>
+</theme>

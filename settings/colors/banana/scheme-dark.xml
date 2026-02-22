@@ -1,0 +1,20 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <variables>
+    <fgColor>FFFFFF</fgColor>
+    
+    <mainColor>F9C440</mainColor>
+    <onMainColor>1D1B16</onMainColor>
+
+    <bgColor>1D1B16</bgColor>
+    <sectColor>fff394</sectColor>
+  </variables>
+
+  <include>./../dark.xml</include>
+</theme>

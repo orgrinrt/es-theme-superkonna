@@ -1,0 +1,36 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <!-- CustomView "elementflix" que exibe uma grid horizontal customizada para navegação estilo Netflix -->
+  <customView name="elementflix" inherits="grid">
+    <imagegrid name="gamegrid">
+      <size>1 0.5</size>
+      <size ifHelpPrompts="true">1 0.46</size>
+      <scrollDirection>horizontal</scrollDirection>
+      <padding>0.065 0.0225</padding>
+      <margin>0.016666667 0.025</margin>
+    </imagegrid>
+
+    <image name="verticalFadeLeft,verticalFadeBottom" extra="true">
+      <origin>0.5 0.5</origin>
+      <size>0.075 0.525</size>
+      <color>${bgColor}</color>
+      <path>./assets/fade-hor.png</path>
+      <zIndex>5</zIndex>
+    </image>
+    
+    <image name="verticalFadeLeft" extra="true">
+      <pos>0.0375 0.7375</pos>
+    </image>
+
+    <image name="verticalFadeBottom" extra="true">
+      <pos>0.9625 0.7375</pos>
+      <rotation>180</rotation>
+    </image>
+  </customView>
+</theme>

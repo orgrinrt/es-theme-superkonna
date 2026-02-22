@@ -1,0 +1,104 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <!-- View que define tamanhos grandes para textos principais do sistema -->
+  <view name="system">
+    <text name="systemName" extra="true">
+      <fontSize>${fontSizeH1-large}</fontSize>
+    </text>
+
+    <text name="systemInfo">
+      <fontSize>${fontSizeBody-large}</fontSize>
+    </text>
+
+    <text name="logoText">
+      <fontSize>${fontSizeBody-large}</fontSize>
+    </text>
+  </view>
+
+  <!-- View que define tamanho grande para a barra de ajuda -->
+  <view name="system, basic, detailed, grid, video">
+    <helpsystem name="help">
+      <fontSize>${fontSizeBody-large}</fontSize>
+    </helpsystem>
+  </view>
+
+  <!-- View que define tamanhos grandes para textos e listas de jogos -->
+  <view name="basic, detailed, grid, video">
+    <text name="logoText">
+      <fontSize>${fontSizeH2-large}</fontSize>
+    </text>
+
+    <textlist name="gamelist">
+      <fontSize>${fontSizeBody-large}</fontSize>
+    </textlist>
+  </view>
+
+  <!-- View que define tamanho grande para textos de metadados -->
+  <view name="detailed, video, grid">
+    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_genre, md_players, md_lastplayed, md_playcount, md_description, md_name">
+      <fontSize>${fontSizeCaption-large}</fontSize>
+    </text>
+  </view>
+
+  <!-- View que define tamanho grande para nome e tile da grid -->
+  <view name="grid">
+    <text name="md_name">
+      <fontSize>${fontSizeBody-large}</fontSize>
+    </text>
+
+    <text name="gridtile">
+      <fontSize>${fontSizeCaption-large}</fontSize>
+    </text>
+  </view>
+
+  <!-- CustomView "boxes" que define tamanho grande para o texto dos tiles -->
+  <customView name="boxes" inherits="grid">
+    <text name="gridtile">
+      <fontSize>${fontSizeCaption-large}</fontSize>
+    </text>
+  </customView>
+
+  <!-- CustomView "elementflix" que define tamanho grande para descrição, tile e logoText -->
+  <customView name="elementflix" inherits="grid">
+    <text name="md_description">
+      <fontSize>${fontSizeCaption-large}</fontSize>
+    </text>
+
+    <text name="gridtile">
+      <fontSize>${fontSizeCaption-large}</fontSize>
+    </text>
+
+    <text name="logoText">
+      <fontSize>${fontSizeH3-large}</fontSize>
+    </text>
+  </customView>
+
+  <!-- View que define tamanhos grandes para textos do menu -->
+  <view name="menu">
+    <menuText name="menutext">
+      <fontSize>${fontSizeBody-large}</fontSize>
+    </menuText>
+
+    <menuTextSmall name="menutextsmall">
+      <fontSize>${fontSizeCaption-large}</fontSize>
+    </menuTextSmall>
+
+    <menuGroup name="menugroup">
+      <fontSize>${fontSizeCaption-large}</fontSize>
+    </menuGroup>
+
+    <menuText name="menutitle">
+      <fontSize>${fontSizeH2-large}</fontSize>
+    </menuText>
+
+    <menuText name="menufooter">
+      <fontSize>${fontSizeCaption-large}</fontSize>
+    </menuText>
+  </view>
+</theme>

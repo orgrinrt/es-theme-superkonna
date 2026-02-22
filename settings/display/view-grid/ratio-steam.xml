@@ -1,0 +1,14 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <view name="grid">
+    <imagegrid name="gamegrid">
+      <folderImage>./assets/grid-steam/folder.png</folderImage>
+    </imagegrid>
+  </view>
+</theme>

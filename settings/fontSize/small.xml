@@ -1,0 +1,97 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <view name="system">
+    <text name="systemName" extra="true">
+      <fontSize>${fontSizeH1-small}</fontSize>
+    </text>
+
+    <text name="systemInfo">
+      <fontSize>${fontSizeBody-small}</fontSize>
+    </text>
+
+    <text name="logoText">
+      <fontSize>${fontSizeBody-small}</fontSize>
+    </text>
+  </view>
+
+  <view name="system, basic, detailed, grid, video">
+    <helpsystem name="help">
+      <fontSize>${fontSizeBody-small}</fontSize>
+    </helpsystem>
+  </view>
+
+  <view name="basic, detailed, grid, video">
+    <text name="logoText">
+      <fontSize>${fontSizeH2-small}</fontSize>
+    </text>
+
+    <textlist name="gamelist">
+      <fontSize>${fontSizeBody-small}</fontSize>
+    </textlist>
+  </view>
+
+  <view name="detailed, video, grid">
+    <text
+      name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_genre, md_players, md_lastplayed, md_playcount, md_description, md_name">
+      <fontSize>${fontSizeCaption-small}</fontSize>
+    </text>
+  </view>
+
+  <view name="grid">
+    <text name="md_name">
+      <fontSize>${fontSizeBody-small}</fontSize>
+    </text>
+
+    <text name="gridtile">
+      <fontSize>${fontSizeCaption-small}</fontSize>
+    </text>
+  </view>
+
+  <customView name="boxes" inherits="grid">
+    <text name="gridtile">
+      <fontSize>${fontSizeCaption-small}</fontSize>
+    </text>
+  </customView>
+
+  <customView name="elementflix" inherits="grid">
+    <text name="md_description">
+      <fontSize>${fontSizeCaption-small}</fontSize>
+    </text>
+
+    <text name="gridtile">
+      <fontSize>${fontSizeCaption-small}</fontSize>
+    </text>
+
+    <text name="logoText">
+      <fontSize>${fontSizeH3-small}</fontSize>
+    </text>
+  </customView>
+
+  <view name="menu">
+    <menuText name="menutext">
+      <fontSize>${fontSizeBody-small}</fontSize>
+    </menuText>
+
+    <menuTextSmall name="menutextsmall">
+      <fontSize>${fontSizeCaption-small}</fontSize>
+    </menuTextSmall>
+
+    <menuGroup name="menugroup">
+      <fontSize>${fontSizeCaption-small}</fontSize>
+    </menuGroup>
+
+    <menuText name="menutitle">
+      <fontSize>${fontSizeH2-small}</fontSize>
+    </menuText>
+
+    <menuText name="menufooter">
+      <fontSize>${fontSizeCaption-small}</fontSize>
+    </menuText>
+  </view>
+</theme>

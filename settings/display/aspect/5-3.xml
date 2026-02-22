@@ -1,0 +1,168 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <!-- View que exibe a borda de overlay em múltiplos modos de exibição -->
+  <view name="system, basic, detailed, grid, video">
+    <image name="borderOverlay" extra="true">
+      <path>./assets/ratio53/borders.png</path>
+    </image>
+  </view>
+
+  <!-- View que exibe o fundo padrão para gamelist nos modos básico, detalhado, grid e vídeo -->
+  <view name="basic, detailed, grid, video">
+    <image name="background_overlay" extra="true">
+      <path>./assets/ratio53/gamelist-basic.png</path>
+    </image>
+  </view>
+
+  <!-- View que configura o espaçamento das linhas da lista de jogos nos modos básico, detalhado e vídeo -->
+  <view name="basic, detailed, video">
+    <textlist name="gamelist">
+      <lineSpacing>1.6</lineSpacing>
+      <lineSpacing ifHelpPrompts="true">1.575</lineSpacing>
+    </textlist>
+  </view>
+
+  <!-- View que exibe o rating (avaliação) na tela detalhada -->
+  <view name="detailed">
+    <rating name="md_rating">
+      <pos>0.62 0.83125</pos>
+      <size>0.075</size>
+    </rating>
+  </view>
+
+  <!-- View que exibe o fundo específico para o modo vídeo -->
+  <view name="video">
+    <image name="background_overlay" extra="true">
+      <path>./assets/ratio53/gamelist-video.png</path>
+    </image>
+  </view>
+
+  <!-- View que configura o grid de jogos, incluindo layout, margens e aparência dos tiles -->
+  <view name="grid">
+    <imagegrid name="gamegrid">
+      <autoLayout>4 2</autoLayout>
+      <margin>0.025 0.025</margin>
+    </imagegrid>
+
+    <gridtile name="default">
+      <padding>8 8</padding>
+    </gridtile>
+
+    <image name="gridtile.image">
+      <roundCorners>0.025</roundCorners>
+    </image>
+
+    <image name="gridtile.image:selected">
+      <roundCorners>0.015</roundCorners>
+    </image>
+
+    <ninepatch name="gridtile.background">
+      <path>./assets/grid-selector@3.svg</path>
+      <cornerSize>10 10</cornerSize>
+    </ninepatch>
+
+    <text name="gridtile">
+      <size>0.9 0.18</size>
+      <padding>0.05 0</padding>
+      <lineSpacing>1.15</lineSpacing>
+    </text>
+  </view>
+
+  <!-- View do menu de configurações, exibindo o fundo do menu -->
+  <view name="menu">
+    <menuBackground name="menubg">
+      <path>./assets/ratio53/menu.png</path>
+    </menuBackground>
+  </view>
+
+  <!-- View do sistema, exibindo carrossel, fundo e informações do sistema -->
+  <view name="system">
+    <carousel name="systemcarousel">
+      <size>1.2 1</size>
+      <maxLogoCount>5</maxLogoCount>
+      <logoPos>0.2 0.55</logoPos>
+    </carousel>
+
+    <image name="background_overlay" extra="true">
+      <path>./assets/ratio53/carousel-background.png</path>
+    </image>
+
+    <text name="systemName" extra="true">
+      <pos>0.08333 0.325</pos>
+    </text>
+
+    <text name="systemInfo">
+      <pos>0.08333 0.41</pos>
+    </text>
+  </view>
+
+  <!-- View que exibe o fundo do OSD nos modos sistema, básico, detalhado, grid e vídeo-->
+  <view name="system, basic, detailed, grid, video">
+    <image name="osdBackground" extra="true">
+      <path>./assets/ratio53/osd-bg.png</path>
+    </image>
+  </view>
+
+  <!-- CustomView "boxes" para grid com layout 3x2 e cantos arredondados menores -->
+  <customView name="boxes" inherits="grid">
+    <imagegrid name="gamegrid">
+      <autoLayout>3 2</autoLayout>
+      <margin>0.025 0.041667</margin>
+    </imagegrid>
+
+    <image name="gridtile.image">
+      <roundCorners>0.015</roundCorners>
+    </image>
+
+    <image name="gridtile.image:selected">
+      <roundCorners>0.01</roundCorners>
+    </image>
+  </customView>
+
+  <!-- CustomView "elementflix" para grid horizontal com layout 5x1 e fundo de vídeo -->
+  <customView name="elementflix" inherits="grid">
+    <imagegrid name="gamegrid">
+      <autoLayout>5 1</autoLayout>
+    </imagegrid>
+
+    <ninepatch name="gridtile.background">
+      <path>./assets/grid-selector@3.svg</path>
+      <cornerSize>6 6</cornerSize>
+    </ninepatch>
+
+    <gridtile name="default">
+      <padding>4 4</padding>
+    </gridtile>
+
+    <image name="background_overlay" extra="true">
+      <path>./assets/ratio53/gamelist-video.png</path>
+    </image>
+  </customView>
+
+  <!-- View da tela principal, exibe relógio e indicador de bateria/rede -->
+  <view name="screen">
+    <text name="clock">
+      <pos>0 0.041666667</pos>
+      <size>0.84 0</size>
+    </text>
+
+    <batteryIndicator name="batteryIndicator">
+      <pos>0.93 0.0125</pos>
+      <size>0.0625</size>
+
+      <full>./assets/icons/screen/72x72/battery=full.svg</full>
+      <at75>./assets/icons/screen/72x72/battery=75.svg</at75>
+      <at50>./assets/icons/screen/72x72/battery=50.svg</at50>
+      <at25>./assets/icons/screen/72x72/battery=25.svg</at25>
+      <empty>./assets/icons/screen/72x72/battery=empty.svg</empty>
+      <incharge>./assets/icons/screen/72x72/battery=charging.svg</incharge>
+      <networkIcon>./assets/icons/screen/72x72/wifi=on.svg</networkIcon>
+    </batteryIndicator>
+  </view>
+</theme>

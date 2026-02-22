@@ -1,0 +1,109 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <!-- View do sistema, exibe carrossel, fundo, nome, logo e informações do sistema -->
+  <view name="system">
+    <carousel name="systemcarousel">
+      <origin>0.5 0</origin>
+      <pos>0.5 0</pos>
+      <defaultTransition>fade</defaultTransition>
+      <systemInfoDelay>300</systemInfoDelay>
+      <logoSize>0.25 0.25</logoSize>
+      <logoScale>1.4</logoScale>
+      <zIndex>10</zIndex>
+    </carousel>
+
+    <image name="background_overlay" extra="true">
+      <size>1 1</size>
+      <origin>0 0</origin>
+      <pos>0 0</pos>
+      <zIndex>-7</zIndex>
+    </image>
+
+    <!-- Bloco que exibe o nome completo do sistema -->
+    <text name="systemName" extra="true">
+      <text>${system.fullName}</text>
+      <origin>0 0</origin>
+      <size>0.866667 ${fontSizeH1-medium}</size>
+      <fontPath>${fontBold}</fontPath>
+      <forceUppercase>1</forceUppercase>
+      <lineSpacing>1</lineSpacing>
+      <alignment>left</alignment>
+      <zIndex>15</zIndex>
+    </text>
+
+    <!-- Bloco que exibe o número de jogos -->
+    <text name="systemInfo">
+      <origin>0 0</origin>
+      <size>0.866667 ${fontSizeBody-medium}</size>
+      <alignment>left</alignment>
+      <forceUppercase>1</forceUppercase>
+      <fontPath>${fontRegular}</fontPath>
+      <lineSpacing>1</lineSpacing>
+      <zIndex>15</zIndex>
+    </text>
+
+    <image name="logo">
+      <path>./assets/logos/${system.theme}.svg</path>
+    </image>
+
+    <!-- Bloco que exibe texto alternativo para o logo -->
+    <text name="logoText">
+      <origin>0 0</origin>
+      <fontPath>${fontRegular}</fontPath>
+    </text>
+
+    <image name="background" extra="true">
+      <path>./assets/background.png</path>
+      <size>1 1</size>
+      <origin>0 0</origin>
+      <pos>0 0</pos>
+      <tile>true</tile>
+      <zIndex>-50</zIndex>
+    </image>
+
+    <image name="cover" extra="true">
+      <size>1 0</size>
+      <origin>0 0.5</origin>
+      <pos>0 0.25</pos>
+      <zIndex>-9</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="0" duration="1000" mode="easeOut" />
+      </storyboard>
+    </image>
+  </view>
+
+  <!-- View que exibe o fundo do OSD nos modos sistema, básico, detalhado e grid -->
+  <view name="system, basic, detailed, grid">
+    <image name="osdBackground" extra="true">
+      <pos>0 0</pos>
+      <origin>0 0</origin>
+      <size>1 1</size>
+      <zIndex>100</zIndex>
+    </image>
+  </view>
+
+  <!-- View da tela principal, exibe relógio e atividade do controle -->
+  <view name="screen">
+    <text name="clock">
+      <origin>0 0.5</origin>
+      <fontSize>${fontSizeBody-medium}</fontSize>
+      <fontPath>${fontRegular}</fontPath>
+      <lineSpacing>1</lineSpacing>
+      <alignment>right</alignment>
+    </text>
+
+    <controllerActivity name="controllerActivity">
+      <origin>0 0</origin>
+      <pos>0.016666 0.025</pos>
+      <size>0.025</size>
+      <itemSpacing>0.003</itemSpacing>
+      <imagePath>./assets/pin.svg</imagePath>
+    </controllerActivity>
+  </view>
+</theme>

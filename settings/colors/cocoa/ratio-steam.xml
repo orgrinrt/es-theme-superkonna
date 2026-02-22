@@ -1,0 +1,14 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <view name="grid">
+    <imagegrid name="gamegrid">
+      <gameImage>./assets/grid-steam/cocoa.png</gameImage>
+    </imagegrid>
+  </view>
+</theme>

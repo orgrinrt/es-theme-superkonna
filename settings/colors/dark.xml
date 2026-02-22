@@ -1,0 +1,28 @@
+<!--
+  Theme: Elementerial
+  Author: mluizvitor
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <view name="menu">
+    <menuTextEdit name="menutextedit">
+      <inactive>./assets/input_inactive.svg</inactive>
+      <active>./assets/input_active-dark.svg</active>
+    </menuTextEdit>
+  </view>
+
+  <customView name="elementflix">
+    <gridtile name="selected">
+      <backgroundColor>FFFFFF</backgroundColor>
+    </gridtile>
+  </customView>
+
+  <view name="grid">
+    <gridtile name="selected">
+      <backgroundColor>${mainColor}</backgroundColor>
+    </gridtile>
+  </view>
+
+</theme>
