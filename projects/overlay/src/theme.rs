@@ -10,8 +10,11 @@ pub struct Theme {
     pub fg_color: Color,
     pub bg_color: Color,
     pub accent_color: Color,
+    pub on_accent_color: Color,
     pub card_color: Color,
     pub shadow_color: Color,
+    pub subtle_color: Color,
+    pub font_display_path: PathBuf,
     pub font_path: PathBuf,
     pub font_light_path: PathBuf,
 }
@@ -93,12 +96,15 @@ impl Theme {
 
         Ok(Theme {
             fg_color: get_color("fgColor", "FFFFFFFF"),
-            bg_color: get_color("bgColor", "121212FF"),
-            accent_color: get_color("mainColor", "8B5CF6FF"),
-            card_color: get_color("cardColor", "1E1E2EFF"),
-            shadow_color: get_color("shadowColor", "00000080"),
-            font_path: resolve_font("fontBody", "assets/fonts/Inter-Regular.ttf"),
-            font_light_path: resolve_font("fontLight", "assets/fonts/Inter-Light.ttf"),
+            bg_color: get_color("bgColor", "1A1A2EFF"),
+            accent_color: get_color("mainColor", "E94560FF"),
+            on_accent_color: get_color("onMainColor", "FFFFFFFF"),
+            card_color: get_color("cardColor", "16213EFF"),
+            shadow_color: get_color("shadowColor", "000000FF"),
+            subtle_color: get_color("subtleColor", "FFFFFFFF"),
+            font_display_path: resolve_font("fontDisplay", "assets/fonts/Inter/Inter-Bold.otf"),
+            font_path: resolve_font("fontBody", "assets/fonts/Inter/Inter-Regular.otf"),
+            font_light_path: resolve_font("fontLight", "assets/fonts/Inter/Inter-Light.otf"),
         })
     }
 }

@@ -1,0 +1,45 @@
+# superkonna-overlay menu configuration
+# Override at: /userdata/system/superkonna-overlay/menu.toml
+
+[menu]
+title = "GAME MENU"
+width = 420
+backdrop_opacity = 0.6
+item_height = 56
+padding = 16
+corner_radius = 16.0
+sound_scroll = "scroll.wav"
+sound_select = "confirm.wav"
+sound_back = "back.wav"
+
+[menu.retroarch]
+host = "127.0.0.1"
+port = 55355
+
+[[menu.items]]
+id = "resume"
+label = "Resume"
+icon = "gamepad.svg"
+action = "dismiss"
+
+[[menu.items]]
+id = "save_state"
+label = "Save State"
+icon = "savestate.svg"
+action = "retroarch"
+command = "SAVE_STATE"
+
+[[menu.items]]
+id = "load_state"
+label = "Load State"
+icon = "savestate.svg"
+action = "retroarch"
+command = "LOAD_STATE"
+
+[[menu.items]]
+id = "quit_to_es"
+label = "Quit to EmulationStation"
+icon = "exit-to-app.svg"
+action = "retroarch"
+command = "QUIT"
+confirm = true
