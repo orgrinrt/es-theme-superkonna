@@ -2,5 +2,8 @@
 generated/*
 !generated/.gitkeep
 
-# Canvas background download marker (local enhancement, not shipped)
-assets/systems/.canvas-fetched
+# Canvas asset fetch marker (local enhancement, not shipped)
+.canvas-fetched
+
+# Canvas system icons (not used by default, fetched locally)
+assets/systems-icons/
