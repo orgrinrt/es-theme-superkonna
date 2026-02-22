@@ -1,23 +1,25 @@
 <!--
-  Theme: Elementerial
-  Author: mluizvitor
+  Theme: Superkonna
+  System view: carousel, background, system info
+  Screen view: top bar (clock, battery, controllers)
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
-  <!-- View do sistema, exibe carrossel, fundo, nome, logo e informações do sistema -->
+  <!-- System carousel view -->
   <view name="system">
     <carousel name="systemcarousel">
       <origin>0.5 0</origin>
       <pos>0.5 0</pos>
-      <defaultTransition>fade</defaultTransition>
+      <defaultTransition>slide</defaultTransition>
       <systemInfoDelay>300</systemInfoDelay>
       <logoSize>0.25 0.25</logoSize>
       <logoScale>1.4</logoScale>
       <zIndex>10</zIndex>
     </carousel>
 
+    <!-- Semi-transparent overlay on top of system art -->
     <image name="background_overlay" extra="true">
       <size>1 1</size>
       <origin>0 0</origin>
@@ -25,60 +27,61 @@
       <zIndex>-7</zIndex>
     </image>
 
-    <!-- Bloco que exibe o nome completo do sistema -->
+    <!-- System name with shadow + settle-in animation -->
     <text name="systemName" extra="true">
       <text>${system.fullName}</text>
       <origin>0 0</origin>
       <size>0.866667 ${fontSizeH1-medium}</size>
-      <fontPath>${fontBold}</fontPath>
+      <fontPath>${fontDisplay}</fontPath>
       <forceUppercase>1</forceUppercase>
       <lineSpacing>1</lineSpacing>
       <alignment>left</alignment>
       <zIndex>15</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="300" duration="0" mode="linear"/>
+      </storyboard>
     </text>
 
-    <!-- Bloco que exibe o número de jogos -->
+    <!-- Game count with settle-in delay -->
     <text name="systemInfo">
       <origin>0 0</origin>
       <size>0.866667 ${fontSizeBody-medium}</size>
       <alignment>left</alignment>
       <forceUppercase>1</forceUppercase>
-      <fontPath>${fontRegular}</fontPath>
+      <fontPath>${fontBody}</fontPath>
       <lineSpacing>1</lineSpacing>
       <zIndex>15</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="350" duration="150" mode="easeOut"/>
+      </storyboard>
     </text>
 
+    <!-- System logo SVG -->
     <image name="logo">
       <path>./assets/logos/${system.theme}.svg</path>
     </image>
 
-    <!-- Bloco que exibe texto alternativo para o logo -->
+    <!-- Fallback text when no logo SVG exists -->
     <text name="logoText">
       <origin>0 0</origin>
-      <fontPath>${fontRegular}</fontPath>
+      <fontPath>${fontBody}</fontPath>
     </text>
 
-    <image name="background" extra="true">
-      <path>./assets/background.png</path>
-      <size>1 1</size>
-      <origin>0 0</origin>
-      <pos>0 0</pos>
-      <tile>true</tile>
-      <zIndex>-50</zIndex>
-    </image>
-
+    <!-- Per-system background artwork -->
     <image name="cover" extra="true">
       <size>1 0</size>
       <origin>0 0.5</origin>
       <pos>0 0.25</pos>
       <zIndex>-9</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="1" begin="0" duration="1000" mode="easeOut" />
+        <animation property="opacity" from="0" to="1" begin="0" duration="800" mode="easeOut"/>
       </storyboard>
     </image>
   </view>
 
-  <!-- View que exibe o fundo do OSD nos modos sistema, básico, detalhado e grid -->
+  <!-- OSD background (all game views) -->
   <view name="system, basic, detailed, grid">
     <image name="osdBackground" extra="true">
       <pos>0 0</pos>
@@ -88,21 +91,31 @@
     </image>
   </view>
 
-  <!-- View da tela principal, exibe relógio e atividade do controle -->
+  <!-- Screen view: top bar overlay (persistent across all views) -->
   <view name="screen">
+    <!-- Clock: top-right -->
     <text name="clock">
-      <origin>0 0.5</origin>
-      <fontSize>${fontSizeBody-medium}</fontSize>
-      <fontPath>${fontRegular}</fontPath>
+      <origin>1 0</origin>
+      <pos>0.98 0.02</pos>
+      <fontSize>${fontSizeCaption-medium}</fontSize>
+      <fontPath>${fontLight}</fontPath>
       <lineSpacing>1</lineSpacing>
       <alignment>right</alignment>
     </text>
 
+    <!-- Battery indicator: next to clock -->
+    <batteryIndicator name="batteryIndicator">
+      <origin>1 0</origin>
+      <pos>0.945 0.025</pos>
+      <size>0.02</size>
+    </batteryIndicator>
+
+    <!-- Controller activity dots: top-left -->
     <controllerActivity name="controllerActivity">
       <origin>0 0</origin>
       <pos>0.016666 0.025</pos>
-      <size>0.025</size>
-      <itemSpacing>0.003</itemSpacing>
+      <size>0.02</size>
+      <itemSpacing>0.004</itemSpacing>
       <imagePath>./assets/pin.svg</imagePath>
     </controllerActivity>
   </view>

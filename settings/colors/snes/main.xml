@@ -1,0 +1,21 @@
+<!--
+  Theme: Superkonna
+  Palette: SNES
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <variables>
+    <fgColor>FFFFFF</fgColor>
+    <bgColor>2C2C54</bgColor>
+    <mainColor>6C5CE7</mainColor>
+    <onMainColor>FFFFFF</onMainColor>
+    <sectColor>474787</sectColor>
+    <cardColor>3B3B7A</cardColor>
+    <shadowColor>000000</shadowColor>
+    <subtleColor>FFFFFF</subtleColor>
+  </variables>
+
+  <include>./../dark-base.xml</include>
+</theme>

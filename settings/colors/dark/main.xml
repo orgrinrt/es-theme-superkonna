@@ -1,0 +1,21 @@
+<!--
+  Theme: Superkonna
+  Palette: Dark (default)
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <variables>
+    <fgColor>FFFFFF</fgColor>
+    <bgColor>1A1A2E</bgColor>
+    <mainColor>E94560</mainColor>
+    <onMainColor>FFFFFF</onMainColor>
+    <sectColor>0F3460</sectColor>
+    <cardColor>16213E</cardColor>
+    <shadowColor>000000</shadowColor>
+    <subtleColor>FFFFFF</subtleColor>
+  </variables>
+
+  <include>./../dark-base.xml</include>
+</theme>

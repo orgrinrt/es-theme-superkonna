@@ -1,0 +1,27 @@
+<!--
+  Theme: Superkonna
+  Light mode base
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <view name="menu">
+    <menuTextEdit name="menutextedit">
+      <inactive>./../../assets/input_inactive.svg</inactive>
+      <active>./../../assets/input_active-light.svg</active>
+    </menuTextEdit>
+  </view>
+
+  <customView name="flix" inherits="grid">
+    <gridtile name="selected">
+      <backgroundColor>${mainColor}</backgroundColor>
+    </gridtile>
+  </customView>
+
+  <view name="grid">
+    <gridtile name="selected">
+      <backgroundColor>${mainColor}</backgroundColor>
+    </gridtile>
+  </view>
+</theme>

@@ -1,16 +1,16 @@
 <!--
-  Theme: Elementerial
-  Author: mluizvitor
+  Theme: Superkonna
+  Color scheme application: wires semantic vars into all ES elements
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
-  <!-- View que configura as cores da barra de ajuda e do fundo em todos os modos -->
+  <!-- Global background + help system colors -->
   <view name="system, basic, detailed, grid, video">
     <helpsystem name="help">
       <textColor>${fgColor}</textColor>
-      <iconColor>${sectColor}</iconColor>
+      <iconColor>${subtleColor}${percent.60}</iconColor>
     </helpsystem>
 
     <image name="background">
@@ -18,24 +18,24 @@
     </image>
   </view>
 
-  <!-- View que configura as cores das listas de jogos, textos e overlays -->
+  <!-- Game list text + metadata colors -->
   <view name="basic, detailed, grid, video">
     <text name="logoText, md_name">
       <color>${fgColor}${percent.90}</color>
-      <glowColor>${bgColor}${percent.10}</glowColor>
-      <glowSize>1</glowSize>
+      <glowColor>${shadowColor}${percent.30}</glowColor>
+      <glowSize>2</glowSize>
     </text>
 
     <textlist name="gamelist">
       <selectedColor>${onMainColor}</selectedColor>
       <selectorColor>${mainColor}</selectorColor>
       <primaryColor>${fgColor}</primaryColor>
-      <secondaryColor>${fgColor}</secondaryColor>
+      <secondaryColor>${fgColor}${percent.70}</secondaryColor>
     </textlist>
 
     <rating name="md_rating">
-      <color>${sectColor}</color>
-      <unfilledColor>${sectColor}</unfilledColor>
+      <color>${mainColor}</color>
+      <unfilledColor>${subtleColor}${percent.20}</unfilledColor>
     </rating>
 
     <image name="background_overlay" extra="true">
@@ -44,45 +44,46 @@
 
     <text name="md_name">
       <color>${fgColor}${percent.90}</color>
-      <textColor>${fgColor}${percent.90}</textColor>
     </text>
 
-    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_genre, md_players, md_lastplayed, md_playcount, md_description">
-      <color>${fgColor}${percent.90}</color>
-      <textColor>${fgColor}${percent.90}</textColor>
+    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount">
+      <color>${subtleColor}${percent.50}</color>
+    </text>
+
+    <text name="md_releasedate, md_developer, md_publisher, md_genre, md_players, md_lastplayed, md_playcount, md_description">
+      <color>${fgColor}${percent.80}</color>
     </text>
 
     <datetime name="md_releasedate, md_lastplayed">
-      <color>${fgColor}${percent.90}</color>
-      <textColor>${fgColor}${percent.90}</textColor>
+      <color>${fgColor}${percent.80}</color>
     </datetime>
   </view>
 
-  <!-- View que configura as cores do menu de configurações -->
+  <!-- Menu colors -->
   <view name="menu">
     <menuText name="menutext">
       <selectedColor>${onMainColor}</selectedColor>
       <selectorColor>${mainColor}</selectorColor>
       <color>${fgColor}</color>
-      <separatorColor>${fgColor}${percent.5}</separatorColor>
+      <separatorColor>${subtleColor}${percent.10}</separatorColor>
     </menuText>
 
     <menuTextSmall name="menutextsmall">
-      <color>${sectColor}</color>
+      <color>${subtleColor}${percent.50}</color>
     </menuTextSmall>
 
     <menuGroup name="menugroup">
       <color>${sectColor}</color>
-      <separatorColor>${sectColor}${percent.60}</separatorColor>
-      <backgroundColor>${sectColor}${percent.10}</backgroundColor>
+      <separatorColor>${sectColor}${percent.40}</separatorColor>
+      <backgroundColor>${cardColor}${percent.60}</backgroundColor>
     </menuGroup>
 
     <menuBackground name="menubg">
-      <color>${bgColor}</color>
+      <color>${cardColor}${percent.90}</color>
     </menuBackground>
 
     <menuText name="menufooter">
-      <color>${fgColor}${percent.80}</color>
+      <color>${subtleColor}${percent.50}</color>
     </menuText>
 
     <menuText name="menutitle">
@@ -90,7 +91,7 @@
     </menuText>
   </view>
 
-  <!-- View que configura as cores dos tiles da grid -->
+  <!-- Grid tile colors -->
   <view name="grid">
     <text name="gridtile">
       <color>${fgColor}</color>
@@ -101,20 +102,8 @@
     </text>
   </view>
 
-  <!-- CustomView "boxes" que configura as cores dos tiles na grid personalizada -->
-  <customView name="boxes" inherits="grid">
-    <text name="gridtile">
-      <color>FFFFFF</color>
-      <backgroundColor>000000${percent.80}</backgroundColor>
-    </text>
-
-    <text name="gridtile:selected">
-      <color>FFFFFF</color>
-    </text>
-  </customView>
-
-  <!-- CustomView "elementflix" que configura as cores dos tiles na grid estilo Netflix -->
-  <customView name="elementflix" inherits="grid">
+  <!-- Flix (Netflix-style) grid tile colors -->
+  <customView name="flix" inherits="grid">
     <text name="gridtile">
       <color>${fgColor}${percent.80}</color>
     </text>
@@ -124,27 +113,24 @@
     </text>
   </customView>
 
-  <!-- View que configura as cores do carrossel, nome do sistema e informações -->
+  <!-- System carousel colors -->
   <view name="system">
     <carousel name="systemcarousel">
       <color>${bgColor}00</color>
     </carousel>
 
     <text name="systemName">
-      <color>${fgColor}${percent.90}</color>
-      <glowColor>${bgColor}${percent.10}</glowColor>
-      <glowSize>1</glowSize>
+      <color>${fgColor}</color>
+      <glowColor>${shadowColor}${percent.60}</glowColor>
+      <glowSize>3</glowSize>
+      <glowOffset>3 2</glowOffset>
     </text>
 
     <text name="systemInfo">
-      <color>${fgColor}${percent.90}</color>
-      <glowColor>${bgColor}${percent.10}</glowColor>
-      <glowSize>1</glowSize>
+      <color>${subtleColor}${percent.60}</color>
+      <glowColor>${shadowColor}${percent.40}</glowColor>
+      <glowSize>2</glowSize>
     </text>
-
-    <image name="cover_fallback" extra="true">
-      <color>${bgColor}</color>
-    </image>
 
     <image name="background_overlay" extra="true">
       <color>${bgColor}</color>
@@ -152,30 +138,33 @@
 
     <text name="logoText">
       <color>${fgColor}</color>
-      <glowColor>${mainColor}${percent.10}</glowColor>
-      <glowSize>1</glowSize>
+      <glowColor>${mainColor}${percent.20}</glowColor>
+      <glowSize>2</glowSize>
     </text>
   </view>
 
-  <!-- View que configura a cor do fundo do OSD nos modos sistema, básico, detalhado e grid -->
+  <!-- OSD background -->
   <view name="system, basic, detailed, grid">
     <image name="osdBackground" extra="true">
-      <color>000000</color>
+      <color>${shadowColor}</color>
     </image>
   </view>
 
-  <!-- View que configura as cores do relógio, indicador de bateria e atividade do controle -->
+  <!-- Screen overlay: clock, battery, controller activity -->
   <view name="screen">
     <text name="clock">
-      <color>FFFFFF</color>
+      <color>${fgColor}</color>
+      <glowColor>${shadowColor}${percent.60}</glowColor>
+      <glowSize>2</glowSize>
+      <glowOffset>1 1</glowOffset>
     </text>
 
     <batteryIndicator name="batteryIndicator">
-      <color>FFFFFF</color>
+      <color>${fgColor}</color>
     </batteryIndicator>
 
     <controllerActivity name="controllerActivity">
-      <color>${fgColor}${percent.30}</color>
+      <color>${subtleColor}${percent.30}</color>
       <activityColor>${mainColor}${percent.70}</activityColor>
       <hotkeyColor>${mainColor}</hotkeyColor>
     </controllerActivity>

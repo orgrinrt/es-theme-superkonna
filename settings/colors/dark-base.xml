@@ -1,0 +1,27 @@
+<!--
+  Theme: Superkonna
+  Dark mode base: shared by dark, pastel, snes palettes
+-->
+
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <view name="menu">
+    <menuTextEdit name="menutextedit">
+      <inactive>./../../assets/input_inactive.svg</inactive>
+      <active>./../../assets/input_active-dark.svg</active>
+    </menuTextEdit>
+  </view>
+
+  <customView name="flix" inherits="grid">
+    <gridtile name="selected">
+      <backgroundColor>FFFFFF</backgroundColor>
+    </gridtile>
+  </customView>
+
+  <view name="grid">
+    <gridtile name="selected">
+      <backgroundColor>${mainColor}</backgroundColor>
+    </gridtile>
+  </view>
+</theme>

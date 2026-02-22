@@ -1,6 +1,7 @@
 <!--
-  Theme: Elementerial
-  Author: mluizvitor
+  Theme: Superkonna
+  A custom ES theme for Batocera.
+  Forked from Elementerial by mluizvitor (MIT License).
 -->
 
 <theme>
@@ -8,58 +9,36 @@
 
   <include>./variables.xml</include>
 
-  <!-- Subset que permite escolher o esquema de cores do tema -->
+  <!-- Color scheme selection -->
   <subset name="Color scheme" displayName="Color scheme">
-    <include name="strawberry" displayName="strawberry">./settings/colors/strawberry/main.xml</include>
-    <include name="orange" displayName="orange">./settings/colors/orange/main.xml</include>
-    <include name="banana" displayName="banana">./settings/colors/banana/main.xml</include>
-    <include name="lime" displayName="lime">./settings/colors/lime/main.xml</include>
-    <include name="mint" displayName="mint">./settings/colors/mint/main.xml</include>
-    <include name="blueberry" displayName="blueberry">./settings/colors/blueberry/main.xml</include>
-    <include name="grape" displayName="grape">./settings/colors/grape/main.xml</include>
-    <include name="bubblegum" displayName="bubblegum">./settings/colors/bubblegum/main.xml</include>
-    <include name="cocoa" displayName="cocoa">./settings/colors/cocoa/main.xml</include>
-    <include name="slate" displayName="slate">./settings/colors/slate/main.xml</include>
-    <include name="snes" displayName="Snes Scheme">./settings/colors/extra-snes/main.xml</include>
-    <include name="gb" displayName="Game Boy Scheme">./settings/colors/extra-gameboy/main.xml</include>
-    <include name="pikachu" displayName="Pikachu Edition">./settings/colors/extra-pikachu/main.xml</include>
-    <include name="redBerries" displayName="Red Berries">./settings/colors/extra-redBerries/main.xml</include>
+    <include name="dark" displayName="Dark (default)">./settings/colors/dark/main.xml</include>
+    <include name="light" displayName="Light">./settings/colors/light/main.xml</include>
+    <include name="pastel" displayName="Pastel">./settings/colors/pastel/main.xml</include>
+    <include name="snes" displayName="SNES">./settings/colors/snes/main.xml</include>
   </subset>
 
-  <!-- Subset que permite escolher o tamanho da fonte do tema -->
+  <!-- Font size selection -->
   <subset name="FontSize" displayName="Font Size">
     <include name="small">./settings/fontSize/small.xml</include>
     <include name="medium">./settings/fontSize/medium.xml</include>
     <include name="large">./settings/fontSize/large.xml</include>
   </subset>
 
-  <!-- Subset que ativa ou desativa vídeo no carrossel -->
-  <subset name="PlayVideo" displayName="Video on carousel">
-    <include name="false" displayName="Disabled"/>
-    <include name="true" displayName="Enabled">./settings/display/background/carousel-video-on.xml</include>
-  </subset>
-
-  <!-- Subset que define o estilo do fundo do tema -->
-  <subset name="Background Style" displayName="Background style">
-    <include name="default" displayName="Default">./settings/display/background/default.xml</include>
-    <include name="random" displayName="Random">./settings/display/background/random.xml</include>
-    <include name="custom" displayName="Custom">./settings/display/background/custom.xml</include>
-  </subset>
-
-  <!-- Subset que configura a barra de status (relógio, bateria, etc) -->
+  <!-- Status bar visibility -->
   <subset name="Status Bar" displayName="Status Bar">
-    <include name="complete" displayName="Clock + Battery">./settings/display/statusbar/complete.xml</include>
-    <include name="clock" displayName="Clock">./settings/display/statusbar/clock.xml</include>
-    <include name="battery" displayName="Battery">./settings/display/statusbar/battery.xml</include>
+    <include name="full" displayName="Full (Clock + Battery + Network)">./settings/display/statusbar/full.xml</include>
+    <include name="clock" displayName="Clock only">./settings/display/statusbar/clock.xml</include>
     <include name="hidden" displayName="Hidden">./settings/display/statusbar/hidden.xml</include>
   </subset>
 
+  <!-- Apply color scheme to all elements -->
   <include>./settings/colors/scheme.xml</include>
+
+  <!-- View definitions -->
   <include>./settings/display/view-general.xml</include>
   <include>./settings/display/view-system.xml</include>
-  <include>./settings/display/view-grid/grid.xml</include>
-  <include>./settings/display/view-boxes.xml</include>
-  <include>./settings/display/view-elementflix/flix.xml</include>
+  <include>./settings/display/view-grid.xml</include>
+  <include>./settings/display/view-flix.xml</include>
   <include>./settings/display/view-menu.xml</include>
 
 </theme>

@@ -1,63 +1,52 @@
 <!--
-  Theme: Elementerial
-  Author: mluizvitor
+  Theme: Superkonna
+  Menu view: settings/configuration menu styling
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
-  <!-- View do menu de configurações do sistema -->
   <view name="menu">
-    <!-- Texto padrão do menu -->
     <menuText name="menutext">
-      <fontPath>${fontRegular}</fontPath>
+      <fontPath>${fontBody}</fontPath>
     </menuText>
 
-    <!-- Texto pequeno do menu -->
     <menuTextSmall name="menutextsmall">
       <fontPath>${fontLight}</fontPath>
     </menuTextSmall>
 
-    <!-- Grupo de itens do menu -->
     <menuGroup name="menugroup">
-      <fontPath>${fontRegular}</fontPath>
+      <fontPath>${fontBody}</fontPath>
     </menuGroup>
 
-    <!-- Título do menu -->
     <menuText name="menutitle">
-      <fontPath>${fontBold}</fontPath>
+      <fontPath>${fontDisplay}</fontPath>
     </menuText>
 
-    <!-- Fundo do menu -->
     <menuBackground name="menubg">
       <fadePath>./assets/shade.png</fadePath>
       <size>1 1</size>
     </menuBackground>
 
-    <!-- Botão do menu -->
     <menuButton name="menubutton">
       <path>./assets/button-normal.svg</path>
       <filledPath>./assets/button-hover.svg</filledPath>
       <cornerSize>8 8</cornerSize>
     </menuButton>
 
-    <!-- Switch do menu -->
     <menuSwitch name="menuswitch">
       <pathOn>./assets/switch-on.svg</pathOn>
       <pathOff>./assets/switch-off.svg</pathOff>
     </menuSwitch>
 
-    <!-- Texto do rodapé do menu -->
     <menuText name="menufooter">
-      <fontPath>${fontBold}</fontPath>
+      <fontPath>${fontDisplay}</fontPath>
     </menuText>
 
-    <!-- Campo de edição de texto do menu -->
     <menuTextEdit name="menutextedit">
-      <fontPath>${fontBold}</fontPath>
+      <fontPath>${fontDisplay}</fontPath>
     </menuTextEdit>
 
-    <!-- Ícones do menu -->
     <menuIcons name="menuicons">
       <iconSystem>./assets/icons/cog.svg</iconSystem>
       <iconUpdates>./assets/icons/update.svg</iconUpdates>
