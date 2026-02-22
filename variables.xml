@@ -34,11 +34,6 @@
     <fontLight>./assets/fonts/Inter/Inter-Light.otf</fontLight>
     <fontUI>./assets/fonts/RobotoCondensed/RobotoCondensed-Regular.ttf</fontUI>
 
-    <!-- Legacy aliases (Elementerial compat while migrating views) -->
-    <fontRegular>./assets/fonts/Inter/Inter-Regular.otf</fontRegular>
-    <fontBold>./assets/fonts/Inter/Inter-Bold.otf</fontBold>
-    <fontHelper>./assets/fonts/RobotoCondensed/RobotoCondensed-Regular.ttf</fontHelper>
-
     <!-- Hex opacity suffixes (append to color vars: ${fgColor}${percent.50}) -->
     <percent.90>E6</percent.90>
     <percent.80>CC</percent.80>
