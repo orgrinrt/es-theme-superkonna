@@ -5,15 +5,16 @@
 //! using an X11 override-redirect window.
 
 mod audio;
-mod config;
-mod menu;
 mod popup;
-mod renderer;
 mod retroarch;
 mod socket;
-mod theme;
 mod watcher;
 mod window;
+
+use superkonna_overlay::config;
+use superkonna_overlay::menu;
+use superkonna_overlay::renderer;
+use superkonna_overlay::theme;
 
 use std::path::PathBuf;
 use std::sync::mpsc;

@@ -1,3 +1,4 @@
 # Generated runtime files
 generated/*
 !generated/.gitkeep
+projects/overlay/preview-output/

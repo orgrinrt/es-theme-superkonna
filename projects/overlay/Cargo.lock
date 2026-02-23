@@ -590,6 +590,7 @@ dependencies = [
  "fontdue",
  "log",
  "notify",
+ "png",
  "serde",
  "tiny-skia",
  "toml",
