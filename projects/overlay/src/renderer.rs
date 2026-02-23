@@ -268,10 +268,10 @@ impl Renderer {
                 TOAST_BADGE_SIZE - 2.0, TOAST_BADGE_SIZE * 0.4,
                 TOAST_BADGE_RADIUS - 1.0,
                 self.subtle.with_alpha(oa(30)));
-            // Star centered
+            // Star centered in badge
             let star_size = 24.0;
             let sx = badge_x + (TOAST_BADGE_SIZE - measure_text(&self.display_font, "\u{2605}", star_size)) / 2.0;
-            let sy = badge_y + TOAST_BADGE_SIZE / 2.0 + star_size * 0.35;
+            let sy = text_center_y(&self.display_font, star_size, badge_y, TOAST_BADGE_SIZE);
             rasterize_text(pixmap, "\u{2605}", &self.display_font, star_size,
                 sx, sy, self.on_accent.with_alpha(oa(240)));
         }
@@ -281,24 +281,38 @@ impl Renderer {
             badge_x, badge_y, TOAST_BADGE_SIZE, TOAST_BADGE_SIZE,
             TOAST_BADGE_RADIUS, self.accent.with_alpha(oa(60)));
 
-        // Text column
+        // Text column — 3 lines vertically distributed in toast
         let text_x = badge_x + TOAST_BADGE_SIZE + 16.0;
         let text_max_w = TOAST_W - (text_x - x) - 16.0;
 
+        // Vertical layout: header(9.5) + title(16) + desc(11.5) with gaps
+        let header_size = 9.5_f32;
+        let title_size = 16.0_f32;
+        let desc_size = 11.5_f32;
+        let header_h = text_height(&self.body_font, header_size);
+        let title_h = text_height(&self.display_font, title_size);
+        let desc_h = text_height(&self.light_font, desc_size);
+        let line_gap = 2.0;
+        let has_desc = !popup.description.is_empty();
+        let total_text_h = header_h + line_gap + title_h + if has_desc { line_gap + desc_h } else { 0.0 };
+        let text_top = y + (TOAST_H - total_text_h) / 2.0;
+
         // "ACHIEVEMENT UNLOCKED" header
-        rasterize_text(pixmap, "ACHIEVEMENT UNLOCKED", &self.body_font, 9.5,
-            text_x, y + 26.0, self.accent.with_alpha(oa(200)));
+        rasterize_text(pixmap, "ACHIEVEMENT UNLOCKED", &self.body_font, header_size,
+            text_x, text_top, self.accent.with_alpha(oa(200)));
 
         // Title
-        let title_trunc = truncate_to_width(&self.display_font, &popup.title, 16.0, text_max_w);
-        rasterize_text(pixmap, &title_trunc, &self.display_font, 16.0,
-            text_x, y + 46.0, self.fg.with_alpha(oa(250)));
+        let title_y = text_top + header_h + line_gap;
+        let title_trunc = truncate_to_width(&self.display_font, &popup.title, title_size, text_max_w);
+        rasterize_text(pixmap, &title_trunc, &self.display_font, title_size,
+            text_x, title_y, self.fg.with_alpha(oa(250)));
 
         // Description
-        if !popup.description.is_empty() {
-            let desc_trunc = truncate_to_width(&self.light_font, &popup.description, 11.5, text_max_w);
-            rasterize_text(pixmap, &desc_trunc, &self.light_font, 11.5,
-                text_x, y + 66.0, self.subtle.with_alpha(oa(120)));
+        if has_desc {
+            let desc_y = title_y + title_h + line_gap;
+            let desc_trunc = truncate_to_width(&self.light_font, &popup.description, desc_size, text_max_w);
+            rasterize_text(pixmap, &desc_trunc, &self.light_font, desc_size,
+                text_x, desc_y, self.subtle.with_alpha(oa(120)));
         }
     }
 
@@ -455,14 +469,14 @@ impl Renderer {
                 } else {
                     self.on_accent.with_alpha(oa(255))
                 };
-                let text_y = iy + item_h / 2.0 + item_text_size * 0.35;
+                let text_y = text_center_y(&self.body_font, item_text_size, iy, item_h);
                 // Center text in pill
                 let tw = measure_text(&self.body_font, label, item_text_size);
                 let tx = sel_x + (sel_w - tw) / 2.0;
                 rasterize_text(pixmap, label, &self.body_font, item_text_size,
                     tx, text_y, text_color);
             } else {
-                let text_y = iy + item_h / 2.0 + item_text_size * 0.35;
+                let text_y = text_center_y(&self.body_font, item_text_size, iy, item_h);
                 let tw = measure_text(&self.body_font, &item.label, item_text_size);
                 let tx = panel_x + (panel_w - tw) / 2.0;
                 rasterize_text(pixmap, &item.label, &self.body_font, item_text_size,
@@ -524,17 +538,19 @@ impl Renderer {
         };
         draw_circle_stroke(pixmap, bcx, bcy, btn_r, border_color);
 
-        // Letter centered
+        // Letter centered in circle
         let lw = measure_text(&self.body_font, button, size * 0.85);
+        let letter_y = text_center_y(&self.body_font, size * 0.85, bcy - btn_r, btn_d);
         rasterize_text(pixmap, button, &self.body_font, size * 0.85,
-            bcx - lw / 2.0, bcy + size * 0.3,
+            bcx - lw / 2.0, letter_y,
             self.fg.with_alpha(oa(200)));
 
-        // Label text
+        // Label text centered with circle
         let gap = 4.0 * scale;
         let lx = x + btn_d + gap;
+        let label_y = text_center_y(&self.light_font, size, bcy - btn_r, btn_d);
         rasterize_text(pixmap, label, &self.light_font, size,
-            lx, bcy + size * 0.35,
+            lx, label_y,
             self.fg.with_alpha(oa(80)));
 
         lx + measure_text(&self.light_font, label, size)
@@ -582,9 +598,10 @@ impl Renderer {
         draw_rounded_rect(pixmap, x + 1.0, y + 1.0, pill_w - 2.0, 1.0, STATUS_RADIUS - 1.0,
             self.subtle.with_alpha(oa(12)));
 
-        // Text
+        // Text vertically centered in pill
+        let text_y = text_center_y(&self.light_font, text_size, y, STATUS_H);
         rasterize_text(pixmap, &text, &self.light_font, text_size,
-            x + STATUS_PAD_H, y + STATUS_H * 0.65,
+            x + STATUS_PAD_H, text_y,
             self.fg.with_alpha(oa(170)));
     }
 }
@@ -727,17 +744,24 @@ fn in_rounded_rect(x: f32, y: f32, w: f32, h: f32, r: f32) -> bool {
     true
 }
 
+/// Rasterize text with y = top of text em-box (not baseline).
+/// Computes baseline internally from font ascent metrics.
 fn rasterize_text(pixmap: &mut Pixmap, text: &str, font: &fontdue::Font, size: f32, x: f32, y: f32, c: Color8) {
     if c.a == 0 { return; }
     let pw = pixmap.width() as i32;
     let ph = pixmap.height() as i32;
     let data = pixmap.data_mut();
 
+    let ascent = font.horizontal_line_metrics(size)
+        .map(|lm| lm.ascent)
+        .unwrap_or(size * 0.8);
+    let baseline_y = y + ascent;
+
     let mut cursor_x = x;
     for ch in text.chars() {
         let (metrics, bitmap) = font.rasterize(ch, size);
         let gx = cursor_x as i32 + metrics.xmin;
-        let gy = y as i32 - metrics.height as i32 + (metrics.height as i32 - metrics.ymin);
+        let gy = baseline_y as i32 - metrics.ymin - metrics.height as i32;
 
         for row in 0..metrics.height {
             for col in 0..metrics.width {
@@ -757,6 +781,18 @@ fn rasterize_text(pixmap: &mut Pixmap, text: &str, font: &fontdue::Font, size: f
         }
         cursor_x += metrics.advance_width;
     }
+}
+
+/// Height of the font em-box (ascent - descent) for vertical centering.
+fn text_height(font: &fontdue::Font, size: f32) -> f32 {
+    font.horizontal_line_metrics(size)
+        .map(|lm| lm.ascent - lm.descent)
+        .unwrap_or(size)
+}
+
+/// Compute y (top of em-box) to vertically center text within a container.
+fn text_center_y(font: &fontdue::Font, size: f32, container_y: f32, container_h: f32) -> f32 {
+    container_y + (container_h - text_height(font, size)) / 2.0
 }
 
 pub fn measure_text(font: &fontdue::Font, text: &str, size: f32) -> f32 {
