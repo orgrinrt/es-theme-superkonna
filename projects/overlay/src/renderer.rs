@@ -49,51 +49,80 @@ impl Renderer {
         }
     }
 
-    // ── Popup rendering (existing) ──────────────────────────
+    // ── Popup rendering — premium achievement card ────────
 
     pub fn render_popup(&self, title: &str, description: &str, opacity: f32) -> Vec<u32> {
-        let w: u32 = 480;
-        let h: u32 = 120;
+        let w: u32 = 640;
+        let h: u32 = 140;
         let mut pixmap = Pixmap::new(w, h).expect("pixmap");
         pixmap.fill(tiny_skia::Color::TRANSPARENT);
 
         let opacity_byte = (opacity * 255.0) as u8;
 
-        // Drop shadow (subtle offset)
-        draw_rounded_rect(&mut pixmap, 4.0, 4.0, w as f32 - 4.0, h as f32 - 4.0, 14.0,
-            Color8 { r: 0, g: 0, b: 0, a: (60.0 * opacity) as u8 });
+        // Outer glow (diffuse)
+        draw_rounded_rect(&mut pixmap, 0.0, 0.0, w as f32, h as f32, 18.0,
+            Color8 { r: self.accent.r, g: self.accent.g, b: self.accent.b, a: (25.0 * opacity) as u8 });
 
-        // Background card
-        draw_rounded_rect(&mut pixmap, 2.0, 2.0, w as f32 - 6.0, h as f32 - 6.0, 12.0,
-            self.card.with_alpha((self.card.a as f32 * opacity) as u8));
+        // Drop shadow (layered for depth)
+        draw_rounded_rect(&mut pixmap, 6.0, 8.0, w as f32 - 8.0, h as f32 - 8.0, 16.0,
+            Color8 { r: 0, g: 0, b: 0, a: (80.0 * opacity) as u8 });
+        draw_rounded_rect(&mut pixmap, 4.0, 5.0, w as f32 - 5.0, h as f32 - 5.0, 16.0,
+            Color8 { r: 0, g: 0, b: 0, a: (50.0 * opacity) as u8 });
 
-        // Accent left strip
-        draw_rounded_rect(&mut pixmap, 2.0, 2.0, 6.0, h as f32 - 6.0, 3.0,
+        // Background card with gradient (top-left lighter)
+        let card_a = (self.card.a as f32 * opacity) as u8;
+        draw_rounded_rect(&mut pixmap, 3.0, 3.0, w as f32 - 6.0, h as f32 - 6.0, 14.0,
+            self.card.with_alpha(card_a));
+        // Subtle highlight at top edge
+        draw_rounded_rect(&mut pixmap, 3.0, 3.0, w as f32 - 6.0, 2.0, 14.0,
+            Color8 { r: 255, g: 255, b: 255, a: (12.0 * opacity) as u8 });
+
+        // Accent left strip (thicker, with gradient fade)
+        draw_rounded_rect(&mut pixmap, 3.0, 3.0, 5.0, h as f32 - 6.0, 3.0,
             self.accent.with_alpha((self.accent.a as f32 * opacity) as u8));
+        // Accent strip glow
+        draw_rounded_rect(&mut pixmap, 3.0, 3.0, 12.0, h as f32 - 6.0, 3.0,
+            self.accent.with_alpha((30.0 * opacity) as u8));
 
-        // Trophy circle with gradient effect (inner brighter)
-        draw_circle(&mut pixmap, 38.0, h as f32 / 2.0, 20.0,
+        // Trophy circle — outer ring
+        let trophy_cx = 48.0;
+        let trophy_cy = h as f32 / 2.0;
+        draw_circle(&mut pixmap, trophy_cx, trophy_cy, 26.0,
+            self.accent.with_alpha((50.0 * opacity) as u8));
+        // Trophy circle — main
+        draw_circle(&mut pixmap, trophy_cx, trophy_cy, 22.0,
             self.accent.with_alpha((180.0 * opacity) as u8));
-        draw_circle(&mut pixmap, 38.0, h as f32 / 2.0, 14.0,
-            self.accent.with_alpha((220.0 * opacity) as u8));
+        // Trophy circle — inner highlight
+        draw_circle(&mut pixmap, trophy_cx, trophy_cy, 16.0,
+            self.accent.with_alpha((230.0 * opacity) as u8));
 
-        // Trophy icon (star character)
-        rasterize_text(&mut pixmap, "\u{2605}", &self.display_font, 20.0, 28.0,
-            h as f32 / 2.0 - 10.0, self.on_accent.with_alpha(opacity_byte));
+        // Trophy icon (star)
+        rasterize_text(&mut pixmap, "\u{2605}", &self.display_font, 22.0, trophy_cx - 11.0,
+            trophy_cy - 11.0, self.on_accent.with_alpha(opacity_byte));
 
-        // "ACHIEVEMENT UNLOCKED" header
-        rasterize_text(&mut pixmap, "ACHIEVEMENT UNLOCKED", &self.light_font, 10.0, 66.0,
-            h as f32 / 2.0 - 26.0, self.fg.with_alpha(((opacity * 0.5) * 255.0) as u8));
+        // "ACHIEVEMENT UNLOCKED" header — caps, tracked
+        let header_y = trophy_cy - 30.0;
+        rasterize_text(&mut pixmap, "ACHIEVEMENT UNLOCKED", &self.light_font, 11.0, 82.0,
+            header_y, self.accent.with_alpha(((opacity * 0.7) * 255.0) as u8));
 
-        // Title
-        rasterize_text(&mut pixmap, title, &self.display_font, 20.0, 66.0,
-            h as f32 / 2.0 - 6.0, self.fg.with_alpha(opacity_byte));
+        // Title — bold, larger
+        rasterize_text(&mut pixmap, title, &self.display_font, 22.0, 82.0,
+            trophy_cy - 6.0, self.fg.with_alpha(opacity_byte));
 
-        // Description
+        // Description — two-line capable with clipping
         if !description.is_empty() {
-            rasterize_text(&mut pixmap, description, &self.light_font, 14.0, 66.0,
-                h as f32 / 2.0 + 18.0, self.fg.with_alpha(((opacity * 0.7) * 255.0) as u8));
+            let desc_y = trophy_cy + 20.0;
+            let max_desc_width = w as f32 - 100.0;
+            let truncated = truncate_to_width(&self.light_font, description, 15.0, max_desc_width);
+            rasterize_text(&mut pixmap, &truncated, &self.light_font, 15.0, 82.0,
+                desc_y, self.fg.with_alpha(((opacity * 0.6) * 255.0) as u8));
         }
+
+        // Right-side accent dot decoration
+        draw_circle(&mut pixmap, w as f32 - 24.0, trophy_cy, 3.0,
+            self.accent.with_alpha((80.0 * opacity) as u8));
+        draw_circle(&mut pixmap, w as f32 - 36.0, trophy_cy, 2.0,
+            self.accent.with_alpha((40.0 * opacity) as u8));
 
         pixmap_to_argb(&pixmap)
     }
@@ -289,6 +318,22 @@ fn rasterize_text(pixmap: &mut Pixmap, text: &str, font: &fontdue::Font, size: f
 
 fn measure_text(font: &fontdue::Font, text: &str, size: f32) -> f32 {
     text.chars().map(|ch| font.metrics(ch, size).advance_width).sum()
+}
+
+fn truncate_to_width(font: &fontdue::Font, text: &str, size: f32, max_width: f32) -> String {
+    let mut result = String::new();
+    let mut width = 0.0;
+    let ellipsis_width = measure_text(font, "...", size);
+    for ch in text.chars() {
+        let cw = font.metrics(ch, size).advance_width;
+        if width + cw + ellipsis_width > max_width && result.len() > 0 {
+            result.push_str("...");
+            return result;
+        }
+        width += cw;
+        result.push(ch);
+    }
+    result
 }
 
 fn pixmap_to_argb(pixmap: &Pixmap) -> Vec<u32> {

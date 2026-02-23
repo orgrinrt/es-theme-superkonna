@@ -231,8 +231,8 @@ fn main() {
             let sh = screen_h as u32;
             let total = (sw * sh) as usize;
             let mut screen = vec![0u32; total];
-            let pw: u32 = 480;
-            let ph: u32 = 120;
+            let pw: u32 = 640;
+            let ph: u32 = 140;
             let offset_x = sw.saturating_sub(pw + 20);
             let offset_y = 20_u32;
             for row in 0..ph {
