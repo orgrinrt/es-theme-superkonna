@@ -3,5 +3,6 @@
 
 pub mod config;
 pub mod menu;
+pub mod popup;
 pub mod renderer;
 pub mod theme;

@@ -5,7 +5,6 @@
 //! using an X11 override-redirect window.
 
 mod audio;
-mod popup;
 mod retroarch;
 mod socket;
 mod watcher;
@@ -13,6 +12,7 @@ mod window;
 
 use superkonna_overlay::config;
 use superkonna_overlay::menu;
+use superkonna_overlay::popup;
 use superkonna_overlay::renderer;
 use superkonna_overlay::theme;
 
@@ -221,32 +221,16 @@ fn main() {
         let has_popup = popup_queue.current().is_some();
         let has_menu = game_menu.is_visible();
 
-        if has_menu {
-            let pixels = rend.render_menu(&game_menu, screen_w as u32, screen_h as u32, &menu_config);
+        if has_menu || has_popup {
+            let frame_state = renderer::FrameState {
+                popup: popup_queue.current(),
+                menu: if has_menu { Some(&game_menu) } else { None },
+                menu_config: &menu_config,
+                game_name: None, // TODO: wire up from RA
+            };
+            let pixels = rend.render_frame(&frame_state, screen_w as u32, screen_h as u32);
             win.show();
             win.update_pixels(&pixels, screen_w, screen_h);
-        } else if has_popup {
-            let popup = popup_queue.current().unwrap();
-            let popup_pixels = rend.render_popup(&popup.title, &popup.description, popup.opacity());
-            let sw = screen_w as u32;
-            let sh = screen_h as u32;
-            let total = (sw * sh) as usize;
-            let mut screen = vec![0u32; total];
-            let pw: u32 = 640;
-            let ph: u32 = 140;
-            let offset_x = sw.saturating_sub(pw + 20);
-            let offset_y = 20_u32;
-            for row in 0..ph {
-                for col in 0..pw {
-                    let src_idx = (row * pw + col) as usize;
-                    let dst_idx = ((offset_y + row) * sw + offset_x + col) as usize;
-                    if dst_idx < total {
-                        screen[dst_idx] = popup_pixels[src_idx];
-                    }
-                }
-            }
-            win.show();
-            win.update_pixels(&screen, screen_w, screen_h);
         } else {
             win.hide();
         }

@@ -19,6 +19,7 @@ enum Phase {
 pub struct Popup {
     pub title: String,
     pub description: String,
+    pub badge_png: Option<Vec<u8>>,
     started: Instant,
     phase: Phase,
 }
@@ -28,9 +29,22 @@ impl Popup {
         Popup {
             title,
             description,
+            badge_png: None,
             started: Instant::now(),
             phase: Phase::SlideIn,
         }
+    }
+
+    pub fn with_badge(mut self, png_bytes: Vec<u8>) -> Self {
+        self.badge_png = Some(png_bytes);
+        self
+    }
+
+    /// Force popup into Hold phase at full opacity (for preview/testing).
+    pub fn force_hold(&mut self) {
+        self.phase = Phase::Hold;
+        // Set started far enough in the past that SlideIn would be done
+        self.started = Instant::now() - std::time::Duration::from_secs(10);
     }
 
     /// Current opacity (0.0 to 1.0) based on animation phase.

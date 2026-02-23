@@ -11,6 +11,7 @@ pub struct Theme {
     pub bg_color: Color,
     pub accent_color: Color,
     pub on_accent_color: Color,
+    pub sect_color: Color,
     pub card_color: Color,
     pub shadow_color: Color,
     pub subtle_color: Color,
@@ -63,7 +64,7 @@ impl Color {
 
 impl Theme {
     pub fn load(theme_root: &Path) -> Result<Self, String> {
-        // Parse variables.xml for font paths
+        // Parse variables.xml for font paths and base defaults
         let vars_path = theme_root.join("variables.xml");
         let vars = if vars_path.exists() {
             parse_variables(&std::fs::read_to_string(&vars_path).map_err(|e| e.to_string())?)
@@ -71,13 +72,8 @@ impl Theme {
             HashMap::new()
         };
 
-        // Parse the active color palette — try settings/colorScheme/main.xml
-        let color_path = theme_root.join("settings/colorScheme/main.xml");
-        let color_vars = if color_path.exists() {
-            parse_variables(&std::fs::read_to_string(&color_path).map_err(|e| e.to_string())?)
-        } else {
-            HashMap::new()
-        };
+        // Discover the active color scheme from ES settings, then load it
+        let color_vars = load_active_color_scheme(theme_root);
 
         let get_color = |key: &str, default: &str| -> Color {
             color_vars
@@ -89,7 +85,6 @@ impl Theme {
 
         let resolve_font = |key: &str, default: &str| -> PathBuf {
             let rel = vars.get(key).map(|s| s.as_str()).unwrap_or(default);
-            // Strip leading ./ for joining
             let rel = rel.strip_prefix("./").unwrap_or(rel);
             theme_root.join(rel)
         };
@@ -99,6 +94,7 @@ impl Theme {
             bg_color: get_color("bgColor", "1A1A2EFF"),
             accent_color: get_color("mainColor", "E94560FF"),
             on_accent_color: get_color("onMainColor", "FFFFFFFF"),
+            sect_color: get_color("sectColor", "0F3460FF"),
             card_color: get_color("cardColor", "16213EFF"),
             shadow_color: get_color("shadowColor", "000000FF"),
             subtle_color: get_color("subtleColor", "FFFFFFFF"),
@@ -107,6 +103,104 @@ impl Theme {
             font_light_path: resolve_font("fontLight", "assets/fonts/Inter/Inter-Light.otf"),
         })
     }
+}
+
+/// Resolve the active color scheme by reading ES settings.
+///
+/// Search order:
+/// 1. `SUPERKONNA_COLOR_SCHEME` env var (e.g. "snes")
+/// 2. ES settings file — look for subset key matching this theme's "Color scheme"
+/// 3. Fall back to "dark"
+///
+/// Then load `{theme_root}/settings/colors/{scheme}/main.xml`.
+fn load_active_color_scheme(theme_root: &Path) -> HashMap<String, String> {
+    let scheme = resolve_color_scheme_name(theme_root);
+    log::info!("overlay color scheme: {scheme}");
+
+    let color_path = theme_root.join(format!("settings/colors/{scheme}/main.xml"));
+    if color_path.exists() {
+        if let Ok(content) = std::fs::read_to_string(&color_path) {
+            return parse_variables(&content);
+        }
+    }
+
+    // Fallback: try dark
+    let fallback = theme_root.join("settings/colors/dark/main.xml");
+    if fallback.exists() {
+        if let Ok(content) = std::fs::read_to_string(&fallback) {
+            return parse_variables(&content);
+        }
+    }
+
+    HashMap::new()
+}
+
+fn resolve_color_scheme_name(theme_root: &Path) -> String {
+    // 1. Env var override
+    if let Ok(val) = std::env::var("SUPERKONNA_COLOR_SCHEME") {
+        if !val.is_empty() {
+            return val;
+        }
+    }
+
+    // 2. Read ES settings to find the active subset
+    //    Batocera stores subset choices as:
+    //      <string name="subset.<theme-dir-name>.<SubsetName>" value="<choice>" />
+    //    The theme dir name is the folder under /userdata/themes/
+    let theme_dir_name = theme_root
+        .file_name()
+        .and_then(|n| n.to_str())
+        .unwrap_or("es-theme-superkonna");
+
+    let es_settings_paths = [
+        // Batocera standard
+        Path::new("/userdata/system/configs/emulationstation/es_settings.cfg"),
+        // Active profile override
+        Path::new("/userdata/system/es_settings.cfg"),
+    ];
+
+    for settings_path in &es_settings_paths {
+        if let Ok(content) = std::fs::read_to_string(settings_path) {
+            if let Some(scheme) = parse_es_subset(&content, theme_dir_name, "Color scheme") {
+                return scheme;
+            }
+        }
+    }
+
+    "dark".to_string()
+}
+
+/// Parse an es_settings.cfg XML for a specific subset value.
+/// Looks for: `<string name="subset.<theme>.<subset_name>" value="<val>" />`
+fn parse_es_subset(xml: &str, theme_name: &str, subset_name: &str) -> Option<String> {
+    // The key format varies by ES version. Try common patterns:
+    //   subset.<theme>.<SubsetName>
+    //   ThemeSubset
+    //   ThemeColorSet
+    let patterns = [
+        format!("subset.{}.{}", theme_name, subset_name),
+        format!("subset.{}.colorScheme", theme_name),
+        "ThemeColorSet".to_string(),
+    ];
+
+    for line in xml.lines() {
+        let trimmed = line.trim();
+        for pat in &patterns {
+            if trimmed.contains(&format!("name=\"{}\"", pat)) {
+                // Extract value="..."
+                if let Some(val_start) = trimmed.find("value=\"") {
+                    let rest = &trimmed[val_start + 7..];
+                    if let Some(val_end) = rest.find('"') {
+                        let val = &rest[..val_end];
+                        if !val.is_empty() {
+                            return Some(val.to_string());
+                        }
+                    }
+                }
+            }
+        }
+    }
+    None
 }
 
 /// Simple XML variable parser — extracts `<name>value</name>` from `<variables>` blocks.
