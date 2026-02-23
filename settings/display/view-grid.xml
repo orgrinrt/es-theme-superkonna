@@ -12,9 +12,9 @@
     <imagegrid name="gamegrid">
       <scrollDirection>horizontal</scrollDirection>
       <scrollLoop>false</scrollLoop>
-      <pos>0 0.2</pos>
-      <size>1 0.8</size>
-      <size ifHelpPrompts="true">1 0.725</size>
+      <pos>0 0.21</pos>
+      <size>1 0.79</size>
+      <size ifHelpPrompts="true">1 0.715</size>
       <padding>0.066666667 0.025</padding>
       <autoLayoutSelectedZoom>1.06</autoLayoutSelectedZoom>
       <animateSelection>true</animateSelection>
@@ -24,7 +24,7 @@
 
     <!-- System name header with fade-in -->
     <text name="logoText">
-      <pos>0.033333 0.078125</pos>
+      <pos>0.05 0.078</pos>
       <origin>0 0.5</origin>
       <size>0.675 ${fontSizeH2-medium}</size>
       <zIndex>5</zIndex>
@@ -36,7 +36,7 @@
     <!-- Selected game name below header with slide-in -->
     <text name="md_name">
       <fontPath>${fontBody}</fontPath>
-      <pos>0.033333 0.14375</pos>
+      <pos>0.05 0.14</pos>
       <origin>0 0.5</origin>
       <size>0.9 ${fontSizeBody-medium}</size>
       <alignment>left</alignment>
@@ -44,7 +44,7 @@
       <visible>true</visible>
       <storyboard>
         <animation property="opacity" from="0" to="1" begin="100" duration="200" mode="easeOut"/>
-        <animation property="y" from="0.155" to="0.14375" begin="100" duration="200" mode="easeOut"/>
+        <animation property="y" from="0.15" to="0.14" begin="100" duration="200" mode="easeOut"/>
       </storyboard>
     </text>
 
@@ -88,16 +88,15 @@
 
     <!-- Genre for selected game -->
     <text name="md_genre">
-      <fontPath>${fontBody}</fontPath>
-      <pos>0.033333 0.175</pos>
+      <fontPath>${fontLight}</fontPath>
+      <pos>0.05 0.175</pos>
       <origin>0 0.5</origin>
       <size>0.5 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
-      <color>${subtleColor}</color>
       <zIndex>5</zIndex>
       <visible>true</visible>
       <storyboard>
-        <animation property="opacity" from="0" to="1" begin="200" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0.7" begin="200" duration="200" mode="easeOut"/>
       </storyboard>
     </text>
 

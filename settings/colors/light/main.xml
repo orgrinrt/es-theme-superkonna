@@ -7,14 +7,14 @@
   <formatVersion>7</formatVersion>
 
   <variables>
-    <fgColor>1A1A2E</fgColor>
-    <bgColor>F0F0F5</bgColor>
-    <mainColor>E94560</mainColor>
+    <fgColor>1E2028</fgColor>
+    <bgColor>F2F3F7</bgColor>
+    <mainColor>D64060</mainColor>
     <onMainColor>FFFFFF</onMainColor>
-    <sectColor>C8D6E5</sectColor>
+    <sectColor>DFE3EA</sectColor>
     <cardColor>FFFFFF</cardColor>
-    <shadowColor>000000</shadowColor>
-    <subtleColor>1A1A2E</subtleColor>
+    <shadowColor>8090A0</shadowColor>
+    <subtleColor>6B7280</subtleColor>
   </variables>
 
   <include>./../light-base.xml</include>

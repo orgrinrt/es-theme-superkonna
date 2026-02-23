@@ -6,22 +6,21 @@
 <theme>
   <formatVersion>7</formatVersion>
 
-  <!-- Bottom bar: background strip + help system (all views) -->
+  <!-- Bottom bar: floating rounded panel (all views) -->
   <view name="system, basic, detailed, grid, video">
-    <!-- Bottom bar background strip -->
     <image name="bottombar_bg" extra="true">
-      <path>./assets/bottombar-bg.png</path>
-      <pos>0 1</pos>
+      <pos>0.015 0.988</pos>
       <origin>0 1</origin>
-      <size>1 0.065</size>
+      <size>0.97 0.055</size>
+      <roundCorners>0.012</roundCorners>
       <zIndex>90</zIndex>
     </image>
 
     <!-- Help prompts: left-aligned in bottom bar -->
     <helpsystem name="help">
-      <fontPath>${fontUI}</fontPath>
+      <fontPath>${fontLight}</fontPath>
       <origin>0 0.5</origin>
-      <pos>0.02 0.965</pos>
+      <pos>0.035 0.963</pos>
     </helpsystem>
   </view>
 
@@ -84,14 +83,14 @@
   <!-- Basic + detailed shared text positions -->
   <view name="basic, detailed, video">
     <text name="logoText">
-      <pos>0.033333 0.1</pos>
-      <size>0.933333 ${fontSizeH2-medium}</size>
+      <pos>0.05 0.1</pos>
+      <size>0.9 ${fontSizeH2-medium}</size>
       <origin>0 0.5</origin>
     </text>
 
     <textlist name="gamelist">
       <pos>0 0.2</pos>
-      <horizontalMargin>0.033333</horizontalMargin>
+      <horizontalMargin>0.05</horizontalMargin>
     </textlist>
   </view>
 
@@ -108,7 +107,7 @@
     <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_genre, md_players, md_lastplayed, md_playcount, md_description, md_name">
       <visible>false</visible>
       <fontPath>${fontBody}</fontPath>
-      <lineSpacing>1.25</lineSpacing>
+      <lineSpacing>1.3</lineSpacing>
     </text>
 
     <datetime name="md_releasedate, md_lastplayed">
@@ -125,14 +124,14 @@
 
     <!-- Game screenshot: right-center, Bump scale on selection change -->
     <image name="md_image">
-      <pos>0.733333 0.5</pos>
+      <pos>0.733333 0.48</pos>
       <origin>0.5 0.5</origin>
-      <maxSize>0.466667 0.50</maxSize>
+      <maxSize>0.433333 0.48</maxSize>
       <zIndex>5</zIndex>
       <roundCorners>0.02</roundCorners>
       <storyboard>
-        <animation property="opacity" from="0" to="1" begin="0" duration="300" mode="easeOut"/>
-        <animation property="scale" from="0.96" to="1" begin="0" duration="350" mode="Bump"/>
+        <animation property="opacity" from="0" to="1" begin="0" duration="250" mode="easeOut"/>
+        <animation property="scale" from="0.98" to="1" begin="0" duration="280" mode="Bump"/>
       </storyboard>
     </image>
 
@@ -158,20 +157,21 @@
       <pos>0.533333 0.82</pos>
       <size>0.1 0.03</size>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
-        <animation property="opacity" from="0" to="1" begin="250" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="60" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="160" duration="180" mode="easeOut"/>
       </storyboard>
     </rating>
 
     <!-- Show key metadata in detailed view -->
     <text name="md_developer">
       <visible>true</visible>
+      <fontPath>${fontLight}</fontPath>
       <pos>0.533333 0.86</pos>
-      <size>0.4 ${fontSizeCaption-medium}</size>
+      <size>0.15 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
-        <animation property="opacity" from="0" to="0.85" begin="280" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
+        <animation property="opacity" from="0" to="0.85" begin="190" duration="180" mode="easeOut"/>
       </storyboard>
     </text>
 
@@ -181,12 +181,13 @@
 
     <text name="md_genre">
       <visible>true</visible>
-      <pos>0.533333 0.89</pos>
-      <size>0.4 ${fontSizeCaption-medium}</size>
+      <fontPath>${fontLight}</fontPath>
+      <pos>0.533333 0.895</pos>
+      <size>0.15 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="140" mode="linear"/>
-        <animation property="opacity" from="0" to="0.85" begin="310" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
+        <animation property="opacity" from="0" to="0.85" begin="220" duration="180" mode="easeOut"/>
       </storyboard>
     </text>
 
@@ -196,12 +197,13 @@
 
     <text name="md_players">
       <visible>true</visible>
-      <pos>0.533333 0.92</pos>
-      <size>0.2 ${fontSizeCaption-medium}</size>
+      <fontPath>${fontLight}</fontPath>
+      <pos>0.533333 0.93</pos>
+      <size>0.15 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="160" mode="linear"/>
-        <animation property="opacity" from="0" to="0.75" begin="340" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
+        <animation property="opacity" from="0" to="0.75" begin="250" duration="180" mode="easeOut"/>
       </storyboard>
     </text>
 
@@ -209,30 +211,31 @@
       <visible>false</visible>
     </text>
 
-    <!-- Game description: below game list, right-aligned area -->
+    <!-- Game description: below game list, left area -->
     <text name="md_description">
       <visible>true</visible>
-      <pos>0.033333 0.78</pos>
+      <pos>0.05 0.78</pos>
       <size>0.433333 0.12</size>
       <fontPath>${fontLight}</fontPath>
-      <lineSpacing>1.2</lineSpacing>
+      <lineSpacing>1.4</lineSpacing>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
-        <animation property="opacity" from="0" to="0.7" begin="200" duration="250" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="60" mode="linear"/>
+        <animation property="opacity" from="0" to="0.7" begin="140" duration="200" mode="easeOut"/>
       </storyboard>
     </text>
 
     <!-- Publisher -->
     <text name="md_publisher">
       <visible>true</visible>
+      <fontPath>${fontLight}</fontPath>
       <pos>0.7 0.86</pos>
       <size>0.25 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
-        <animation property="opacity" from="0" to="0.75" begin="280" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
+        <animation property="opacity" from="0" to="0.75" begin="190" duration="180" mode="easeOut"/>
       </storyboard>
     </text>
 
@@ -240,14 +243,14 @@
     <text name="md_gametime" extra="true">
       <text>{game:gametime.formatseconds()}</text>
       <visible>true</visible>
-      <pos>0.7 0.89</pos>
+      <pos>0.7 0.895</pos>
       <size>0.25 ${fontSizeCaption-medium}</size>
       <fontPath>${fontLight}</fontPath>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="160" mode="linear"/>
-        <animation property="opacity" from="0" to="0.65" begin="310" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
+        <animation property="opacity" from="0" to="0.65" begin="220" duration="180" mode="easeOut"/>
       </storyboard>
     </text>
 
@@ -255,14 +258,14 @@
     <text name="md_lastplayed_rel" extra="true">
       <text>{game:lastplayed.elapsed()}</text>
       <visible>true</visible>
-      <pos>0.7 0.92</pos>
+      <pos>0.7 0.93</pos>
       <size>0.25 ${fontSizeCaption-medium}</size>
       <fontPath>${fontLight}</fontPath>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="180" mode="linear"/>
-        <animation property="opacity" from="0" to="0.55" begin="340" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
+        <animation property="opacity" from="0" to="0.55" begin="250" duration="180" mode="easeOut"/>
       </storyboard>
     </text>
 
@@ -271,47 +274,47 @@
       <path>./assets/icons/trophy.svg</path>
       <visible>{game:cheevos}</visible>
       <pos>0.533333 0.78</pos>
-      <maxSize>0.022 0.022</maxSize>
+      <maxSize>0.018 0.018</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="1" begin="200" duration="250" mode="easeOut"/>
+        <animation property="opacity" from="0" to="1" begin="140" duration="180" mode="easeOut"/>
       </storyboard>
     </image>
 
     <image name="badge_mature" extra="true">
       <path>./assets/icons/mature.svg</path>
       <visible>!{game:kidGame}</visible>
-      <pos>0.56 0.78</pos>
-      <maxSize>0.022 0.022</maxSize>
+      <pos>0.555 0.78</pos>
+      <maxSize>0.018 0.018</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="1" begin="220" duration="250" mode="easeOut"/>
+        <animation property="opacity" from="0" to="1" begin="160" duration="180" mode="easeOut"/>
       </storyboard>
     </image>
 
     <image name="badge_savestate" extra="true">
       <path>./assets/icons/savestate.svg</path>
       <visible>{game:hasSaveState}</visible>
-      <pos>0.587 0.78</pos>
-      <maxSize>0.022 0.022</maxSize>
+      <pos>0.577 0.78</pos>
+      <maxSize>0.018 0.018</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="1" begin="240" duration="250" mode="easeOut"/>
+        <animation property="opacity" from="0" to="1" begin="180" duration="180" mode="easeOut"/>
       </storyboard>
     </image>
 
     <image name="badge_manual" extra="true">
       <path>./assets/icons/manual.svg</path>
       <visible>{game:hasManual}</visible>
-      <pos>0.614 0.78</pos>
-      <maxSize>0.022 0.022</maxSize>
+      <pos>0.599 0.78</pos>
+      <maxSize>0.018 0.018</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="1" begin="260" duration="250" mode="easeOut"/>
+        <animation property="opacity" from="0" to="1" begin="200" duration="180" mode="easeOut"/>
       </storyboard>
     </image>
   </view>
@@ -373,7 +376,7 @@
 
     <text name="logoText">
       <origin>0 0.5</origin>
-      <pos>0.033333333 0.4</pos>
+      <pos>0.05 0.4</pos>
     </text>
   </view>
 </theme>

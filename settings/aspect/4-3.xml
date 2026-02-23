@@ -17,12 +17,12 @@
     </carousel>
 
     <text name="systemName" extra="true">
-      <pos>0.05 0.86</pos>
+      <pos>0.05 0.82</pos>
       <size>0.7 ${fontSizeH1-medium}</size>
     </text>
 
     <text name="systemInfo">
-      <pos>0.05 0.91</pos>
+      <pos>0.05 0.87</pos>
       <size>0.5 ${fontSizeBody-medium}</size>
     </text>
   </view>
@@ -60,18 +60,23 @@
     </video>
   </customView>
 
-  <!-- Game carousel: slightly tighter for 4:3 -->
+  <!-- Game carousel: tighter for 4:3 -->
   <view name="gamecarousel">
     <gamecarousel name="gamecarousel">
       <pos>-0.25 0</pos>
-      <logoSize>0.16 0.24</logoSize>
+      <logoSize>0.14 0.14</logoSize>
       <maxLogoCount>5</maxLogoCount>
     </gamecarousel>
 
     <image name="md_image">
-      <pos>0.68 0.45</pos>
-      <maxSize>0.45 0.6</maxSize>
+      <pos>0.68 0.42</pos>
+      <maxSize>0.42 0.52</maxSize>
     </image>
+
+    <video name="md_video">
+      <pos>0.68 0.42</pos>
+      <maxSize>0.42 0.52</maxSize>
+    </video>
   </view>
 
   <!-- Top bar: tighter spacing for 4:3 -->

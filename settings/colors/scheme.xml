@@ -28,10 +28,10 @@
 
     <textlist name="gamelist">
       <selectedColor>${onMainColor}</selectedColor>
-      <selectorColor>${mainColor}</selectorColor>
+      <selectorColor>${mainColor}${percent.80}</selectorColor>
       <primaryColor>${fgColor}</primaryColor>
-      <secondaryColor>${fgColor}${percent.70}</secondaryColor>
-      <selectorGradientColor>${mainColor}${percent.60}</selectorGradientColor>
+      <secondaryColor>${fgColor}${percent.60}</secondaryColor>
+      <selectorGradientColor>${mainColor}${percent.30}</selectorGradientColor>
     </textlist>
 
     <rating name="md_rating">
@@ -127,17 +127,31 @@
 
   <!-- Flix (Netflix-style) grid tile colors -->
   <customView name="flix" inherits="grid">
+    <gridtile name="default">
+      <backgroundColor>${cardColor}${percent.30}</backgroundColor>
+    </gridtile>
+
     <text name="gridtile">
-      <color>${fgColor}${percent.80}</color>
+      <color>${fgColor}${percent.70}</color>
     </text>
 
     <text name="gridtile:selected">
       <color>${fgColor}</color>
     </text>
 
-    <!-- Flix top vignette -->
+    <!-- Semi-transparent overlay so hero screenshot shows through -->
+    <image name="background_overlay" extra="true">
+      <color>${bgColor}${percent.60}</color>
+    </image>
+
+    <!-- Edge fades: blend game strip edges into background -->
+    <image name="verticalFadeLeft,verticalFadeRight" extra="true">
+      <color>${bgColor}${percent.70}</color>
+    </image>
+
+    <!-- Flix top vignette: soft fade for preview text legibility -->
     <image name="top_vignette" extra="true">
-      <color>${bgColor}</color>
+      <color>${bgColor}${percent.80}</color>
     </image>
   </customView>
 
@@ -149,29 +163,30 @@
 
     <text name="systemName">
       <color>${fgColor}</color>
-      <glowColor>${shadowColor}${percent.60}</glowColor>
-      <glowSize>3</glowSize>
-      <glowOffset>3 2</glowOffset>
+      <glowColor>${shadowColor}${percent.80}</glowColor>
+      <glowSize>4</glowSize>
+      <glowOffset>2 2</glowOffset>
     </text>
 
     <text name="systemInfo">
-      <color>${subtleColor}${percent.60}</color>
-      <glowColor>${shadowColor}${percent.40}</glowColor>
-      <glowSize>2</glowSize>
+      <color>${fgColor}${percent.70}</color>
+      <glowColor>${shadowColor}${percent.50}</glowColor>
+      <glowSize>3</glowSize>
     </text>
 
+    <!-- Semi-transparent overlay: lets hero art breathe through -->
     <image name="background_overlay" extra="true">
-      <color>${bgColor}</color>
+      <color>${bgColor}${percent.50}</color>
     </image>
 
-    <!-- Bottom vignette: dark for text legibility on system view -->
+    <!-- Bottom vignette: softer gradient for text legibility -->
     <image name="bottom_vignette" extra="true">
-      <color>${shadowColor}</color>
+      <color>${shadowColor}${percent.90}</color>
     </image>
 
     <text name="systemManufacturer">
-      <color>${subtleColor}${percent.40}</color>
-      <glowColor>${shadowColor}${percent.30}</glowColor>
+      <color>${subtleColor}${percent.50}</color>
+      <glowColor>${shadowColor}${percent.40}</glowColor>
       <glowSize>2</glowSize>
     </text>
 
@@ -192,11 +207,12 @@
   <!-- Gamecarousel vignette + overlay -->
   <view name="gamecarousel">
     <image name="bottom_vignette" extra="true">
-      <color>${shadowColor}</color>
+      <color>${shadowColor}${percent.80}</color>
     </image>
 
+    <!-- Semi-transparent: let game art show through -->
     <image name="background_overlay" extra="true">
-      <color>${bgColor}</color>
+      <color>${bgColor}${percent.60}</color>
     </image>
 
     <rating name="md_rating">
@@ -233,5 +249,27 @@
       <activityColor>${mainColor}${percent.70}</activityColor>
       <hotkeyColor>${mainColor}</hotkeyColor>
     </controllerActivity>
+
+    <text name="ra_user" extra="true">
+      <color>${subtleColor}</color>
+      <glowColor>${shadowColor}${percent.40}</glowColor>
+      <glowSize>2</glowSize>
+    </text>
+
+    <text name="weather_temp" extra="true">
+      <color>${subtleColor}</color>
+    </text>
+
+    <!-- Top bar: semi-transparent card-colored panel -->
+    <image name="topbar_bg" extra="true">
+      <color>${cardColor}${percent.70}</color>
+    </image>
+  </view>
+
+  <!-- Bottom bar: semi-transparent card-colored panel -->
+  <view name="system, basic, detailed, grid, video">
+    <image name="bottombar_bg" extra="true">
+      <color>${cardColor}${percent.70}</color>
+    </image>
   </view>
 </theme>

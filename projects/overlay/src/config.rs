@@ -59,7 +59,18 @@ pub struct MenuItem {
     pub command: Option<String>,
     #[serde(default)]
     pub confirm: bool,
+    /// Quick-press shortcut button (e.g. "b" for Resume).
+    pub bind: Option<String>,
+    /// Hold-for-duration shortcut button (e.g. "y" for Save State).
+    pub hold_bind: Option<String>,
+    /// Hold duration in ms (default 1500).
+    #[serde(default = "default_hold_ms")]
+    pub hold_ms: u64,
+    /// Short label shown in hint bar (defaults to label if absent).
+    pub hint_label: Option<String>,
 }
+
+fn default_hold_ms() -> u64 { 1500 }
 
 impl OverlayConfig {
     pub fn load(path: &Path) -> Result<Self, String> {
@@ -130,10 +141,30 @@ fn default_port() -> u16 { 55355 }
 
 fn default_items() -> Vec<MenuItem> {
     vec![
-        MenuItem { id: "resume".into(), label: "Resume".into(), icon: Some("gamepad.svg".into()), action: "dismiss".into(), command: None, confirm: false },
-        MenuItem { id: "save_state".into(), label: "Save State".into(), icon: Some("savestate.svg".into()), action: "retroarch".into(), command: Some("SAVE_STATE".into()), confirm: false },
-        MenuItem { id: "load_state".into(), label: "Load State".into(), icon: Some("savestate.svg".into()), action: "retroarch".into(), command: Some("LOAD_STATE".into()), confirm: false },
-        MenuItem { id: "quit_to_es".into(), label: "Quit to EmulationStation".into(), icon: Some("exit-to-app.svg".into()), action: "retroarch".into(), command: Some("QUIT".into()), confirm: true },
+        MenuItem {
+            id: "resume".into(), label: "Resume".into(), icon: Some("gamepad.svg".into()),
+            action: "dismiss".into(), command: None, confirm: false,
+            bind: Some("b".into()), hold_bind: None, hold_ms: default_hold_ms(),
+            hint_label: None,
+        },
+        MenuItem {
+            id: "save_state".into(), label: "Save State".into(), icon: Some("savestate.svg".into()),
+            action: "retroarch".into(), command: Some("SAVE_STATE".into()), confirm: false,
+            bind: None, hold_bind: Some("y".into()), hold_ms: 1500,
+            hint_label: Some("Save".into()),
+        },
+        MenuItem {
+            id: "load_state".into(), label: "Load State".into(), icon: Some("savestate.svg".into()),
+            action: "retroarch".into(), command: Some("LOAD_STATE".into()), confirm: false,
+            bind: None, hold_bind: Some("x".into()), hold_ms: 1500,
+            hint_label: Some("Load".into()),
+        },
+        MenuItem {
+            id: "quit_to_es".into(), label: "Quit to EmulationStation".into(), icon: Some("exit-to-app.svg".into()),
+            action: "retroarch".into(), command: Some("QUIT".into()), confirm: true,
+            bind: None, hold_bind: Some("start".into()), hold_ms: 2000,
+            hint_label: Some("Quit".into()),
+        },
     ]
 }
 

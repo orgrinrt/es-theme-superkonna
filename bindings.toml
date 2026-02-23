@@ -1,0 +1,104 @@
+# bindings.toml — single source of truth for all input bindings
+#
+# Every consumer (overlay, kiosk, RetroArch, ES) reads from this.
+# Button names use ES abstract convention:
+#   a (south/confirm), b (east/back), x (west), y (north),
+#   start, select, l1, r1, l2, r2, l3, r3,
+#   up, down, left, right (dpad)
+#
+# Gesture types:
+#   "press"  — tap and release (default)
+#   "hold"   — press and hold for hold_ms before activating
+
+[defaults]
+hold_ms = 1500
+
+# ── Semantic actions ─────────────────────────────────────────
+
+[actions.confirm]
+label = "Select"
+button = "a"
+
+[actions.back]
+label = "Back"
+button = "b"
+
+[actions.menu]
+label = "Menu"
+button = "start"
+
+[actions.save_state]
+label = "Save"
+button = "y"
+hold = true
+hold_ms = 1500
+
+[actions.load_state]
+label = "Load"
+button = "x"
+hold = true
+hold_ms = 1500
+
+[actions.quit_to_es]
+label = "Quit"
+button = "start"
+hold = true
+hold_ms = 2000
+confirm = true
+
+[actions.screenshot]
+label = "Screenshot"
+button = "select"
+hold = true
+hold_ms = 1000
+
+[actions.next_save_slot]
+label = "Next Slot"
+button = "r1"
+
+[actions.prev_save_slot]
+label = "Prev Slot"
+button = "l1"
+
+# ── Menu items ───────────────────────────────────────────────
+# Ordered list of items shown in the overlay quick menu.
+# Each references an action by name for its binding.
+
+[[menu]]
+id = "resume"
+label = "Resume"
+icon = "gamepad.svg"
+action_type = "dismiss"
+bind_action = "back"
+
+[[menu]]
+id = "save_state"
+label = "Save State"
+icon = "savestate.svg"
+action_type = "retroarch"
+command = "SAVE_STATE"
+bind_action = "save_state"
+
+[[menu]]
+id = "load_state"
+label = "Load State"
+icon = "savestate.svg"
+action_type = "retroarch"
+command = "LOAD_STATE"
+bind_action = "load_state"
+
+[[menu]]
+id = "screenshot"
+label = "Screenshot"
+icon = "camera.svg"
+action_type = "retroarch"
+command = "SCREENSHOT"
+bind_action = "screenshot"
+
+[[menu]]
+id = "quit_to_es"
+label = "Quit to EmulationStation"
+icon = "exit-to-app.svg"
+action_type = "retroarch"
+command = "QUIT"
+bind_action = "quit_to_es"

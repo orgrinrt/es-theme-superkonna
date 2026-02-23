@@ -15,8 +15,8 @@
       <pos>-0.35 0</pos>
       <size>1 1</size>
       <color>00000000</color>
-      <logoScale>1.25</logoScale>
-      <logoSize>0.18 0.28</logoSize>
+      <logoScale>1.15</logoScale>
+      <logoSize>0.16 0.16</logoSize>
       <logoRotation>7</logoRotation>
       <logoRotationOrigin>-2.5 0.3</logoRotationOrigin>
       <logoAlignment>center</logoAlignment>
@@ -33,7 +33,7 @@
       <forceUppercase>1</forceUppercase>
       <alignment>left</alignment>
       <origin>0 0.5</origin>
-      <pos>0.033333 0.065</pos>
+      <pos>0.05 0.065</pos>
       <size>0.4 ${fontSizeH2-medium}</size>
       <zIndex>5</zIndex>
     </text>
@@ -41,21 +41,21 @@
     <!-- Selected game screenshot (right side, large) -->
     <image name="md_image">
       <origin>0.5 0.5</origin>
-      <pos>0.7 0.45</pos>
-      <maxSize>0.5 0.65</maxSize>
+      <pos>0.7 0.42</pos>
+      <maxSize>0.48 0.55</maxSize>
       <zIndex>1</zIndex>
       <roundCorners>0.02</roundCorners>
       <storyboard>
-        <animation property="opacity" from="0" to="1" begin="0" duration="350" mode="easeOut"/>
-        <animation property="scale" from="0.97" to="1" begin="0" duration="300" mode="Bump"/>
+        <animation property="opacity" from="0" to="1" begin="0" duration="300" mode="easeOut"/>
+        <animation property="scale" from="0.98" to="1" begin="0" duration="250" mode="Bump"/>
       </storyboard>
     </image>
 
     <!-- Video preview over screenshot -->
     <video name="md_video">
       <origin>0.5 0.5</origin>
-      <pos>0.7 0.45</pos>
-      <maxSize>0.5 0.65</maxSize>
+      <pos>0.7 0.42</pos>
+      <maxSize>0.48 0.55</maxSize>
       <zIndex>2</zIndex>
       <delay>1</delay>
       <showSnapshotNoVideo>false</showSnapshotNoVideo>
@@ -64,7 +64,7 @@
       <roundCorners>0.02</roundCorners>
       <effect>none</effect>
       <storyboard>
-        <animation property="opacity" from="0" to="1" begin="0" duration="350" mode="easeOut"/>
+        <animation property="opacity" from="0" to="1" begin="0" duration="300" mode="easeOut"/>
       </storyboard>
     </video>
 
@@ -72,53 +72,41 @@
     <text name="md_name">
       <visible>true</visible>
       <fontPath>${fontBody}</fontPath>
-      <pos>0.5 0.82</pos>
+      <pos>0.5 0.75</pos>
       <origin>0 0</origin>
       <size>0.45 ${fontSizeBody-medium}</size>
       <alignment>left</alignment>
+      <lineSpacing>1.3</lineSpacing>
       <zIndex>5</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
-        <animation property="opacity" from="0" to="1" begin="200" duration="200" mode="easeOut"/>
-        <animation property="y" from="0.83" to="0.82" begin="200" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="60" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="140" duration="180" mode="easeOut"/>
+        <animation property="y" from="0.76" to="0.75" begin="140" duration="180" mode="easeOut"/>
       </storyboard>
     </text>
 
-    <!-- Star rating: compact, right of game name area -->
+    <!-- Star rating: compact, below game name -->
     <rating name="md_rating">
       <visible>true</visible>
       <origin>0 0</origin>
       <filledPath>./assets/icons/star.svg</filledPath>
       <unfilledPath>./assets/icons/star_border.svg</unfilledPath>
-      <pos>0.5 0.85</pos>
+      <pos>0.5 0.79</pos>
       <size>0.07 0.02</size>
       <zIndex>5</zIndex>
     </rating>
 
-    <!-- Developer + genre (below rating) -->
+    <!-- Developer + publisher row -->
     <text name="md_developer">
       <visible>true</visible>
       <fontPath>${fontLight}</fontPath>
-      <pos>0.5 0.875</pos>
+      <pos>0.5 0.82</pos>
       <size>0.2 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
-        <animation property="opacity" from="0" to="0.8" begin="250" duration="200" mode="easeOut"/>
-      </storyboard>
-    </text>
-
-    <text name="md_genre">
-      <visible>true</visible>
-      <fontPath>${fontLight}</fontPath>
-      <pos>0.5 0.9</pos>
-      <size>0.2 ${fontSizeCaption-medium}</size>
-      <alignment>left</alignment>
-      <zIndex>5</zIndex>
-      <storyboard>
-        <animation property="opacity" from="0" to="0" duration="140" mode="linear"/>
-        <animation property="opacity" from="0" to="0.8" begin="280" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
+        <animation property="opacity" from="0" to="0.8" begin="180" duration="180" mode="easeOut"/>
       </storyboard>
     </text>
 
@@ -126,43 +114,56 @@
     <text name="md_publisher">
       <visible>true</visible>
       <fontPath>${fontLight}</fontPath>
-      <pos>0.72 0.875</pos>
+      <pos>0.72 0.82</pos>
       <size>0.25 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
-        <animation property="opacity" from="0" to="0.7" begin="250" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
+        <animation property="opacity" from="0" to="0.7" begin="180" duration="180" mode="easeOut"/>
       </storyboard>
     </text>
 
-    <!-- Play time (formatted) -->
+    <!-- Genre row -->
+    <text name="md_genre">
+      <visible>true</visible>
+      <fontPath>${fontLight}</fontPath>
+      <pos>0.5 0.855</pos>
+      <size>0.2 ${fontSizeCaption-medium}</size>
+      <alignment>left</alignment>
+      <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
+        <animation property="opacity" from="0" to="0.8" begin="210" duration="180" mode="easeOut"/>
+      </storyboard>
+    </text>
+
+    <!-- Play time + last played row -->
     <text name="md_gametime" extra="true">
       <text>{game:gametime.formatseconds()}</text>
       <visible>true</visible>
-      <pos>0.5 0.925</pos>
+      <pos>0.5 0.89</pos>
       <size>0.2 ${fontSizeCaption-medium}</size>
       <fontPath>${fontLight}</fontPath>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="160" mode="linear"/>
-        <animation property="opacity" from="0" to="0.6" begin="310" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
+        <animation property="opacity" from="0" to="0.6" begin="240" duration="180" mode="easeOut"/>
       </storyboard>
     </text>
 
-    <!-- Last played (relative) -->
     <text name="md_lastplayed_rel" extra="true">
       <text>{game:lastplayed.elapsed()}</text>
       <visible>true</visible>
-      <pos>0.72 0.925</pos>
+      <pos>0.72 0.89</pos>
       <size>0.25 ${fontSizeCaption-medium}</size>
       <fontPath>${fontLight}</fontPath>
       <alignment>left</alignment>
       <zIndex>5</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="160" mode="linear"/>
-        <animation property="opacity" from="0" to="0.6" begin="310" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
+        <animation property="opacity" from="0" to="0.6" begin="240" duration="180" mode="easeOut"/>
       </storyboard>
     </text>
 
@@ -170,8 +171,8 @@
     <image name="badge_cheevos" extra="true">
       <path>./assets/icons/trophy.svg</path>
       <visible>{game:cheevos}</visible>
-      <pos>0.5 0.955</pos>
-      <maxSize>0.018 0.018</maxSize>
+      <pos>0.5 0.93</pos>
+      <maxSize>0.016 0.016</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
     </image>
@@ -179,8 +180,8 @@
     <image name="badge_mature" extra="true">
       <path>./assets/icons/mature.svg</path>
       <visible>!{game:kidGame}</visible>
-      <pos>0.522 0.955</pos>
-      <maxSize>0.018 0.018</maxSize>
+      <pos>0.52 0.93</pos>
+      <maxSize>0.016 0.016</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
     </image>
@@ -188,8 +189,8 @@
     <image name="badge_savestate" extra="true">
       <path>./assets/icons/savestate.svg</path>
       <visible>{game:hasSaveState}</visible>
-      <pos>0.544 0.955</pos>
-      <maxSize>0.018 0.018</maxSize>
+      <pos>0.54 0.93</pos>
+      <maxSize>0.016 0.016</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
     </image>
@@ -197,8 +198,8 @@
     <image name="badge_manual" extra="true">
       <path>./assets/icons/manual.svg</path>
       <visible>{game:hasManual}</visible>
-      <pos>0.566 0.955</pos>
-      <maxSize>0.018 0.018</maxSize>
+      <pos>0.56 0.93</pos>
+      <maxSize>0.016 0.016</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
     </image>
@@ -215,10 +216,10 @@
     <!-- Bottom vignette: dark for text legibility below screenshots -->
     <image name="bottom_vignette" extra="true">
       <path>./assets/fade-ver.png</path>
-      <size>1 0.35</size>
+      <size>1 0.40</size>
       <origin>0 1</origin>
       <pos>0 1</pos>
-      <zIndex>0</zIndex>
+      <zIndex>3</zIndex>
       <rotation>180</rotation>
     </image>
 

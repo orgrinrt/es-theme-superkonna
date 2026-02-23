@@ -1,11 +1,12 @@
 <!--
   Theme: Superkonna
-  Light mode base
+  Light mode base: overrides for elements that assume dark backgrounds
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
+  <!-- Menu: light-mode input field styling -->
   <view name="menu">
     <menuTextEdit name="menutextedit">
       <inactive>./../../assets/input_inactive.svg</inactive>
@@ -13,6 +14,7 @@
     </menuTextEdit>
   </view>
 
+  <!-- Grid tile selection: solid accent on light bg (no translucency needed) -->
   <customView name="flix" inherits="grid">
     <gridtile name="selected">
       <backgroundColor>${mainColor}</backgroundColor>
@@ -24,4 +26,95 @@
       <backgroundColor>${mainColor}</backgroundColor>
     </gridtile>
   </view>
+
+  <!-- System view: light-appropriate overlays and glows -->
+  <view name="system">
+    <!-- Lighter overlay: white wash instead of dark dim -->
+    <image name="background_overlay" extra="true">
+      <color>${bgColor}${percent.40}</color>
+    </image>
+
+    <!-- Vignette: use bg-tinted shadow instead of pure black -->
+    <image name="bottom_vignette" extra="true">
+      <color>${shadowColor}${percent.60}</color>
+    </image>
+
+    <!-- Text glow: subtle light halo instead of dark shadow -->
+    <text name="systemName">
+      <glowColor>${bgColor}${percent.80}</glowColor>
+      <glowSize>6</glowSize>
+      <glowOffset>0 0</glowOffset>
+    </text>
+
+    <text name="systemInfo">
+      <glowColor>${bgColor}${percent.60}</glowColor>
+      <glowSize>4</glowSize>
+    </text>
+
+    <text name="systemManufacturer">
+      <glowColor>${bgColor}${percent.50}</glowColor>
+    </text>
+  </view>
+
+  <!-- Flix view: lighter overlay for preview area -->
+  <customView name="flix" inherits="grid">
+    <image name="background_overlay" extra="true">
+      <color>${bgColor}${percent.50}</color>
+    </image>
+
+    <image name="top_vignette" extra="true">
+      <color>${bgColor}${percent.70}</color>
+    </image>
+  </customView>
+
+  <!-- Gamecarousel: lighter vignette -->
+  <view name="gamecarousel">
+    <image name="bottom_vignette" extra="true">
+      <color>${shadowColor}${percent.50}</color>
+    </image>
+
+    <image name="background_overlay" extra="true">
+      <color>${bgColor}${percent.50}</color>
+    </image>
+
+    <!-- Light bg glow for game name legibility -->
+    <text name="md_name">
+      <glowColor>${bgColor}${percent.60}</glowColor>
+    </text>
+  </view>
+
+  <!-- Game list views: reduce dark glow on light backgrounds -->
+  <view name="basic, detailed, grid, video">
+    <text name="logoText, md_name">
+      <glowColor>${bgColor}${percent.40}</glowColor>
+      <glowSize>3</glowSize>
+    </text>
+  </view>
+
+  <!-- Bars: more opaque on light bg for better definition -->
+  <view name="screen">
+    <image name="topbar_bg" extra="true">
+      <color>${cardColor}${percent.80}</color>
+    </image>
+
+    <!-- Reduce clock/text glow on light bar bg -->
+    <text name="clock">
+      <glowColor>${cardColor}${percent.40}</glowColor>
+      <glowSize>2</glowSize>
+      <glowOffset>0 0</glowOffset>
+    </text>
+  </view>
+
+  <view name="system, basic, detailed, grid, video">
+    <image name="bottombar_bg" extra="true">
+      <color>${cardColor}${percent.80}</color>
+    </image>
+  </view>
+
+  <!-- Edge fades: lighter for light bg -->
+  <customView name="flix" inherits="grid">
+    <image name="verticalFadeLeft,verticalFadeRight" extra="true">
+      <color>${bgColor}${percent.50}</color>
+    </image>
+  </customView>
 </theme>

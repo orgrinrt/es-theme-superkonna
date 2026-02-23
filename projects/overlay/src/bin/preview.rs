@@ -37,6 +37,7 @@ fn main() {
     let theme = Theme::load(&theme_root).expect("failed to load theme");
     let rend = Renderer::new(&theme);
     let config = OverlayConfig::find_and_load(&theme_root);
+    let bindings = superkonna_overlay::bindings::Bindings::find_and_load(&theme_root);
 
     let out = PathBuf::from("preview-output");
     std::fs::create_dir_all(&out).unwrap();
@@ -61,7 +62,7 @@ fn main() {
             popup: Some(&popup),
             menu: None,
             menu_config: &config.menu,
-            game_name: None,
+            game_name: None, bindings: Some(&bindings),
         };
         let argb = rend.render_frame(&state, SCREEN_W, SCREEN_H);
         let composited = composite_over_bg(&game_bg, &argb, SCREEN_W, SCREEN_H);
@@ -80,7 +81,7 @@ fn main() {
             popup: Some(&popup),
             menu: None,
             menu_config: &config.menu,
-            game_name: None,
+            game_name: None, bindings: Some(&bindings),
         };
         let argb = rend.render_frame(&state, SCREEN_W, SCREEN_H);
         let composited = composite_over_bg(&game_bg, &argb, SCREEN_W, SCREEN_H);
@@ -101,7 +102,7 @@ fn main() {
             popup: None,
             menu: Some(&menu),
             menu_config: &config.menu,
-            game_name: Some("Super Mario World"),
+            game_name: Some("Super Mario World"), bindings: Some(&bindings),
         };
         let argb = rend.render_frame(&state, SCREEN_W, SCREEN_H);
         let composited = composite_over_bg(&game_bg, &argb, SCREEN_W, SCREEN_H);
@@ -121,7 +122,7 @@ fn main() {
                 popup: None,
                 menu: Some(&menu),
                 menu_config: &config.menu,
-                game_name: Some("Super Mario World"),
+                game_name: Some("Super Mario World"), bindings: Some(&bindings),
             };
             let argb = rend.render_frame(&state, SCREEN_W, SCREEN_H);
             let composited = composite_over_bg(&game_bg, &argb, SCREEN_W, SCREEN_H);
@@ -142,7 +143,7 @@ fn main() {
             popup: Some(&popup),
             menu: Some(&menu),
             menu_config: &config.menu,
-            game_name: Some("Chrono Trigger"),
+            game_name: Some(&bindings), bindings: Some(&bindings),
         };
         let argb = rend.render_frame(&state, SCREEN_W, SCREEN_H);
         let composited = composite_over_bg(&game_bg, &argb, SCREEN_W, SCREEN_H);

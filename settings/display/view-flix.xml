@@ -15,15 +15,15 @@
 
     <!-- === GAME GRID: Horizontal strip in lower half === -->
     <imagegrid name="gamegrid">
-      <pos>0 0.475</pos>
-      <size>1 0.5</size>
-      <size ifHelpPrompts="true">1 0.46</size>
+      <pos>0 0.50</pos>
+      <size>1 0.475</size>
+      <size ifHelpPrompts="true">1 0.44</size>
       <imageSource>thumb</imageSource>
       <scrollDirection>horizontal</scrollDirection>
       <animateSelection>true</animateSelection>
-      <autoLayoutSelectedZoom>1.08</autoLayoutSelectedZoom>
-      <padding>0.065 0.0225</padding>
-      <margin>0.016666667 0.025</margin>
+      <autoLayoutSelectedZoom>1.06</autoLayoutSelectedZoom>
+      <padding>0.07 0.03</padding>
+      <margin>0.02 0.03</margin>
       <scrollLoop>true</scrollLoop>
       <zIndex>5</zIndex>
       <scrollSound>./assets/sounds/tick.wav</scrollSound>
@@ -37,6 +37,7 @@
 
     <gridtile name="default">
       <imageColor>FFFFFFFF</imageColor>
+      <backgroundCornerSize>0.02</backgroundCornerSize>
     </gridtile>
 
     <gridtile name="selected">
@@ -63,18 +64,17 @@
     <!-- === EDGE FADES: Soft left/right bleed on game strip === -->
     <image name="verticalFadeLeft,verticalFadeRight" extra="true">
       <origin>0.5 0.5</origin>
-      <size>0.075 0.525</size>
-      <color>${bgColor}</color>
+      <size>0.05 0.50</size>
       <path>./assets/fade-hor.png</path>
       <zIndex>6</zIndex>
     </image>
 
     <image name="verticalFadeLeft" extra="true">
-      <pos>0.0375 0.7375</pos>
+      <pos>0.025 0.7375</pos>
     </image>
 
     <image name="verticalFadeRight" extra="true">
-      <pos>0.9625 0.7375</pos>
+      <pos>0.975 0.7375</pos>
       <rotation>180</rotation>
     </image>
 
@@ -82,18 +82,18 @@
 
     <!-- Selected game marquee/logo (upper-left area) -->
     <image name="md_marquee">
-      <pos>0.233333333 0.125</pos>
+      <pos>0.24 0.11</pos>
       <origin>0.5 0.5</origin>
-      <maxSize>0.4 0.225</maxSize>
+      <maxSize>0.38 0.18</maxSize>
       <zIndex>6</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
-        <animation property="opacity" from="0" to="1" begin="200" duration="200" mode="easeOut"/>
-        <animation property="scale" from="0.9" to="1" begin="200" duration="250" mode="Bump"/>
+        <animation property="opacity" from="0" to="0" duration="60" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="120" duration="200" mode="easeOut"/>
+        <animation property="scale" from="0.95" to="1" begin="120" duration="250" mode="Bump"/>
       </storyboard>
     </image>
 
-    <!-- Background screenshot of selected game (full preview area) -->
+    <!-- Background screenshot of selected game (right side, full-bleed) -->
     <image name="md_image">
       <origin>0.5 0.5</origin>
       <pos>0.7 0.25</pos>
@@ -122,12 +122,53 @@
       </storyboard>
     </video>
 
+    <!-- Rating: below marquee -->
+    <rating name="md_rating">
+      <visible>true</visible>
+      <origin>0 0</origin>
+      <filledPath>./assets/icons/star.svg</filledPath>
+      <unfilledPath>./assets/icons/star_border.svg</unfilledPath>
+      <pos>0.05 0.22</pos>
+      <size>0.07 0.022</size>
+      <zIndex>5</zIndex>
+    </rating>
+
+    <!-- Genre: below rating -->
+    <text name="md_genre">
+      <visible>true</visible>
+      <pos>0.05 0.255</pos>
+      <size>0.38 ${fontSizeCaption-medium}</size>
+      <fontSize>${fontSizeCaption-medium}</fontSize>
+      <fontPath>${fontLight}</fontPath>
+      <alignment>left</alignment>
+      <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
+        <animation property="opacity" from="0" to="0.6" begin="200" duration="200" mode="easeOut"/>
+      </storyboard>
+    </text>
+
+    <!-- Game description: below genre, generous line spacing -->
+    <text name="md_description">
+      <visible>true</visible>
+      <pos>0.05 0.29</pos>
+      <size>0.4 0.13</size>
+      <fontSize>${fontSizeCaption-medium}</fontSize>
+      <fontPath>${fontLight}</fontPath>
+      <lineSpacing>1.4</lineSpacing>
+      <zIndex>5</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="60" mode="linear"/>
+        <animation property="opacity" from="0" to="0.85" begin="180" duration="220" mode="easeOut"/>
+      </storyboard>
+    </text>
+
     <!-- Badge row: below description, above game strip -->
     <image name="badge_cheevos" extra="true">
       <path>./assets/icons/trophy.svg</path>
       <visible>{game:cheevos}</visible>
-      <pos>0.033333333 0.42</pos>
-      <maxSize>0.018 0.018</maxSize>
+      <pos>0.05 0.44</pos>
+      <maxSize>0.016 0.016</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
     </image>
@@ -135,8 +176,8 @@
     <image name="badge_mature" extra="true">
       <path>./assets/icons/mature.svg</path>
       <visible>!{game:kidGame}</visible>
-      <pos>0.055 0.42</pos>
-      <maxSize>0.018 0.018</maxSize>
+      <pos>0.07 0.44</pos>
+      <maxSize>0.016 0.016</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
     </image>
@@ -144,50 +185,11 @@
     <image name="badge_savestate" extra="true">
       <path>./assets/icons/savestate.svg</path>
       <visible>{game:hasSaveState}</visible>
-      <pos>0.077 0.42</pos>
-      <maxSize>0.018 0.018</maxSize>
+      <pos>0.09 0.44</pos>
+      <maxSize>0.016 0.016</maxSize>
       <origin>0 0.5</origin>
       <zIndex>6</zIndex>
     </image>
-
-    <!-- Game description: left of preview art -->
-    <text name="md_description">
-      <visible>true</visible>
-      <pos>0.033333333 0.25</pos>
-      <size>0.433333333 0.15</size>
-      <fontPath>${fontBody}</fontPath>
-      <lineSpacing>1.2</lineSpacing>
-      <zIndex>5</zIndex>
-      <storyboard>
-        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
-        <animation property="opacity" from="0" to="1" begin="250" duration="200" mode="easeOut"/>
-      </storyboard>
-    </text>
-
-    <!-- Genre: below marquee in preview area -->
-    <text name="md_genre">
-      <visible>true</visible>
-      <pos>0.033333333 0.21</pos>
-      <size>0.4 ${fontSizeCaption-medium}</size>
-      <fontPath>${fontLight}</fontPath>
-      <alignment>left</alignment>
-      <zIndex>5</zIndex>
-      <storyboard>
-        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
-        <animation property="opacity" from="0" to="0.7" begin="300" duration="200" mode="easeOut"/>
-      </storyboard>
-    </text>
-
-    <!-- Rating: subtle stars in preview area -->
-    <rating name="md_rating">
-      <visible>true</visible>
-      <origin>0 0</origin>
-      <filledPath>./assets/icons/star.svg</filledPath>
-      <unfilledPath>./assets/icons/star_border.svg</unfilledPath>
-      <pos>0.033333333 0.175</pos>
-      <size>0.08 0.025</size>
-      <zIndex>5</zIndex>
-    </rating>
 
     <!-- Hide remaining metadata labels -->
     <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_players, md_lastplayed, md_playcount, md_name">
@@ -218,8 +220,9 @@
     <!-- Tile label: game name below cover art -->
     <text name="gridtile">
       <size>1 0.2</size>
-      <pos>0 0.75</pos>
+      <pos>0 0.78</pos>
       <fontPath>${fontBody}</fontPath>
+      <fontSize>${fontSizeCaption-medium}</fontSize>
       <alignment>center</alignment>
       <lineSpacing>1.2</lineSpacing>
     </text>
@@ -232,7 +235,9 @@
     <!-- System name: top-left above game strip -->
     <text name="logoText">
       <origin>0 0.5</origin>
-      <pos>0.033333333 0.45</pos>
+      <pos>0.05 0.46</pos>
+      <size>0.4 ${fontSizeH3-medium}</size>
+      <fontSize>${fontSizeH3-medium}</fontSize>
     </text>
 
   </customView>

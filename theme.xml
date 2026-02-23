@@ -11,19 +11,19 @@
 
   <include>./variables.xml</include>
 
-  <!-- Color scheme selection -->
+  <!-- Color scheme selection (first = automatic default) -->
   <subset name="Color scheme" displayName="Color scheme">
-    <include name="dark" displayName="Dark (default)">./settings/colors/dark/main.xml</include>
-    <include name="light" displayName="Light">./settings/colors/light/main.xml</include>
+    <include name="light" displayName="Light (default)">./settings/colors/light/main.xml</include>
+    <include name="dark" displayName="Dark">./settings/colors/dark/main.xml</include>
     <include name="pastel" displayName="Pastel">./settings/colors/pastel/main.xml</include>
     <include name="snes" displayName="SNES">./settings/colors/snes/main.xml</include>
     <include name="custom" displayName="Custom (edit this file)">./settings/colors/custom/main.xml</include>
   </subset>
 
-  <!-- Font size selection -->
+  <!-- Font size selection (first = automatic default) -->
   <subset name="FontSize" displayName="Font Size">
-    <include name="small">./settings/fontSize/small.xml</include>
     <include name="medium">./settings/fontSize/medium.xml</include>
+    <include name="small">./settings/fontSize/small.xml</include>
     <include name="large">./settings/fontSize/large.xml</include>
   </subset>
 

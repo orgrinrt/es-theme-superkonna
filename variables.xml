@@ -7,32 +7,32 @@
   <formatVersion>7</formatVersion>
 
   <variables>
-    <!-- Font size tiers: medium (default) -->
+    <!-- Font size tiers: medium (default)
+         Clear hierarchy: each step ~25-30% smaller than the previous -->
     <fontSizeH1-medium>0.06</fontSizeH1-medium>
-    <fontSizeH2-medium>0.05</fontSizeH2-medium>
-    <fontSizeH3-medium>0.04375</fontSizeH3-medium>
-    <fontSizeBody-medium>0.035</fontSizeBody-medium>
-    <fontSizeCaption-medium>0.028125</fontSizeCaption-medium>
+    <fontSizeH2-medium>0.046</fontSizeH2-medium>
+    <fontSizeH3-medium>0.037</fontSizeH3-medium>
+    <fontSizeBody-medium>0.032</fontSizeBody-medium>
+    <fontSizeCaption-medium>0.025</fontSizeCaption-medium>
 
     <!-- Font size tiers: large -->
-    <fontSizeH1-large>0.06875</fontSizeH1-large>
-    <fontSizeH2-large>0.05625</fontSizeH2-large>
-    <fontSizeH3-large>0.046875</fontSizeH3-large>
-    <fontSizeBody-large>0.040625</fontSizeBody-large>
-    <fontSizeCaption-large>0.03125</fontSizeCaption-large>
+    <fontSizeH1-large>0.068</fontSizeH1-large>
+    <fontSizeH2-large>0.053</fontSizeH2-large>
+    <fontSizeH3-large>0.043</fontSizeH3-large>
+    <fontSizeBody-large>0.037</fontSizeBody-large>
+    <fontSizeCaption-large>0.029</fontSizeCaption-large>
 
     <!-- Font size tiers: small -->
-    <fontSizeH1-small>0.05625</fontSizeH1-small>
-    <fontSizeH2-small>0.04375</fontSizeH2-small>
-    <fontSizeH3-small>0.0375</fontSizeH3-small>
-    <fontSizeBody-small>0.03</fontSizeBody-small>
-    <fontSizeCaption-small>0.028125</fontSizeCaption-small>
+    <fontSizeH1-small>0.054</fontSizeH1-small>
+    <fontSizeH2-small>0.041</fontSizeH2-small>
+    <fontSizeH3-small>0.033</fontSizeH3-small>
+    <fontSizeBody-small>0.028</fontSizeBody-small>
+    <fontSizeCaption-small>0.023</fontSizeCaption-small>
 
-    <!-- Font paths (3-tier hierarchy: display/body/UI) -->
+    <!-- Font paths (3-tier hierarchy: display/body/light) -->
     <fontDisplay>./assets/fonts/Inter/Inter-Bold.otf</fontDisplay>
     <fontBody>./assets/fonts/Inter/Inter-Regular.otf</fontBody>
     <fontLight>./assets/fonts/Inter/Inter-Light.otf</fontLight>
-    <fontUI>./assets/fonts/RobotoCondensed/RobotoCondensed-Regular.ttf</fontUI>
 
     <!-- Hex opacity suffixes (append to color vars: ${fgColor}${percent.50}) -->
     <percent.90>E6</percent.90>

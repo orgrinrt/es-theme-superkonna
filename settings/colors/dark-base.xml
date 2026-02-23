@@ -15,13 +15,13 @@
 
   <customView name="flix" inherits="grid">
     <gridtile name="selected">
-      <backgroundColor>FFFFFF</backgroundColor>
+      <backgroundColor>FFFFFF30</backgroundColor>
     </gridtile>
   </customView>
 
   <view name="grid">
     <gridtile name="selected">
-      <backgroundColor>${mainColor}</backgroundColor>
+      <backgroundColor>${mainColor}50</backgroundColor>
     </gridtile>
   </view>
 </theme>

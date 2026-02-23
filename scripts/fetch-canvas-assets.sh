@@ -22,7 +22,7 @@ set -euo pipefail
 THEME_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 FORCE=false
 CANVAS_REPO="Siddy212/canvas-es"
-CANVAS_BRANCH="master"
+CANVAS_BRANCH="main"
 RAW_BASE="https://raw.githubusercontent.com/${CANVAS_REPO}/${CANVAS_BRANCH}"
 
 while [[ $# -gt 0 ]]; do

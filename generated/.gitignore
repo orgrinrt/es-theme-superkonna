@@ -1,2 +1,8 @@
-# Generated hint strips — created at runtime by scripts/update-hints.sh
+# Generated at runtime by scripts/update-*.sh
 hints-*.svg
+profile-badge.svg
+profile-name.txt
+profile-balance.txt
+profile-avatar.png
+.avatar-url
+weather-icon.svg

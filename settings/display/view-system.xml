@@ -42,7 +42,7 @@
     <!-- Layer 2b: Bottom gradient vignette for text readability -->
     <image name="bottom_vignette" extra="true">
       <path>./assets/fade-ver.png</path>
-      <size>1 0.45</size>
+      <size>1 0.32</size>
       <origin>0 1</origin>
       <pos>0 1</pos>
       <zIndex>-6</zIndex>
@@ -58,9 +58,9 @@
       <pos>-0.660 -0.10</pos>
       <size>1.76 1</size>
       <logoScale>1.15</logoScale>
-      <logoSize>0.28 0.28</logoSize>
+      <logoSize>0.25 0.25</logoSize>
       <color>00000000</color>
-      <maxLogoCount>10</maxLogoCount>
+      <maxLogoCount>5</maxLogoCount>
       <zIndex>42</zIndex>
       <logoAlignment>bottom</logoAlignment>
       <defaultTransition>slide</defaultTransition>
@@ -75,7 +75,7 @@
     <text name="systemName" extra="true">
       <text>${system.fullName}</text>
       <origin>0 1</origin>
-      <pos>0.04 0.88</pos>
+      <pos>0.05 0.82</pos>
       <size>0.6 ${fontSizeH1-medium}</size>
       <fontPath>${fontDisplay}</fontPath>
       <forceUppercase>1</forceUppercase>
@@ -83,26 +83,26 @@
       <alignment>left</alignment>
       <zIndex>50</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="250" mode="linear"/>
-        <animation property="opacity" from="0" to="1" begin="300" duration="200" mode="easeOut"/>
-        <animation property="y" from="0.91" to="0.88" begin="300" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="100" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="150" duration="250" mode="easeOut"/>
+        <animation property="y" from="0.84" to="0.82" begin="150" duration="250" mode="easeOut"/>
       </storyboard>
     </text>
 
     <!-- Game count: below system name, slide-up settle-in -->
     <text name="systemInfo">
       <origin>0 1</origin>
-      <pos>0.04 0.92</pos>
+      <pos>0.05 0.87</pos>
       <size>0.4 ${fontSizeBody-medium}</size>
       <alignment>left</alignment>
       <forceUppercase>1</forceUppercase>
       <fontPath>${fontBody}</fontPath>
-      <lineSpacing>1</lineSpacing>
+      <lineSpacing>1.3</lineSpacing>
       <zIndex>50</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="300" mode="linear"/>
-        <animation property="opacity" from="0" to="1" begin="350" duration="200" mode="easeOut"/>
-        <animation property="y" from="0.95" to="0.92" begin="350" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="150" mode="linear"/>
+        <animation property="opacity" from="0" to="0.9" begin="200" duration="250" mode="easeOut"/>
+        <animation property="y" from="0.885" to="0.87" begin="200" duration="250" mode="easeOut"/>
       </storyboard>
     </text>
 
@@ -110,16 +110,16 @@
     <text name="systemManufacturer" extra="true">
       <text>{system:manufacturer} · {system:releaseYear}</text>
       <origin>0 1</origin>
-      <pos>0.04 0.96</pos>
+      <pos>0.05 0.915</pos>
       <size>0.4 ${fontSizeCaption-medium}</size>
       <alignment>left</alignment>
       <fontPath>${fontLight}</fontPath>
-      <lineSpacing>1</lineSpacing>
+      <lineSpacing>1.3</lineSpacing>
       <zIndex>50</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="350" mode="linear"/>
-        <animation property="opacity" from="0" to="0.6" begin="400" duration="200" mode="easeOut"/>
-        <animation property="y" from="0.98" to="0.96" begin="400" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="200" mode="linear"/>
+        <animation property="opacity" from="0" to="0.6" begin="250" duration="250" mode="easeOut"/>
+        <animation property="y" from="0.93" to="0.915" begin="250" duration="250" mode="easeOut"/>
       </storyboard>
     </text>
 
@@ -131,8 +131,11 @@
 
     <!-- Fallback text when no logo SVG exists -->
     <text name="logoText">
-      <origin>0 0</origin>
-      <fontPath>${fontBody}</fontPath>
+      <origin>0.5 0.5</origin>
+      <fontPath>${fontDisplay}</fontPath>
+      <fontSize>${fontSizeH3-medium}</fontSize>
+      <forceUppercase>1</forceUppercase>
+      <alignment>center</alignment>
     </text>
 
   </view>
@@ -153,81 +156,82 @@
        ========================================== -->
   <view name="screen">
 
-    <!-- Top bar background: subtle gradient strip -->
+    <!-- Top bar background: floating rounded panel -->
     <image name="topbar_bg" extra="true">
-      <path>./assets/topbar-bg.png</path>
-      <pos>0 0</pos>
+      <pos>0.015 0.012</pos>
       <origin>0 0</origin>
-      <size>1 0.065</size>
+      <size>0.97 0.055</size>
+      <roundCorners>0.012</roundCorners>
       <zIndex>9</zIndex>
     </image>
 
-    <!-- User avatar: top-left -->
+    <!-- User avatar: top-left inside floating bar -->
     <image name="avatar" extra="true">
       <path>./assets/profile/avatar-default.png</path>
-      <pos>0.016 0.012</pos>
+      <pos>0.03 0.02</pos>
       <origin>0 0</origin>
-      <maxSize>0.04 0.04</maxSize>
-      <zIndex>11</zIndex>
+      <maxSize>0.03 0.035</maxSize>
+      <zIndex>10</zIndex>
     </image>
 
-    <!-- RetroAchievements username: next to avatar, only when RA enabled -->
+    <!-- Profile badge: user silhouette + name + konnapenni balance
+         Generated by scripts/update-profile.sh from romhoard API.
+         Sits over the avatar (higher z) — the SVG includes its own user icon.
+         When romhoard isn't running, the SVG won't exist and avatar shows through. -->
+    <image name="profile_badge" extra="true">
+      <path>./generated/profile-badge.svg</path>
+      <origin>0 0.5</origin>
+      <pos>0.028 0.039</pos>
+      <maxSize>0.16 0.028</maxSize>
+      <zIndex>12</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="200" duration="400" mode="easeOut"/>
+      </storyboard>
+    </image>
+
+    <!-- Controller activity dots: after badge area -->
+    <controllerActivity name="controllerActivity">
+      <origin>0 0.5</origin>
+      <pos>0.20 0.039</pos>
+      <size>0.014</size>
+      <itemSpacing>0.004</itemSpacing>
+      <imagePath>./assets/pin.svg</imagePath>
+    </controllerActivity>
+
+    <!-- RetroAchievements username: shown when cheevos enabled, after controller dots -->
     <text name="ra_user" extra="true" ifCheevos="true">
       <text>{global:cheevosUser}</text>
       <origin>0 0.5</origin>
-      <pos>0.062 0.032</pos>
+      <pos>0.25 0.039</pos>
       <fontSize>${fontSizeCaption-medium}</fontSize>
       <fontPath>${fontLight}</fontPath>
       <lineSpacing>1</lineSpacing>
       <zIndex>11</zIndex>
     </text>
 
-    <!-- Controller activity dots: after avatar -->
-    <controllerActivity name="controllerActivity">
-      <origin>0 0.5</origin>
-      <pos>0.065 0.032</pos>
-      <size>0.018</size>
-      <itemSpacing>0.004</itemSpacing>
-      <imagePath>./assets/pin.svg</imagePath>
-    </controllerActivity>
-
-    <!-- Profile badge: user name + balance, updated by scripts/update-profile.sh
-         Uses SVG with baked text since ES can't read text files dynamically. -->
-    <image name="profile_badge" extra="true">
-      <path>./generated/profile-badge.svg</path>
-      <origin>0 0</origin>
-      <pos>0.016 0.015</pos>
-      <maxSize>0.15 0.025</maxSize>
-      <zIndex>11</zIndex>
-      <storyboard>
-        <animation property="opacity" from="0" to="0.9" begin="200" duration="500" mode="easeOut"/>
-      </storyboard>
-    </image>
-
-    <!-- Clock: top-right -->
+    <!-- Clock: top-right inside floating bar -->
     <text name="clock">
-      <origin>1 0</origin>
-      <pos>0.984 0.015</pos>
+      <origin>1 0.5</origin>
+      <pos>0.97 0.039</pos>
       <fontSize>${fontSizeCaption-medium}</fontSize>
       <fontPath>${fontLight}</fontPath>
       <lineSpacing>1</lineSpacing>
       <alignment>right</alignment>
     </text>
 
-    <!-- Weather: file-swap icon, updated by scripts/update-weather.sh
-         Shows temperature + condition icon. If file doesn't exist, invisible. -->
+    <!-- Weather: file-swap icon, updated by scripts/update-weather.sh -->
     <image name="weather_icon" extra="true">
       <path>./generated/weather-icon.svg</path>
-      <origin>1 0</origin>
-      <pos>0.91 0.015</pos>
-      <maxSize>0.025 0.025</maxSize>
+      <origin>1 0.5</origin>
+      <pos>0.90 0.039</pos>
+      <maxSize>0.022 0.022</maxSize>
       <zIndex>11</zIndex>
     </image>
 
     <text name="weather_temp" extra="true">
       <text> </text>
-      <origin>1 0</origin>
-      <pos>0.885 0.015</pos>
+      <origin>1 0.5</origin>
+      <pos>0.875 0.039</pos>
       <fontSize>${fontSizeCaption-medium}</fontSize>
       <fontPath>${fontLight}</fontPath>
       <alignment>right</alignment>
@@ -236,9 +240,9 @@
 
     <!-- Battery indicator: left of clock -->
     <batteryIndicator name="batteryIndicator">
-      <origin>1 0</origin>
-      <pos>0.855 0.018</pos>
-      <size>0.018</size>
+      <origin>1 0.5</origin>
+      <pos>0.845 0.039</pos>
+      <size>0.016</size>
     </batteryIndicator>
 
   </view>

@@ -59,6 +59,7 @@ pub struct Renderer {
     display_font: fontdue::Font,
     body_font: fontdue::Font,
     light_font: fontdue::Font,
+    button_icons: Option<crate::buttons::ButtonIcons>,
 }
 
 #[derive(Clone, Copy)]
@@ -95,10 +96,14 @@ pub struct FrameState<'a> {
     pub menu: Option<&'a Menu>,
     pub menu_config: &'a MenuConfig,
     pub game_name: Option<&'a str>,
+    pub bindings: Option<&'a crate::bindings::Bindings>,
 }
 
 impl Renderer {
     pub fn new(theme: &Theme) -> Self {
+        // Load button icons at 24px (scales well for hint bars)
+        let button_icons = crate::buttons::ButtonIcons::load(&theme.root, 24);
+
         Renderer {
             fg: Color8::from_theme(&theme.fg_color),
             bg: Color8::from_theme(&theme.bg_color),
@@ -111,6 +116,7 @@ impl Renderer {
             display_font: load_font(&theme.font_display_path),
             body_font: load_font(&theme.font_path),
             light_font: load_font(&theme.font_light_path),
+            button_icons: Some(button_icons),
         }
     }
 
@@ -137,7 +143,7 @@ impl Renderer {
         // Quick menu (left side)
         if let Some(menu) = state.menu {
             if menu.is_visible() {
-                self.draw_menu_panel(&mut pixmap, menu, state.menu_config, screen_h);
+                self.draw_menu_panel(&mut pixmap, menu, state.menu_config, state.bindings, screen_h);
             }
         }
 
@@ -376,7 +382,7 @@ impl Renderer {
 
     // ── Quick menu panel ────────────────────────────────────
 
-    fn draw_menu_panel(&self, pixmap: &mut Pixmap, menu: &Menu, config: &MenuConfig, screen_h: u32) {
+    fn draw_menu_panel(&self, pixmap: &mut Pixmap, menu: &Menu, config: &MenuConfig, bindings: Option<&crate::bindings::Bindings>, screen_h: u32) {
         let opacity = menu.opacity();
         if opacity <= 0.0 { return; }
         let oa = |base: u8| -> u8 { (base as f32 * opacity) as u8 };
@@ -486,7 +492,7 @@ impl Renderer {
             // NO divider lines — spacing alone separates items
         }
 
-        // Hint bar (bottom)
+        // Hint bar (bottom) — driven by bindings.toml
         let hint_y = items_y + n_items * item_h + 4.0 * scale;
         // Subtle separator
         fill_rect(pixmap,
@@ -496,64 +502,111 @@ impl Renderer {
 
         let hint_size = 10.0 * scale;
         let hint_center_y = hint_y + MENU_HINT_H * scale * 0.5;
+        let icon_size = (MENU_HINT_H * scale * 0.7).round() as u32;
 
-        // Controller face buttons as circles (PS-style)
-        let total_hint_w = self.measure_hints(hint_size, scale);
-        let mut hx = panel_x + (panel_w - total_hint_w) / 2.0; // center hints
+        // Build hint list from bindings (or fall back to hardcoded A/B)
+        let default_hints = vec![
+            crate::bindings::HintBarItem { button: crate::buttons::Button::A, label: "Select".into(), hold: false, hold_ms: 0 },
+            crate::bindings::HintBarItem { button: crate::buttons::Button::B, label: "Back".into(), hold: false, hold_ms: 0 },
+        ];
+        let hints = bindings.map(|b| b.hint_bar_items()).unwrap_or(default_hints);
 
-        hx = self.draw_face_button(pixmap, hx, hint_center_y, "A", "Select", hint_size, scale, opacity, true);
-        hx += 16.0 * scale;
-        let _ = self.draw_face_button(pixmap, hx, hint_center_y, "B", "Back", hint_size, scale, opacity, false);
+        let total_hint_w = self.measure_hint_items(&hints, hint_size, icon_size as f32, scale);
+        let mut hx = panel_x + (panel_w - total_hint_w) / 2.0;
+        let sep = 12.0 * scale;
+
+        for (i, hint) in hints.iter().enumerate() {
+            if i > 0 { hx += sep; }
+            let label = if hint.hold {
+                format!("hold {}", hint.label)
+            } else {
+                hint.label.clone()
+            };
+            // Show hold progress ring if this button is being held
+            let hold_progress = if hint.hold {
+                menu.hold_progress(&hint.button_name_for_config())
+            } else {
+                0.0
+            };
+            hx = self.draw_button_hint_ex(pixmap, hx, hint_center_y, hint.button,
+                &label, hint_size, icon_size, scale, opacity, hold_progress);
+        }
     }
 
-    fn measure_hints(&self, size: f32, scale: f32) -> f32 {
-        let btn_d = size + 8.0 * scale;
+    fn measure_hint_items(&self, hints: &[crate::bindings::HintBarItem], text_size: f32, icon_size: f32, scale: f32) -> f32 {
         let gap = 4.0 * scale;
-        let sep = 16.0 * scale;
-        let a_label = measure_text(&self.light_font, "Select", size);
-        let b_label = measure_text(&self.light_font, "Back", size);
-        btn_d + gap + a_label + sep + btn_d + gap + b_label
+        let sep = 12.0 * scale;
+        let mut total = 0.0;
+        for (i, hint) in hints.iter().enumerate() {
+            if i > 0 { total += sep; }
+            let label = if hint.hold {
+                format!("hold {}", hint.label)
+            } else {
+                hint.label.clone()
+            };
+            total += icon_size + gap + measure_text(&self.light_font, &label, text_size);
+        }
+        total
     }
 
-    fn draw_face_button(&self, pixmap: &mut Pixmap, x: f32, cy: f32, button: &str, label: &str, size: f32, scale: f32, opacity: f32, is_primary: bool) -> f32 {
+    /// Draw a button hint: SVG icon + label text + optional hold progress arc.
+    /// Returns x after the label.
+    fn draw_button_hint_ex(&self, pixmap: &mut Pixmap, x: f32, cy: f32, button: crate::buttons::Button, label: &str, text_size: f32, icon_size: u32, scale: f32, opacity: f32, hold_progress: f32) -> f32 {
         let oa = |base: u8| -> u8 { (base as f32 * opacity) as u8 };
-        let btn_d = size + 8.0 * scale; // circle diameter
-        let btn_r = btn_d / 2.0;
-        let bcx = x + btn_r;
-        let bcy = cy;
+        let icon_f = icon_size as f32;
+        let icon_y = cy - icon_f / 2.0;
 
-        // Circle background
-        let bg_color = if is_primary {
-            self.accent.with_alpha(oa(60))
+        // Try to blit SVG icon
+        let has_icon = if let Some(ref icons) = self.button_icons {
+            if let Some(icon) = icons.get(button) {
+                blit_rgba(pixmap, icon.rgba.as_slice(), icon.width, icon.height,
+                    x, icon_y, icon_f, opacity);
+                true
+            } else {
+                false
+            }
         } else {
-            self.subtle.with_alpha(oa(20))
+            false
         };
-        draw_circle(pixmap, bcx, bcy, btn_r, bg_color);
 
-        // Circle border
-        let border_color = if is_primary {
-            self.accent.with_alpha(oa(100))
-        } else {
-            self.subtle.with_alpha(oa(30))
-        };
-        draw_circle_stroke(pixmap, bcx, bcy, btn_r, border_color);
+        // Fallback: draw a circle with letter if no SVG
+        if !has_icon {
+            let btn_r = icon_f / 2.0;
+            let bcx = x + btn_r;
+            draw_circle(pixmap, bcx, cy, btn_r, self.subtle.with_alpha(oa(30)));
+            draw_circle_stroke(pixmap, bcx, cy, btn_r, self.subtle.with_alpha(oa(50)));
+            let letter = match button {
+                crate::buttons::Button::A => "A",
+                crate::buttons::Button::B => "B",
+                crate::buttons::Button::X => "X",
+                crate::buttons::Button::Y => "Y",
+                crate::buttons::Button::Start => "▶",
+                crate::buttons::Button::Select => "◼",
+                _ => "?",
+            };
+            let lw = measure_text(&self.body_font, letter, text_size * 0.85);
+            let letter_y = text_center_y(&self.body_font, text_size * 0.85, cy - btn_r, icon_f);
+            rasterize_text(pixmap, letter, &self.body_font, text_size * 0.85,
+                bcx - lw / 2.0, letter_y, self.fg.with_alpha(oa(200)));
+        }
 
-        // Letter centered in circle
-        let lw = measure_text(&self.body_font, button, size * 0.85);
-        let letter_y = text_center_y(&self.body_font, size * 0.85, bcy - btn_r, btn_d);
-        rasterize_text(pixmap, button, &self.body_font, size * 0.85,
-            bcx - lw / 2.0, letter_y,
-            self.fg.with_alpha(oa(200)));
+        // Hold progress arc around the icon
+        if hold_progress > 0.0 {
+            let btn_r = icon_f / 2.0 + 2.0;
+            let bcx = x + icon_f / 2.0;
+            let progress_alpha = (180.0 * opacity * hold_progress.min(1.0)) as u8;
+            draw_arc(pixmap, bcx, cy, btn_r, hold_progress,
+                self.accent.with_alpha(progress_alpha), 2.0 * scale);
+        }
 
-        // Label text centered with circle
+        // Label text
         let gap = 4.0 * scale;
-        let lx = x + btn_d + gap;
-        let label_y = text_center_y(&self.light_font, size, bcy - btn_r, btn_d);
-        rasterize_text(pixmap, label, &self.light_font, size,
-            lx, label_y,
-            self.fg.with_alpha(oa(80)));
+        let lx = x + icon_f + gap;
+        let label_y = text_center_y(&self.light_font, text_size, cy - icon_f / 2.0, icon_f);
+        rasterize_text(pixmap, label, &self.light_font, text_size,
+            lx, label_y, self.fg.with_alpha(oa(80)));
 
-        lx + measure_text(&self.light_font, label, size)
+        lx + measure_text(&self.light_font, label, text_size)
     }
 
     // ── Status pill ─────────────────────────────────────────
@@ -607,6 +660,43 @@ impl Renderer {
 }
 
 // ── Shared drawing helpers ──────────────────────────────────
+
+/// Blit RGBA source image onto pixmap with alpha blending and optional scaling.
+fn blit_rgba(pixmap: &mut Pixmap, src: &[u8], src_w: u32, src_h: u32, dst_x: f32, dst_y: f32, dst_size: f32, opacity: f32) {
+    let pw = pixmap.width() as i32;
+    let ph = pixmap.height() as i32;
+    let data = pixmap.data_mut();
+    let scale_x = src_w as f32 / dst_size;
+    let scale_y = src_h as f32 / dst_size;
+    let dst_w = dst_size as i32;
+    let dst_h = dst_size as i32;
+
+    for dy in 0..dst_h {
+        for dx in 0..dst_w {
+            let px = dst_x as i32 + dx;
+            let py = dst_y as i32 + dy;
+            if px < 0 || py < 0 || px >= pw || py >= ph { continue; }
+
+            let sx = ((dx as f32 + 0.5) * scale_x) as u32;
+            let sy = ((dy as f32 + 0.5) * scale_y) as u32;
+            if sx >= src_w || sy >= src_h { continue; }
+
+            let si = ((sy * src_w + sx) * 4) as usize;
+            let sr = src[si];
+            let sg = src[si + 1];
+            let sb = src[si + 2];
+            let sa = (src[si + 3] as f32 * opacity) as u8;
+            if sa == 0 { continue; }
+
+            let di = ((py as u32 * pw as u32 + px as u32) * 4) as usize;
+            let inv = 255 - sa;
+            data[di]     = ((sr as u32 * sa as u32 + data[di] as u32 * inv as u32) / 255) as u8;
+            data[di + 1] = ((sg as u32 * sa as u32 + data[di + 1] as u32 * inv as u32) / 255) as u8;
+            data[di + 2] = ((sb as u32 * sa as u32 + data[di + 2] as u32 * inv as u32) / 255) as u8;
+            data[di + 3] = ((sa as u32 + data[di + 3] as u32 * inv as u32 / 255).min(255)) as u8;
+        }
+    }
+}
 
 fn fill_rect(pixmap: &mut Pixmap, x: f32, y: f32, w: f32, h: f32, c: Color8) {
     draw_rounded_rect(pixmap, x, y, w, h, 0.0, c);
@@ -719,6 +809,41 @@ fn draw_circle_stroke(pixmap: &mut Pixmap, cx: f32, cy: f32, radius: f32, c: Col
         };
         let stroke = Stroke {
             width: 1.0,
+            ..Stroke::default()
+        };
+        pixmap.stroke_path(&path, &paint, &stroke, Transform::identity(), None);
+    }
+}
+
+/// Draw a progress arc (0.0 = empty, 1.0 = full circle). Starts at top (12 o'clock).
+fn draw_arc(pixmap: &mut Pixmap, cx: f32, cy: f32, radius: f32, progress: f32, c: Color8, width: f32) {
+    if c.a == 0 || progress <= 0.0 { return; }
+    let progress = progress.min(1.0);
+    let steps = (48.0 * progress).max(4.0) as usize;
+    let start_angle = -std::f32::consts::FRAC_PI_2; // 12 o'clock
+    let sweep = 2.0 * std::f32::consts::PI * progress;
+
+    let mut pb = PathBuilder::new();
+    for i in 0..=steps {
+        let t = i as f32 / steps as f32;
+        let angle = start_angle + sweep * t;
+        let px = cx + radius * angle.cos();
+        let py = cy + radius * angle.sin();
+        if i == 0 {
+            pb.move_to(px, py);
+        } else {
+            pb.line_to(px, py);
+        }
+    }
+    if let Some(path) = pb.finish() {
+        let paint = Paint {
+            shader: Shader::SolidColor(tiny_skia::Color::from_rgba8(c.r, c.g, c.b, c.a)),
+            anti_alias: true,
+            ..Paint::default()
+        };
+        let stroke = Stroke {
+            width,
+            line_cap: LineCap::Round,
             ..Stroke::default()
         };
         pixmap.stroke_path(&path, &paint, &stroke, Transform::identity(), None);

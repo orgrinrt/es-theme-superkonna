@@ -7,14 +7,14 @@
   <formatVersion>7</formatVersion>
 
   <variables>
-    <fgColor>FFFFFF</fgColor>
-    <bgColor>1A1A2E</bgColor>
-    <mainColor>E94560</mainColor>
+    <fgColor>EAEDF3</fgColor>
+    <bgColor>0E1117</bgColor>
+    <mainColor>D64060</mainColor>
     <onMainColor>FFFFFF</onMainColor>
-    <sectColor>0F3460</sectColor>
-    <cardColor>16213E</cardColor>
+    <sectColor>182235</sectColor>
+    <cardColor>151A26</cardColor>
     <shadowColor>000000</shadowColor>
-    <subtleColor>FFFFFF</subtleColor>
+    <subtleColor>A0A8B8</subtleColor>
   </variables>
 
   <include>./../dark-base.xml</include>

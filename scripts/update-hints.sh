@@ -252,6 +252,19 @@ generate_all_hints() {
     "Launch" "a" \
     "Favorite" "y" \
     "Options" "x"
+
+  # Kiosk / romhoard store hints
+  generate_hint_strip "${OUTPUT_DIR}/hints-kiosk-left.svg" \
+    "Select" "a" \
+    "Back" "b"
+
+  generate_hint_strip "${OUTPUT_DIR}/hints-kiosk-right.svg" \
+    "Queue" "y" \
+    "Prev" "lb" \
+    "Next" "rb"
+
+  # Write detected style to a file for other consumers
+  detect_style > "${OUTPUT_DIR}/controller-style.txt"
 }
 
 # ─── Main ────────────────────────────────────────────────────────────────────

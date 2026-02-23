@@ -7,6 +7,7 @@ use std::path::{Path, PathBuf};
 
 #[derive(Debug, Clone)]
 pub struct Theme {
+    pub root: PathBuf,
     pub fg_color: Color,
     pub bg_color: Color,
     pub accent_color: Color,
@@ -90,6 +91,7 @@ impl Theme {
         };
 
         Ok(Theme {
+            root: theme_root.to_path_buf(),
             fg_color: get_color("fgColor", "FFFFFFFF"),
             bg_color: get_color("bgColor", "1A1A2EFF"),
             accent_color: get_color("mainColor", "E94560FF"),
@@ -110,7 +112,7 @@ impl Theme {
 /// Search order:
 /// 1. `SUPERKONNA_COLOR_SCHEME` env var (e.g. "snes")
 /// 2. ES settings file — look for subset key matching this theme's "Color scheme"
-/// 3. Fall back to "dark"
+/// 3. Fall back to "light" (theme default)
 ///
 /// Then load `{theme_root}/settings/colors/{scheme}/main.xml`.
 fn load_active_color_scheme(theme_root: &Path) -> HashMap<String, String> {
@@ -124,7 +126,13 @@ fn load_active_color_scheme(theme_root: &Path) -> HashMap<String, String> {
         }
     }
 
-    // Fallback: try dark
+    // Fallback: try light (theme default), then dark
+    let fallback = theme_root.join("settings/colors/light/main.xml");
+    if fallback.exists() {
+        if let Ok(content) = std::fs::read_to_string(&fallback) {
+            return parse_variables(&content);
+        }
+    }
     let fallback = theme_root.join("settings/colors/dark/main.xml");
     if fallback.exists() {
         if let Ok(content) = std::fs::read_to_string(&fallback) {
@@ -167,7 +175,7 @@ fn resolve_color_scheme_name(theme_root: &Path) -> String {
         }
     }
 
-    "dark".to_string()
+    "light".to_string()
 }
 
 /// Parse an es_settings.cfg XML for a specific subset value.
