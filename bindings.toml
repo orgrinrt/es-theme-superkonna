@@ -60,6 +60,54 @@ button = "r1"
 label = "Prev Slot"
 button = "l1"
 
+# ── Kiosk / browsing actions ──────────────────────────────────
+# Used by romhoard kiosk and overlay bottom bar hint resolution.
+# Clients send action names; overlay resolves button + icon.
+
+[actions.queue]
+label = "Queue"
+button = "y"
+
+[actions.favorite]
+label = "Favorite"
+button = "y"
+
+[actions.launch]
+label = "Launch"
+button = "a"
+
+[actions.options]
+label = "Options"
+button = "x"
+
+[actions.filter]
+label = "Filter"
+button = "x"
+
+[actions.search]
+label = "Search"
+button = "select"
+
+[actions.navigate]
+label = "Navigate"
+button = "dpad"
+
+[actions.page_next]
+label = "Next"
+button = "r1"
+
+[actions.page_prev]
+label = "Prev"
+button = "l1"
+
+[actions.tab_next]
+label = "Next Tab"
+button = "r1"
+
+[actions.tab_prev]
+label = "Prev Tab"
+button = "l1"
+
 # ── Menu items ───────────────────────────────────────────────
 # Ordered list of items shown in the overlay quick menu.
 # Each references an action by name for its binding.
@@ -97,7 +145,7 @@ bind_action = "screenshot"
 
 [[menu]]
 id = "quit_to_es"
-label = "Quit to EmulationStation"
+label = "Quit to Frontend"
 icon = "exit-to-app.svg"
 action_type = "retroarch"
 command = "QUIT"
