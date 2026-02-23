@@ -1,15 +1,37 @@
 # RetroAchievements Integration — Research
 
+## Relationship to LIBRETRO-FRONTEND.md
+
+This document and LIBRETRO-FRONTEND.md describe two complementary approaches to
+RetroAchievements integration. They are not in conflict — they serve different layers:
+
+- **`rc_client` via rcheevos C FFI** (described in LIBRETRO-FRONTEND.md): Real-time
+  per-frame achievement evaluation during gameplay. This is the primary achievement
+  engine, running inside our custom libretro frontend with direct emulator memory
+  access. Achievements fire through `rc_client` event callbacks.
+
+- **Web API client in Rust** (described in this document): Querying unlock history,
+  displaying badges in the romhoard game library, checking user stats and completion
+  progress. This is for the UI layer, not gameplay.
+
+Both are needed. `rc_client` handles the "playing a game right now" path.
+The Web API handles the "browsing your library" path.
+
 ## Current State
 
-The overlay already has passive achievement toast notifications:
+The overlay has passive achievement toast notifications (legacy prototype):
 
 - `watcher.rs` — tails `/tmp/retroarch.log`, parses `[RCHEEVOS]: awarding cheevo <ID>: <Title> (<Description>)`
 - `popup.rs` — toast animation (SlideIn 300ms → Hold 4000ms → FadeOut 500ms → Done)
 - `popup.rs` has a `badge_png: Option<Vec<u8>>` field wired but never populated
 
-What's missing: no API communication, no user auth, no badge images, no game
-identification, no progress tracking. Strictly a log scraper for toasts.
+**Note:** The log-tailing approach in `watcher.rs` is legacy/reference only. With our
+custom libretro frontend (see LIBRETRO-FRONTEND.md), achievements fire through
+`rc_client` events directly — no log parsing needed. The watcher was a prototype for
+the RetroArch-based setup and will be replaced by `rc_client` event callbacks.
+
+What's missing from the Web API side: no API communication, no user auth, no badge
+images, no game identification, no progress tracking in the UI layer.
 
 ---
 
@@ -158,7 +180,7 @@ pub struct RaClient {
     username: String,
     api_key: String,
     http: reqwest::Client,
-    badge_cache: PathBuf,  // ~/.cache/loisto/ra-badges/
+    badge_cache: PathBuf,  // /data/cache/loisto/ra-badges/
 }
 ```
 
@@ -182,11 +204,12 @@ Dependencies: `reqwest`, `serde`/`serde_json`, `image`, `tokio`.
 
 ### Enhancing overlay toasts with badges
 
-The achievement ID is already in the log line. To add badge images:
+With our custom libretro frontend, achievement IDs come from `rc_client` event
+callbacks (not log parsing). To add badge images:
 
-1. When RetroArch loads a game (detect via `[RCHEEVOS]: login succeeded` in log),
+1. When the frontend loads a game (rc_client fires game-loaded event),
    pre-fetch game's achievement list via `GetGameExtended`
-2. Cache all badge images: `~/.cache/loisto/ra-badges/<badge_name>.png`
+2. Cache all badge images: `/data/cache/loisto/ra-badges/<badge_name>.png`
 3. On toast, map achievement ID → badge name from cached list
 4. Pass PNG bytes to existing `Popup::with_badge()`
 
@@ -205,9 +228,9 @@ Cache the mapping in romhoard's DB.
 ### Image caching
 
 ```
-~/.cache/loisto/ra-badges/<badge_name>.png    # 64x64 achievement badges
-~/.cache/loisto/ra-icons/<image_id>.png       # game icons
-~/.cache/loisto/ra-avatars/<username>.png     # user avatars
+/data/cache/loisto/ra-badges/<badge_name>.png    # 64x64 achievement badges
+/data/cache/loisto/ra-icons/<image_id>.png       # game icons
+/data/cache/loisto/ra-avatars/<username>.png     # user avatars
 ```
 
 Fetch on first display, serve from cache. Badges rarely change.

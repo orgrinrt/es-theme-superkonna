@@ -3,11 +3,14 @@
 ## TL;DR
 
 Custom convention-based build system (shell scripts, not mkosi) producing a
-**dm-verity protected `/usr/`** with **RAUC** for A/B atomic delta updates and
-**sysext** for modular driver/emulator packs. Base packages from Arch Linux via
-`pacstrap`. UKI via `ukify` directly. No mkosi, no Python at runtime. Boot directly
-to gamescope on TTY. Entire OS defined in git as `image.conf` + phased build scripts,
-built in GitHub Actions, produces a flashable `.img` under 500MB.
+**dm-verity protected `/usr/`** with **RAUC** (`efi` backend, CLI mode) for A/B
+atomic delta updates and **sysext** for modular driver/emulator packs. Base
+packages from Arch Linux via `pacstrap`. UKI via `ukify` directly. **No systemd
+at runtime** — a custom **Zig init** (~300 LOC) is PID 1. No dbus. WiFi via
+**iwd**, audio via **PipeWire standalone** (no WirePlumber). No mkosi, no Python
+at runtime. Boot directly to gamescope on TTY. Entire OS defined in git as
+`image.conf` + phased build scripts, built in GitHub Actions, produces a
+flashable `.img` under 500MB.
 
 ---
 
@@ -33,59 +36,40 @@ runs as an embedded compositor directly on TTY1 using DRM/KMS — no display man
 no Xorg, no Wayland compositor chain.
 
 ```
-BIOS/UEFI → systemd-boot → kernel → systemd
-    → loisto-session.service
+BIOS/UEFI → systemd-boot → kernel → Zig init (PID 1)
     → gamescope --backend drm -- loisto-shell
 ```
 
-### systemd session service
+### Zig init (PID 1)
 
-```ini
-# /etc/systemd/system/loisto-session.service
-[Unit]
-Description=Loisto Console Session
-After=systemd-user-sessions.service dbus.service
-Wants=dbus.service
+A custom Zig init (~300 LOC) replaces systemd as PID 1. It handles:
 
-[Service]
-User=loisto
-PAMName=login
-TTYPath=/dev/tty1
-StandardInput=tty
-StandardOutput=journal
-ExecStartPre=/usr/bin/chvt 1
-ExecStart=/usr/bin/gamescope --backend drm -W 1920 -H 1080 -- /usr/bin/loisto-shell
-Restart=on-failure
-RestartSec=2
+- Mount pseudofilesystems (`/proc`, `/sys`, `/dev`, `/tmp`)
+- Mount persistent partitions (`/var`, `/data`)
+- Bind-mount persistent state dirs (iwd, bluetooth)
+- Set hostname, seed urandom
+- Start `pipewire` (audio)
+- Start `iwd` + `dhcpcd` (networking)
+- Start `gamescope --backend drm -- loisto-shell` as the session
+- Reap zombies (PID 1 responsibility)
+- Handle SIGTERM/SIGINT for clean shutdown
 
-[Install]
-WantedBy=graphical.target
-```
+No systemd, no dbus, no service manager. The init starts a fixed set of
+processes in a fixed order. See INIT.md (pending) for the full design.
 
 ### Lockdown — disable all escape hatches
 
-```ini
-# Mask all other gettys
-systemctl mask getty@tty2.service
-systemctl mask getty@tty3.service
-systemctl mask getty@tty4.service
-systemctl mask getty@tty5.service
-systemctl mask getty@tty6.service
-
-# Disable Ctrl+Alt+Del reboot
-systemctl mask ctrl-alt-del.target
-
-# Disable emergency/rescue shells
-systemctl mask emergency.service
-systemctl mask rescue.service
-```
+No gettys, no emergency shells, no rescue mode — these simply do not exist.
+The Zig init only starts the processes listed above. There is no shell, no
+login prompt, and no service manager that could spawn them. Ctrl+Alt+Del is
+ignored (the init does not register a handler for it).
 
 ### Dev mode toggle
 
 A hidden key combo in loisto-shell sets a flag in `/data/system/dev-mode`. On next
-boot, initramfs checks that flag and unmasks `getty@tty2` + enables SSH. Another combo
-disables it. This provides developer access without compromising the end-user
-experience.
+boot, the Zig init checks that flag and spawns `getty` on TTY2 + starts an SSH
+daemon. Another combo disables it. This provides developer access without
+compromising the end-user experience.
 
 ---
 
@@ -122,19 +106,16 @@ GPT Partition Table:
   #1  ESP          256MB    FAT32     Bootloader + kernel + initrd
   #2  rootfs-A     1.5GB    (raw)     Active squashfs image
   #3  rootfs-B     1.5GB    (raw)     Inactive slot (for updates)
-  #4  var          256MB    ext4      System state (logs, machine-id, NM)
+  #4  var          256MB    ext4      System state (logs, machine-id, iwd)
   #5  data         remainder ext4     ROMs, saves, BIOS, config
 
 Total OS overhead: ~3.5GB
 Remaining: user data
 ```
 
-Simpler variant (no dedicated A/B partitions):
-
-```
-  #1  boot         512MB    FAT32     kernel + initrd + loisto.squashfs + loisto.prev.squashfs
-  #2  data         remainder ext4     Everything persistent
-```
+**Decision**: The 5-partition layout above is what RAUC A/B needs and is the
+committed design. A simpler 2-partition variant was considered but rejected
+because RAUC's `efi` bootloader backend requires dedicated slot partitions.
 
 ### How immutability works
 
@@ -144,8 +125,8 @@ kernel → initramfs:
   2. mount tmpfs as /upper (writable, in-memory)
   3. mount overlayfs: lower=/lower, upper=/upper → merged root
   4. mount /data partition for persistent storage
-  5. bind-mount persistent dirs (NetworkManager, Bluetooth)
-  6. switch_root → systemd → gamescope → loisto-shell
+  5. bind-mount persistent dirs (iwd, Bluetooth)
+  6. switch_root → Zig init → gamescope → loisto-shell
 ```
 
 All system changes are in-memory (tmpfs upper) and lost on reboot. Only `/data/`
@@ -156,6 +137,10 @@ persists. This means:
 - A corrupted system state is fixed by rebooting
 
 ### The initramfs init script
+
+The initramfs uses a busybox shell script (or a small Zig binary) to mount
+filesystems, verify dm-verity, and switch_root into the real rootfs where the
+Zig init takes over as PID 1.
 
 ```bash
 #!/bin/busybox sh
@@ -169,13 +154,18 @@ persists. This means:
 /bin/busybox modprobe overlay
 /bin/busybox modprobe ext4
 /bin/busybox modprobe vfat
+/bin/busybox modprobe dm-verity 2>/dev/null
 
 # Mount boot partition (contains squashfs)
 /bin/busybox mkdir -p /boot
 /bin/busybox mount -t vfat /dev/disk/by-label/LOISTO-BOOT /boot
 
-# Determine which slot to boot (RAUC sets this)
+# Determine which slot to boot (RAUC efi backend reads EFI variables)
 SLOT=$(/bin/busybox cat /boot/active-slot 2>/dev/null || echo "a")
+
+# dm-verity verification (veritysetup is standalone, no systemd needed)
+# veritysetup open /dev/disk/by-partlabel/rootfs-${SLOT} verified-root \
+#     /dev/disk/by-partlabel/rootfs-${SLOT}-verity $ROOTHASH
 
 # Mount squashfs as read-only lower
 /bin/busybox mkdir -p /lower
@@ -196,19 +186,14 @@ SLOT=$(/bin/busybox cat /boot/active-slot 2>/dev/null || echo "a")
 /bin/busybox mkdir -p /newroot/data
 /bin/busybox mount -t ext4 /dev/disk/by-label/LOISTO-DATA /newroot/data
 
-# Bind persistent state
-for dir in var/lib/NetworkManager var/lib/bluetooth; do
+# Bind persistent state (iwd for WiFi, bluez for Bluetooth)
+for dir in var/lib/iwd var/lib/bluetooth; do
     /bin/busybox mkdir -p "/newroot/data/system/$dir" "/newroot/$dir"
     /bin/busybox mount --bind "/newroot/data/system/$dir" "/newroot/$dir"
 done
 
-# Dev mode: unmask getty@tty2 if flag set
-if [ -f /newroot/data/system/dev-mode ]; then
-    /bin/busybox mkdir -p /newroot/etc/systemd/system
-    /bin/busybox ln -sf /usr/lib/systemd/system/getty@.service \
-        /newroot/etc/systemd/system/getty@tty2.service
-fi
-
+# switch_root → Zig init (PID 1)
+# Dev mode flag is checked by the Zig init, not here
 exec /bin/busybox switch_root /newroot /sbin/init
 ```
 
@@ -227,16 +212,19 @@ mkdir -p "$ROOTFS"
 pacstrap -c "$ROOTFS" \
     base linux linux-firmware \
     mesa vulkan-radeon vulkan-intel libva-mesa-driver intel-media-driver \
-    pipewire wireplumber pipewire-pulse pipewire-alsa \
+    pipewire pipewire-alsa \
     gamescope libinput \
-    networkmanager iwd bluez \
-    mpv
+    iwd dhcpcd bluez \
+    mpv \
+    rauc \
+    cryptsetup     # provides veritysetup
 
-# Install our Rust binaries
+# Install our binaries
 install -m755 target/release/loisto-shell    "$ROOTFS/usr/bin/"
 install -m755 target/release/loisto-updater  "$ROOTFS/usr/bin/"
 install -m755 target/release/loisto-configgen "$ROOTFS/usr/bin/"
 install -m755 target/release/loisto-frontend "$ROOTFS/usr/bin/"
+install -m755 zig-out/bin/loisto-init        "$ROOTFS/sbin/init"
 
 # Install libretro cores
 mkdir -p "$ROOTFS/usr/lib/libretro"
@@ -245,17 +233,8 @@ cp cores/*.so "$ROOTFS/usr/lib/libretro/"
 # Install standalone emulators
 cp emulators/* "$ROOTFS/usr/bin/"
 
-# Configure systemd (session service, masked gettys, etc.)
-install -Dm644 loisto-session.service "$ROOTFS/etc/systemd/system/"
-ln -sf /etc/systemd/system/loisto-session.service \
-    "$ROOTFS/etc/systemd/system/graphical.target.wants/loisto-session.service"
-
-for i in 2 3 4 5 6; do
-    ln -sf /dev/null "$ROOTFS/etc/systemd/system/getty@tty${i}.service"
-done
-ln -sf /dev/null "$ROOTFS/etc/systemd/system/ctrl-alt-del.target"
-ln -sf /dev/null "$ROOTFS/etc/systemd/system/emergency.service"
-ln -sf /dev/null "$ROOTFS/etc/systemd/system/rescue.service"
+# No systemd — the Zig init is installed as /sbin/init above.
+# No gettys, no service units, no masking needed.
 
 # Strip unnecessary files
 rm -rf "$ROOTFS"/usr/share/{doc,man,info,locale,i18n,gtk-doc}
@@ -325,7 +304,7 @@ umount /tmp/boot-mnt
 # Create default data structure
 mkdir -p /tmp/data-mnt
 mount "${LOOP}p5" /tmp/data-mnt
-mkdir -p /tmp/data-mnt/{roms,saves,bios,config,system/{var/lib/NetworkManager,var/lib/bluetooth}}
+mkdir -p /tmp/data-mnt/{roms,saves,bios,config,system/{var/lib/iwd,var/lib/bluetooth}}
 umount /tmp/data-mnt
 
 losetup -d "$LOOP"
@@ -366,11 +345,13 @@ User presses A to install
     ↓
 loisto-updater downloads loisto-v1.3.0.raucb
     ↓
-RAUC verifies signature, writes to inactive slot
+rauc install loisto-v1.3.0.raucb (CLI one-shot, no dbus)
+    ↓
+RAUC verifies signature, writes to inactive slot, updates EFI variables
     ↓
 Reboot prompt → system boots into new version
     ↓
-If boot fails 3 times → automatic rollback to previous slot
+If boot fails → RAUC efi backend reads EFI variables, rolls back to previous slot
 ```
 
 Build-side:
@@ -405,7 +386,7 @@ casync extract loisto.squashfs.caibx /dev/disk/by-partlabel/rootfs-B \
 | Path | Partition | Persistence | Contents |
 |------|-----------|-------------|----------|
 | `/` | overlayfs (squashfs + tmpfs) | Lost on reboot | System runtime state |
-| `/var/` | ext4 (var partition) | Survives reboot | Logs, machine-id, NM connections |
+| `/var/` | ext4 (var partition) | Survives reboot | Logs, machine-id, iwd networks |
 | `/data/roms/` | ext4 (data partition) | Permanent | Game ROMs |
 | `/data/saves/` | ext4 (data partition) | Permanent | Save states, SRAM |
 | `/data/bios/` | ext4 (data partition) | Permanent | BIOS/firmware files |
@@ -445,9 +426,9 @@ Packages=
     linux
     linux-firmware
     mesa vulkan-radeon vulkan-intel libva-mesa-driver
-    pipewire wireplumber
+    pipewire pipewire-alsa
     gamescope libinput
-    networkmanager iwd bluez
+    iwd bluez
     mpv
 
 RemovePackages=python perl man-db
@@ -484,14 +465,10 @@ MatchPartitionType=usr
 
 ### Boot assessment (automatic rollback)
 
-systemd-boot uses counters in UKI filenames:
-
-```
-loisto-1.0.0+3-0.efi    # 3 tries left, 0 good boots
-loisto-0.9.0+0-1.efi    # known good (0 tries, 1 good)
-```
-
-If the new version fails 3 boots, systemd-boot auto-selects the previous.
+RAUC's `efi` bootloader backend handles boot assessment by reading/writing EFI
+variables directly (no systemd boot counters). After an update, RAUC marks the
+new slot as "pending". On successful boot, `rauc status mark-good` confirms it.
+If the system fails to mark-good, the next boot falls back to the previous slot.
 
 ### Tradeoffs vs raw squashfs
 
@@ -501,8 +478,8 @@ If the new version fails 3 boots, systemd-boot auto-selects the previous.
 | Build tool | Shell scripts | mkosi (Python) |
 | Update mgmt | RAUC | systemd-sysupdate |
 | Verified boot | Optional (add dm-verity later) | Built-in (dm-verity + UKI) |
-| Rollback | RAUC boot counter | systemd-boot assessment |
-| First-boot partitioning | Manual (in build script) | systemd-repart (automatic) |
+| Rollback | RAUC efi backend (EFI variables) | systemd-boot assessment |
+| Partitioning | Build-time (systemd-repart at build) | systemd-repart (build or first boot) |
 | Learning curve | Low | Medium (systemd ecosystem) |
 
 ---
@@ -526,7 +503,7 @@ The most principled approach. The entire OS is declared in `.nix` files —
   # Impermanence: what survives reboots
   environment.persistence."/data/persist" = {
     directories = [
-      "/var/lib/NetworkManager"
+      "/var/lib/iwd"
       "/var/lib/bluetooth"
       "/var/log"
     ];
@@ -562,8 +539,9 @@ The most principled approach. The entire OS is declared in `.nix` files —
 
 ## Modular Extensions with sysext
 
-Regardless of base approach, **systemd-sysext** enables modular updates to
-`/usr/` without rebuilding the entire image:
+Regardless of base approach, **sysext** enables modular updates to `/usr/`
+without rebuilding the entire image. Despite the `systemd-` prefix, sysext
+works standalone — it just needs erofs/squashfs + overlayfs (kernel features):
 
 ```bash
 # Build a sysext image for Mesa driver updates
@@ -581,7 +559,7 @@ systemd-sysext merge
 ```
 
 This means we can ship:
-- **Base image** (kernel, systemd, gamescope, loisto binaries) — updates rarely
+- **Base image** (kernel, Zig init, gamescope, loisto binaries) — updates rarely
 - **GPU driver extension** — updates when Mesa releases
 - **Emulator pack extension** — updates when cores/emulators release
 - **Media extension** — mpv + codecs
@@ -641,7 +619,7 @@ for embedded Linux and aligns with loisto's Rust stack.
    b. initramfs checks /data partition:
       - If missing: format with default directory structure
       - If present: mount as-is
-   c. switch_root → systemd → loisto-session
+   c. switch_root → Zig init → gamescope session
    d. loisto-shell detects no /data/config/setup-complete:
       - Launch first-boot wizard (inside gamescope)
       - WiFi setup, controller pairing, language, timezone
@@ -662,10 +640,10 @@ All approaches use the same upstream packages:
 | Mesa + Vulkan (Intel) | `mesa` + `vulkan-intel` | ~50MB |
 | VA-API | `libva-mesa-driver` / `intel-media-driver` | ~20MB |
 | NVIDIA (proprietary) | `nvidia` | ~200MB |
-| PipeWire + WirePlumber | `pipewire` + `wireplumber` | ~20MB |
+| PipeWire | `pipewire` + `pipewire-alsa` | ~15MB |
 | libinput | `libinput` | ~5MB |
-| Bluetooth | `bluez` | ~10MB |
-| Networking | `networkmanager` + `iwd` | ~15MB |
+| Bluetooth | `bluez` (transient, for pairing only) | ~10MB |
+| Networking | `iwd` + `dhcpcd` | ~5MB |
 
 Batocera ships the exact same upstream packages compiled into Buildroot.
 There is zero driver advantage to using Batocera as a base.
@@ -764,17 +742,17 @@ export PIPEWIRE_RUNTIME_DIR=/run/user/$(id -u)
 | Kernel | ~10MB |
 | Firmware (trimmed AMD+Intel) | ~30MB |
 | Mesa + Vulkan + VA-API | ~50MB |
-| PipeWire + WirePlumber | ~10MB |
-| systemd + base utilities | ~30MB |
+| PipeWire + pipewire-alsa | ~8MB |
+| Zig init + base utilities | ~5MB |
 | gamescope | ~5MB |
-| NetworkManager + iwd + bluez | ~15MB |
+| iwd + dhcpcd + bluez | ~8MB |
 | mpv | ~8MB |
 | Loisto binaries (all) | ~20MB |
 | Libretro cores (30 cores) | ~80MB |
 | Standalone emulators (5) | ~40MB |
-| **Total** | **~300MB** |
+| **Total** | **~250MB** |
 
-With all firmware (for generic hardware support): **~400-500MB**.
+With all firmware (for generic hardware support): **~350-450MB**.
 
 ---
 
@@ -842,15 +820,16 @@ We do NOT use mkosi. We borrow its *design paradigm*:
 - Convention-based directory layout (predictable, auditable)
 - Split build phases (each phase is a standalone script)
 - dm-verity for cryptographic rootfs integrity
-- systemd-repart configs for first-boot partitioning (just INI files, no mkosi)
-- UKI optionally via `ukify` directly (it's a standalone systemd tool)
-- sysext for modular driver/emulator extensions
+- systemd-repart configs for BUILD TIME partitioning (just INI files, not runtime)
+- UKI optionally via `ukify` directly (it's a standalone tool)
+- sysext for modular driver/emulator extensions (kernel overlayfs, no systemd needed)
 
 We pair this with RAUC for updates because:
 
 - Delta updates via block-hash-index (systemd-sysupdate has none)
 - 8+ years of production deployments in industrial/automotive/medical
-- D-Bus API that our Rust updater can talk to natively
+- CLI mode (`rauc install`) — no dbus daemon needed at runtime
+- `efi` bootloader backend reads/writes EFI variables directly for boot assessment
 - Recovery partition support built-in
 
 ### What we borrow from mkosi (the paradigm, not the tool)
@@ -880,7 +859,7 @@ loisto-image/
 │   ├── 00-bootstrap.sh         # pacstrap base packages into $ROOTFS
 │   ├── 10-install-packages.sh  # Install additional packages from image.conf
 │   ├── 20-install-loisto.sh    # Copy our Rust binaries, cores, emulators
-│   ├── 30-configure.sh         # Enable/mask systemd units, create users
+│   ├── 30-configure.sh         # Create users, install Zig init as /sbin/init
 │   ├── 40-strip.sh             # Remove docs, man pages, includes, firmware trim
 │   ├── 50-verity.sh            # veritysetup format → rootfs.verity + root hash
 │   ├── 60-uki.sh               # ukify build → loisto.efi (embed verity root hash)
@@ -891,16 +870,12 @@ loisto-image/
 │       ├── bin/
 │       │   └── loisto-shell    # (copied from cargo build output)
 │       ├── lib/
-│       │   ├── libretro/       # .so cores
-│       │   └── systemd/
-│       │       └── system/
-│       │           ├── loisto-session.service
-│       │           └── loisto-health.service
+│       │   └── libretro/       # .so cores
 │       └── share/
 │           └── factory/
-│               └── etc/        # Factory defaults for /etc (systemd-tmpfiles)
+│               └── etc/        # Factory defaults for /etc
 │
-├── repart.d/                   # systemd-repart configs (used on device at first boot)
+├── repart.d/                   # systemd-repart configs (used at IMAGE BUILD TIME only)
 │   ├── 00-esp.conf
 │   ├── 10-usr-a.conf
 │   ├── 11-usr-a-verity.conf
@@ -942,19 +917,20 @@ COMPATIBLE="loisto-console"    # RAUC compatible string
 # Base packages (Arch)
 PACKAGES=(
     base linux linux-firmware
-    systemd systemd-boot
     # GPU
     mesa vulkan-radeon vulkan-intel libva-mesa-driver intel-media-driver
-    # Audio
-    pipewire wireplumber pipewire-pulse pipewire-alsa
+    # Audio (PipeWire standalone, no WirePlumber, no PulseAudio compat)
+    pipewire pipewire-alsa
     # Compositor
     gamescope
     # Input
     libinput
-    # Network
-    networkmanager iwd bluez
+    # Network (iwd for WiFi, dhcpcd for DHCP, no NetworkManager)
+    iwd dhcpcd bluez
     # Media
     mpv
+    # Updates
+    rauc
     # Verity + boot tools
     cryptsetup     # provides veritysetup
 )
@@ -1045,9 +1021,7 @@ set -euo pipefail
 # Copy overlay directory verbatim
 cp -a "$SCRIPT_DIR/overlay/"* "$ROOTFS/"
 
-# Copy repart configs (for first-boot on device)
-mkdir -p "$ROOTFS/usr/lib/repart.d"
-cp "$SCRIPT_DIR/repart.d/"*.conf "$ROOTFS/usr/lib/repart.d/"
+# repart configs are used at build time only (not shipped to device)
 
 # Copy RAUC config
 mkdir -p "$ROOTFS/etc/rauc"
@@ -1117,10 +1091,11 @@ KERNEL="$ROOTFS/usr/lib/modules/*/vmlinuz"  # glob to find kernel
 INITRD="$OUTPUT/initramfs.img"              # built by mkinitcpio in phase 30
 
 # Build kernel cmdline with embedded verity hash
+# No systemd.verity_* params — our initramfs calls veritysetup directly
 CMDLINE="ro quiet loglevel=0 vt.global_cursor_default=0"
-CMDLINE="$CMDLINE systemd.verity_root_data=/dev/disk/by-partlabel/usr-a"
-CMDLINE="$CMDLINE systemd.verity_root_hash=/dev/disk/by-partlabel/usr-a-verity"
-CMDLINE="$CMDLINE roothash=$ROOTHASH"
+CMDLINE="$CMDLINE loisto.verity_data=/dev/disk/by-partlabel/usr-a"
+CMDLINE="$CMDLINE loisto.verity_hash=/dev/disk/by-partlabel/usr-a-verity"
+CMDLINE="$CMDLINE loisto.roothash=$ROOTHASH"
 
 echo "$CMDLINE" > "$OUTPUT/cmdline.txt"
 
@@ -1193,7 +1168,7 @@ esac
 | **Transparency** | Abstraction hides what's happening | Every byte placement is visible in the phase script |
 | **dm-verity** | Built-in | We call `veritysetup` directly — same result, 5 lines of shell |
 | **UKI** | Built-in | We call `ukify` directly — same result, 10 lines of shell |
-| **systemd-repart** | mkosi calls it at build time | We ship the `.conf` files; systemd-repart runs on device at first boot |
+| **systemd-repart** | mkosi calls it at build time | We call it at build time only; not shipped to device |
 | **sysext** | Native (dm-verity `/usr/`) | Same — our `/usr/` is dm-verity protected, sysext works identically |
 
 The key realization: mkosi's "magic" is just calling `veritysetup`, `ukify`, `sbsign`,
@@ -1204,13 +1179,13 @@ them ourselves and gain full visibility into what's happening.
 
 | Tool | Purpose | When |
 |------|---------|------|
-| `veritysetup` | Generate dm-verity hash tree | Build time |
-| `ukify` | Build Unified Kernel Image | Build time |
+| `veritysetup` | Generate dm-verity hash tree | Build time (standalone binary) |
+| `ukify` | Build Unified Kernel Image | Build time (standalone tool) |
 | `sbsign` | Sign UKI for Secure Boot | Build time |
-| `systemd-repart` | Create missing partitions | First boot on device |
-| `systemd-sysext` | Merge modular extensions onto `/usr/` | Runtime on device |
-| `systemd-boot` | UEFI boot manager with boot assessment | Runtime on device |
-| RAUC | A/B update management with delta support | Runtime on device |
+| `systemd-repart` | Partition the disk image | Build time only (not shipped) |
+| `systemd-sysext` | Merge modular extensions onto `/usr/` | Runtime (standalone, needs only erofs + overlayfs) |
+| `systemd-boot` | UEFI boot manager | Runtime (EFI binary, not a systemd daemon) |
+| RAUC | A/B update management, `efi` backend for boot assessment | Runtime (CLI: `rauc install`, no dbus) |
 
 ### Summary
 
@@ -1223,9 +1198,9 @@ Build (CI/dev machine):           Device (runtime):
 │ phases/10-packages.sh   │       │   ↓                         │
 │ phases/20-loisto.sh     │       │ dm-verity on /usr            │
 │ phases/30-configure.sh  │       │   ↓                         │
-│ phases/40-strip.sh      │       │ systemd → gamescope → app   │
+│ phases/40-strip.sh      │       │ Zig init → gamescope → app  │
 │ phases/50-verity.sh     │       │                             │
-│ phases/60-uki.sh        │       │ RAUC daemon (D-Bus)         │
+│ phases/60-uki.sh        │       │ rauc install (CLI one-shot) │
 │ phases/70-disk.sh       │       │   ↓                         │
 │   ↓                     │       │ Delta update (5-50MB)       │
 │ bundle.sh → .raucb      │──────→│   ↓                         │

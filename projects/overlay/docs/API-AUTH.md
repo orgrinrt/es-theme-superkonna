@@ -550,7 +550,7 @@ Services where loisto manages its own credentials (no user setup):
 
 ```rust
 pub struct TokenStore {
-    path: PathBuf,  // ~/.config/loisto/tokens.json (encrypted or file-permission-protected)
+    path: PathBuf,  // /data/config/loisto/tokens.json (encrypted or file-permission-protected)
     tokens: HashMap<String, ServiceToken>,
 }
 
@@ -691,8 +691,8 @@ For API key services:
 
 ### Security considerations
 
-- Store tokens in `~/.config/loisto/tokens.json` with `0600` permissions
-- On Batocera: `/userdata/system/.config/loisto/tokens.json`
+- Store tokens in `/data/config/loisto/tokens.json` with `0600` permissions
+  (`/data/` is the persistent user data partition on our custom OS)
 - Never log tokens (mask in debug output)
 - Refresh tokens are more sensitive than access tokens — losing a refresh token
   means the user must re-authenticate via device flow

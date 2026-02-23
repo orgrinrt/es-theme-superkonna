@@ -1,5 +1,13 @@
 # Batocera configgen Pipeline — Research for Rust Rewrite
 
+## Scope Note
+
+This doc was researched against Batocera's configgen. Loisto builds its own OS — the
+Rust configgen replaces Batocera's Python entirely. Batocera-specific paths (`/userdata/`),
+tools (`batocera-resolution`, `batocera-evmapy`, `emulatorlauncher.py`), and ES-specific
+formats (`es_input.cfg`) documented here are reference for understanding the problem space,
+not our implementation targets. Our filesystem root is `/data/` instead of `/userdata/`.
+
 ## TL;DR
 
 Batocera's `emulatorlauncher.py` is the orchestrator between ES and emulators. It receives
@@ -757,7 +765,7 @@ ES reads `/tmp/launch_error.log` to display errors to the user.
 | `lazy import_module` | Feature flags or `inventory` crate |
 | `Command` dataclass | `struct Command { args: Vec<OsString>, env: HashMap<String, OsString> }` |
 | `SystemConfig` dict | `struct SystemConfig(HashMap<String, ConfigValue>)` with typed accessors |
-| `UnixSettings` | Custom parser (no section headers, `.` namespacing) |
+| `UnixSettings` | Custom parser for `loisto.conf` (no section headers, `.` namespacing) |
 | `subprocess.Popen` | `std::process::Command` |
 | `pyudev` | `udev` crate |
 | `evdev` | `evdev` crate |
@@ -804,7 +812,7 @@ pub trait Generator {
 pub struct ConfigCascade {
     defaults: HashMap<String, HashMap<String, String>>,      // from YAML
     arch_defaults: HashMap<String, HashMap<String, String>>,  // from arch YAML
-    user_config: BatoceraConf,                                // from batocera.conf
+    user_config: UserConf,                                      // from loisto.conf
 }
 
 impl ConfigCascade {
@@ -838,17 +846,18 @@ impl ConfigCascade {
 }
 ```
 
-### batocera.conf Parser
+### Config File Parser
 
+Batocera uses `batocera.conf`; loisto uses `loisto.conf` at `/data/system/loisto.conf`.
 The format is non-standard INI (no section headers, dot-namespaced keys with bracket
 indexing for per-game overrides). Needs a custom parser:
 
 ```rust
-pub struct BatoceraConf {
+pub struct UserConf {
     entries: Vec<(String, String)>,  // preserve order for writing back
 }
 
-impl BatoceraConf {
+impl UserConf {
     pub fn get_global(&self) -> HashMap<String, String> {
         // Keys matching: global.{key} → {key}
     }
@@ -932,7 +941,7 @@ inventory::submit! { GeneratorEntry("dolphin", || Box::new(DolphinGenerator)) }
 | `controller.rs` | ~300 | Controller/Input types, es_input.cfg parser, SDL DB |
 | `emulator.rs` | ~200 | Emulator type, defaults loading |
 | `command.rs` | ~50 | Command struct |
-| `video.rs` | ~100 | Resolution switching (subprocess to batocera-resolution) |
+| `video.rs` | ~100 | Resolution switching (gamescope handles this natively) |
 | `hotkeys.rs` | ~100 | Hotkeygen context management |
 | `guns.rs` | ~200 | Gun detection, precalibration |
 | `wheels.rs` | ~200 | Wheel detection, remapping |
@@ -959,18 +968,20 @@ inventory::submit! { GeneratorEntry("dolphin", || Box::new(DolphinGenerator)) }
 ### What Stays as Subprocess Calls
 
 These are external tools that stay as-is:
-- `batocera-resolution` — display mode switching
+- `batocera-resolution` — display mode switching (**needs replacement:** gamescope handles resolution and display mode switching natively)
 - `hotkeygen` — hotkey daemon
-- `batocera-evmapy` — pad-to-keyboard mapping
+- `batocera-evmapy` — pad-to-keyboard mapping (**needs replacement:** our overlay or configgen handles input mapping directly)
 - `evsieve` — virtual input device creation
 - `mount`/`umount` — SquashFS handling
 
 ---
 
-## Filesystem Paths (batoceraPaths.py)
+## Filesystem Paths
 
-| Constant | Path |
-|----------|------|
+### Batocera reference (batoceraPaths.py)
+
+| Constant | Batocera Path |
+|----------|---------------|
 | `CONF` | `/userdata/system/batocera.conf` |
 | `SAVES` | `/userdata/saves` |
 | `ROMS` | `/userdata/roms` |
@@ -985,6 +996,23 @@ These are external tools that stay as-is:
 | `DECORATIONS` | `/usr/share/batocera/datainit/decorations` |
 | `EVMAPY` | `/userdata/system/configs/evmapy` |
 | `LOGS` | `/userdata/system/logs` |
+
+### Loisto paths
+
+| Constant | Loisto Path |
+|----------|-------------|
+| `CONF` | `/data/system/loisto.conf` |
+| `SAVES` | `/data/saves` |
+| `ROMS` | `/data/roms` |
+| `BIOS` | `/data/bios` |
+| `CONFIGS` | `/data/system/configs` |
+| `OVERLAYS` | `/data/overlays` |
+| `SHADERS` | `/usr/share/loisto/shaders` |
+| `USER_SHADERS` | `/data/shaders` |
+| `CORES` | `/usr/lib/libretro` |
+| `CORE_INFO` | `/usr/share/libretro/info` |
+| `SCREENSHOTS` | `/data/screenshots` |
+| `LOGS` | `/data/system/logs` |
 
 ---
 

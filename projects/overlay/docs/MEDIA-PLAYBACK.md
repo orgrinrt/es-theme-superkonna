@@ -2,10 +2,11 @@
 
 ## TL;DR
 
-mpv is the right backend — it ships on Batocera, handles every codec/HDR/subtitle/audio
-passthrough scenario, and has good Rust bindings. Control via IPC socket (`mpvipc` crate)
-for v1, upgrade to embedded libmpv (`libmpv2` crate) for seamless UI integration later.
-Debrid services all return direct HTTPS URLs that mpv plays natively.
+mpv is the right backend — it's included in our image via pacstrap, handles every
+codec/HDR/subtitle/audio passthrough scenario, and has good Rust bindings. Control via
+IPC socket (`mpvipc` crate) for v1, upgrade to embedded libmpv (`libmpv2` crate) for
+seamless UI integration later. Debrid services all return direct HTTPS URLs that mpv
+plays natively.
 
 ---
 
@@ -36,12 +37,12 @@ Debrid services all return direct HTTPS URLs that mpv plays natively.
 | Chapter support | Yes |
 | Deinterlacing | Yes |
 
-Batocera ships mpv 0.40.0. Zero build dependencies for playback.
+mpv is included in our image via pacstrap (whatever version Arch provides).
 
 ### GStreamer (`gstreamer-rs`)
 
 Full pipeline framework. Actively maintained Rust bindings by GStreamer core team.
-Batocera ships GStreamer 1.24.8.
+GStreamer is available via pacstrap if needed.
 
 **Pros:** Fine-grained pipeline control, VA-API elements, HLS/DASH demuxers.
 **Cons:** Verbose pipeline construction, poor subtitle rendering (no libass), limited
@@ -62,21 +63,22 @@ Useful for audio-only streams (podcasts, Yle radio) if you want zero C deps for 
 
 ---
 
-## Hardware Acceleration on Batocera
+## Hardware Acceleration
 
-Batocera x86_64 ships the full stack:
+Our image includes the full acceleration stack via pacstrap:
 
-| Component | Version | Notes |
-|-----------|---------|-------|
-| Mesa + VA-API drivers | Current | Intel iHD/i965, AMD radeonsi |
-| libva | 2.22.0 | VA-API runtime |
-| FFmpeg | 7.1 | VA-API + CUDA support |
-| mpv | 0.40.0 | VA-API hardware decode |
-| GStreamer | 1.24.8 | VA-API plugin |
-| NVIDIA CUDA | Bundled | Proprietary driver path |
+| Component | Notes |
+|-----------|-------|
+| Mesa + VA-API drivers | Intel iHD/i965, AMD radeonsi |
+| libva | VA-API runtime |
+| FFmpeg | VA-API + CUDA support |
+| mpv | VA-API hardware decode |
+| GStreamer | VA-API plugin (if needed) |
+| NVIDIA CUDA | Proprietary driver path (if applicable) |
 
-**You don't need to ship any video drivers.** Just use `--hwdec=auto` and mpv
-auto-detects the best decoder (VA-API for Intel/AMD, NVDEC for NVIDIA).
+**Mesa, libva, and hardware acceleration drivers must be included in the image.**
+Use `--hwdec=auto` and mpv auto-detects the best decoder (VA-API for Intel/AMD,
+NVDEC for NVIDIA).
 
 ---
 
@@ -102,8 +104,8 @@ essentially building a video player from scratch. Not recommended.
 ### Gamescope integration
 
 Video player should be a **regular X11 window** that gamescope composites as
-the focused app — NOT an overlay. `GAMESCOPE_EXTERNAL_OVERLAY` atom is claimed
-by MangoHud on Steam Deck / gamescope-session.
+the focused app — NOT an overlay. The `GAMESCOPE_EXTERNAL_OVERLAY` atom is
+claimed by our own overlay (the Rust wgpu binary) for persistent bars and toasts.
 
 Alternatively, use libmpv render API to render video into the overlay process's
 own wgpu/OpenGL context for seamless transitions.
@@ -182,7 +184,7 @@ For uncached torrents: submit magnet → poll status → once ready → unrestri
 | HDR/Dolby Vision | Excellent | Limited | None (DIY) | Good |
 | Audio passthrough | Excellent | Manual | None (DIY) | Good |
 | HLS/DASH | Yes | Yes | Manual | Yes |
-| Batocera ships it | Yes (0.40.0) | Yes (1.24.8) | Yes (7.1) | No |
+| Included in image | Yes | Yes | Yes | No |
 | Gamescope integration | Easy | Medium | Hard | Medium |
 | Time to working player | Days | Weeks | Months | Weeks |
 | Rust LOC needed | ~500 | ~2000 | ~10000+ | ~1000 |
@@ -273,6 +275,6 @@ m3u8-rs = "6"
 - [gstreamer-rs (GitHub)](https://github.com/sdroege/gstreamer-rs)
 - [GStreamer VA-API](https://github.com/GStreamer/gstreamer-vaapi)
 - [symphonia (crates.io)](https://crates.io/crates/symphonia)
-- [Batocera mpv package](https://github.com/batocera-linux/batocera-x86_64_efi/)
+- [Arch mpv package](https://archlinux.org/packages/extra/x86_64/mpv/)
 - [Hardware video acceleration (ArchWiki)](https://wiki.archlinux.org/title/Hardware_video_acceleration)
 - [Gamescope architecture](https://deepwiki.com/ValveSoftware/gamescope/2-architecture)

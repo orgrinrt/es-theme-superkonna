@@ -5,8 +5,8 @@
 Building a custom libretro frontend in Rust is viable and surprisingly small (~2000-4000 LOC).
 The libretro API is ~15 functions to call + 6 callbacks to implement. Key enablers: `librashader`
 (Rust crate, wgpu runtime) eliminates shader pipeline work, `rcheevos` C FFI gives native
-achievement evaluation with direct memory access, and Batocera ships all cores as standard `.so`
-files at `/usr/lib/libretro/`. RetroArch becomes optional middleware we don't need.
+achievement evaluation with direct memory access, and cores are standard `.so` files at
+`/usr/lib/libretro/`. RetroArch becomes optional middleware we don't need.
 
 ---
 
@@ -214,8 +214,8 @@ filter_chain.frame(
 )?;
 ```
 
-Batocera ships RetroArch's shader presets at `/usr/share/batocera/shaders/`. These
-`.slangp` files work directly with librashader.
+RetroArch shader presets (`.slangp` files) work directly with librashader. Loisto
+ships these at `/usr/share/loisto/shaders/`.
 
 ### Audio — cpal
 
@@ -225,6 +225,11 @@ Batocera ships RetroArch's shader presets at `/usr/share/batocera/shaders/`. The
 
 Backends: ALSA (Linux, works through PipeWire's ALSA compat layer), CoreAudio (macOS),
 WASAPI (Windows). No native PipeWire backend but transparent via `pipewire-alsa`.
+
+Note: loisto runs PipeWire standalone without WirePlumber. The `pipewire-alsa` compatibility
+layer should work for simple playback (which is all we need for core audio output), but
+this needs validation — session management features that depend on WirePlumber will not
+be available.
 
 Libretro cores output interleaved stereo `i16` PCM at the core's declared sample rate
 (typically 32000-48000 Hz).
@@ -596,7 +601,7 @@ loop {
 
 ---
 
-## Batocera Integration
+## Filesystem Layout
 
 ### Cores
 
@@ -605,23 +610,23 @@ Examples: `snes9x_libretro.so`, `mgba_libretro.so`, `beetle_psx_hw_libretro.so`
 
 Standard libretro ABI — loadable by any frontend via `dlopen`. Nothing RetroArch-specific.
 
-User override path: `/userdata/system/configs/retroarch/cores/`
+User override path: `/data/system/configs/cores/`
 
 ### Shaders
 
-Location: `/usr/share/batocera/shaders/`
+Location: `/usr/share/loisto/shaders/`
 Format: `.slangp` presets + `.slang` source files
 
 These work directly with `librashader`.
 
 ### System files (BIOS)
 
-Location: `/userdata/bios/`
+Location: `/data/bios/`
 Cores request these via `RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY`.
 
 ### Save data
 
-Location: `/userdata/saves/` (SRAM) and `/userdata/saves/` (save states)
+Location: `/data/saves/` (SRAM) and `/data/states/` (save states)
 The frontend manages these paths and passes them via environment callbacks.
 
 ---
@@ -761,9 +766,14 @@ bindgen = "0.71"
 ## Non-Libretro Emulators
 
 Not everything runs as a libretro core. For standalone emulators (Dolphin, RPCS3, PCSX2,
-Cemu, etc.), loisto falls back to the `emulatorlauncher.py` subprocess approach — same
-as current Batocera behavior. The libretro frontend handles the retro library; standalone
-emulators are launched as separate processes under gamescope.
+Cemu, etc.), loisto falls back to the Rust configgen subprocess approach — it writes
+emulator-specific config files and launches the process. The libretro frontend handles
+the retro library; standalone emulators are launched as separate processes under gamescope.
+
+Note: under gamescope, windowing works differently than a traditional desktop. The
+frontend runs as an X11 window under gamescope's managed X11 server, so there is no
+window manager or desktop environment involved. Gamescope handles display scaling,
+resolution, and compositing.
 
 ---
 
@@ -798,6 +808,6 @@ emulators are launched as separate processes under gamescope.
 - [rc_client integration wiki](https://github.com/RetroAchievements/rcheevos/wiki/rc_client-integration)
 - [RA API docs](https://api-docs.retroachievements.org/)
 
-### Batocera
+### Batocera (reference only)
 - [Batocera RetroArch wiki](https://wiki.batocera.org/emulators:retroarch)
 - [Batocera core paths](https://deepwiki.com/batocera-linux/batocera.linux/4.1-retroarch-and-libretro-cores)
