@@ -259,6 +259,150 @@ fetch('/api/overlay', {
 
 ---
 
+## Rendering: vello + wgpu + winit
+
+### Why not tiny-skia
+
+The overlay currently uses `tiny-skia` (CPU software rasterizer) with `fontdue` for
+text. This was the right call when the overlay only rendered occasional toasts. With
+persistent bars at 60fps, the calculus changes:
+
+- **CPU→GPU copy tax**: tiny-skia renders to `Vec<u32>` in system memory, which
+  gamescope then copies to a GPU texture for compositing. GPU rendering eliminates this.
+- **Every-frame rendering**: Bars with clock/controllers/etc. update every frame.
+  Software-rasterizing ~1920x120px 60 times/sec is fine at 1080p but scales linearly
+  with resolution (4K = 4x work). GPU doesn't care.
+- **Animation quality**: Bar slide-in/out, toast easing, glow effects — expensive on
+  CPU, trivial as GPU shaders.
+- **Text quality**: `fontdue` is functional but basic. `parley` (vello's text stack)
+  gives proper shaping, font fallback, and subpixel positioning.
+
+### Why vello, not a GUI framework
+
+The overlay is a **render loop**, not an app:
+
+```
+loop { poll_events → update_state → draw_frame → present → sleep }
+```
+
+No text input, no scrolling lists, no interactive widgets, no layout reflow. It's a
+game HUD. GUI frameworks (Tauri, Dioxus, iced, egui) add widget trees, layout engines,
+event dispatch, accessibility — none of which apply here. They'd also fight the X11
+atom registration and gamescope integration.
+
+**vello** is a GPU-accelerated 2D rendering library (Linebender project). It's a
+drawing API, not a framework — rounded rects, paths, text, images. No widget overhead.
+Paired with **wgpu** for GPU abstraction and **winit** for windowing.
+
+### Dependency stack
+
+```
+winit          → X11 window creation + event loop
+wgpu           → Vulkan/OpenGL GPU abstraction (gamescope already requires Vulkan)
+vello          → GPU-accelerated 2D path rendering
+parley         → Text layout (shaping, font fallback, line breaking)
+peniko         → Color/brush types shared across Linebender ecosystem
+```
+
+### Rendering architecture
+
+```rust
+pub struct Renderer {
+    device: wgpu::Device,
+    queue: wgpu::Queue,
+    surface: wgpu::Surface,
+    vello_renderer: vello::Renderer,
+    // Theme colors (same as current)
+    fg: peniko::Color,
+    bg: peniko::Color,
+    accent: peniko::Color,
+    card: peniko::Color,
+    // Fonts
+    display_font: parley::FontFamily,
+    body_font: parley::FontFamily,
+    light_font: parley::FontFamily,
+    // Controller icons (pre-rasterized SVGs as vello::Scene fragments)
+    button_icons: Option<ButtonIcons>,
+}
+
+impl Renderer {
+    /// Build a vello Scene for one frame (replaces tiny-skia Pixmap).
+    pub fn render_frame(&self, state: &FrameState, w: u32, h: u32) {
+        let mut scene = vello::Scene::new();
+
+        // Bars (always, unless InGame)
+        if let Some(bars) = state.bars {
+            self.draw_top_bar(&mut scene, bars, w);
+            self.draw_bottom_bar(&mut scene, bars, w, h);
+        }
+
+        // Backdrop (menu open)
+        if state.menu.map_or(false, |m| m.is_visible()) {
+            self.draw_backdrop(&mut scene, w, h, state.menu.unwrap().opacity());
+        }
+
+        // Quick menu
+        if let Some(menu) = state.menu {
+            self.draw_menu(&mut scene, menu, state.menu_config, h);
+        }
+
+        // Achievement toast
+        if let Some(popup) = state.popup {
+            self.draw_toast(&mut scene, popup, w);
+        }
+
+        // Submit to GPU — no CPU pixel buffer, no copy
+        let surface_texture = self.surface.get_current_texture().unwrap();
+        self.vello_renderer.render_to_surface(
+            &self.device, &self.queue, &scene,
+            &surface_texture, &vello::RenderParams {
+                base_color: peniko::Color::TRANSPARENT,
+                width: w, height: h,
+                antialiasing_method: vello::AaConfig::Msaa16,
+            },
+        ).unwrap();
+        surface_texture.present();
+    }
+}
+```
+
+### Drawing example (bar panel)
+
+```rust
+fn draw_top_bar(&self, scene: &mut vello::Scene, bars: &Bars, screen_w: u32) {
+    let w = screen_w as f64 - BAR_MARGIN_X as f64 * 2.0;
+    let rect = kurbo::RoundedRect::new(
+        BAR_MARGIN_X as f64, BAR_MARGIN_Y as f64,
+        BAR_MARGIN_X as f64 + w, BAR_MARGIN_Y as f64 + BAR_INNER_H as f64,
+        BAR_RADIUS as f64,
+    );
+    // Panel background
+    scene.fill(
+        vello::peniko::Fill::NonZero,
+        kurbo::Affine::IDENTITY,
+        self.card.with_alpha_factor(0.75),
+        None, &rect,
+    );
+    // Profile cluster (left)
+    self.draw_profile_cluster(scene, &bars.profile, BAR_MARGIN_X as f64 + 16.0, ...);
+    // System cluster (right)
+    self.draw_system_cluster(scene, &bars.system, screen_w as f64 - BAR_MARGIN_X as f64 - 16.0, ...);
+}
+```
+
+### Migration path
+
+The existing toast and menu rendering (tiny-skia) migrates incrementally:
+1. **Phase 2a**: New bar code written directly with vello (no legacy)
+2. **Phase 2b**: Port toast rendering from tiny-skia to vello
+3. **Phase 2c**: Port menu rendering from tiny-skia to vello
+4. **Phase 2d**: Remove tiny-skia dependency entirely
+
+During migration, both renderers can coexist — vello for bars, tiny-skia for
+toasts/menu composited via `vello::Scene::append` from a rasterized image.
+
+---
+
 ## Architecture: New Module `bars.rs`
 
 ```rust
@@ -272,7 +416,7 @@ pub struct Bars {
 }
 
 pub struct ProfileState {
-    avatar: Option<RasterizedImage>,
+    avatar: Option<vello::peniko::Image>,  // GPU-ready image
     username: String,
     balance: Option<String>,
     currency_symbol: String,
@@ -284,7 +428,7 @@ pub struct SystemState {
     battery_charging: bool,
     controller_count: u8,
     controller_active: [bool; 4],
-    weather_icon: Option<RasterizedImage>,
+    weather_icon: Option<vello::peniko::Image>,
     weather_temp: Option<String>,
     ra_user: Option<String>,
     net_connected: bool,
@@ -316,46 +460,46 @@ struct BarTimers {
 }
 ```
 
-### Renderer additions
+### Main loop (winit event loop)
 
 ```rust
-// In renderer.rs — new methods:
-fn draw_top_bar(&self, pixmap: &mut Pixmap, bars: &Bars, screen_w: u32)
-fn draw_bottom_bar(&self, pixmap: &mut Pixmap, bars: &Bars, screen_w: u32, screen_h: u32)
-fn draw_bar_panel(&self, pixmap: &mut Pixmap, x: f32, y: f32, w: f32, h: f32)
-fn draw_profile_cluster(&self, pixmap: &mut Pixmap, profile: &ProfileState, x: f32, cy: f32)
-fn draw_system_cluster(&self, pixmap: &mut Pixmap, system: &SystemState, right_edge: f32, cy: f32)
-fn draw_hints(&self, pixmap: &mut Pixmap, hints: &[HintItem], x: f32, cy: f32, max_w: f32)
-```
+// winit event loop replaces the manual loop + sleep:
+event_loop.run(move |event, target| {
+    match event {
+        Event::WindowEvent { event: WindowEvent::RedrawRequested, .. } => {
+            // Drain socket commands
+            while let Ok(cmd) = rx.try_recv() {
+                handle_command(&mut bars, &mut popup_queue, &mut game_menu, cmd);
+            }
 
-### Main loop changes
+            // Tick state
+            bars.tick_timers();
+            popup_queue.tick();
+            game_menu.tick();
 
-```rust
-// Bars render ALWAYS when visible (not just popup/menu):
-let has_bars = bars.visible && bars.context != BarContext::InGame;
+            // Build frame
+            let has_bars = bars.visible && bars.context != BarContext::InGame;
+            let has_content = has_bars
+                || popup_queue.current().is_some()
+                || game_menu.is_visible();
 
-// Tick bar timers:
-bars.tick_timers();
+            if has_content {
+                renderer.render_frame(&FrameState {
+                    bars: if has_bars { Some(&bars) } else { None },
+                    popup: popup_queue.current(),
+                    menu: if game_menu.is_visible() { Some(&game_menu) } else { None },
+                    menu_config: &menu_config,
+                    game_name: None,
+                    bindings: Some(&bindings),
+                }, screen_w, screen_h);
+            }
 
-// Frame always needs drawing if bars are up:
-if has_bars || has_popup || has_menu {
-    let frame_state = FrameState {
-        popup: popup_queue.current(),
-        menu: if has_menu { Some(&game_menu) } else { None },
-        menu_config: &menu_config,
-        game_name: None,
-        bindings: Some(&bindings),
-        bars: if has_bars { Some(&bars) } else { None },
-    };
-    let pixels = rend.render_frame(&frame_state, screen_w as u32, screen_h as u32);
-    win.show();
-    win.update_pixels(&pixels, screen_w, screen_h);
-} else if !has_bars {
-    // In-game: only show for popup/menu
-    if !has_popup && !has_menu {
-        win.hide();
+            // Request next frame
+            window.request_redraw();
+        }
+        _ => {}
     }
-}
+});
 ```
 
 ---
@@ -466,33 +610,71 @@ adaptive_sync = false
 
 ## Implementation Order
 
-### Phase 1: Gamescope wrapper + session script
-1. Build gamescope for Batocera (package + deps)
-2. Write `superkonna-session` launch script
-3. Test: gamescope wraps Chromium, overlay registers as external overlay
-4. Verify letterboxing works (inner 960px, bars in remaining space)
+### Phase 1: Rendering migration + gamescope
+1. Add `wgpu`, `vello`, `parley`, `winit` to Cargo.toml
+2. New `renderer_vello.rs` — wgpu surface setup, vello Scene building
+3. Port `window.rs` from raw X11 to winit (keeps X11 backend, adds event loop)
+4. Set `GAMESCOPE_EXTERNAL_OVERLAY` atom via winit's raw window handle
+5. Build gamescope for Batocera (package + deps)
+6. Write `superkonna-session` launch script
+7. Test: gamescope wraps a test app, overlay registers as external overlay
 
-### Phase 2: Bar rendering
-5. `bars.rs` module — state, contexts, timer ticks
-6. `socket.rs` extensions — `bar:*` commands
-7. `renderer.rs` — `draw_top_bar`, `draw_bottom_bar`, profile/system/hint clusters
-8. `main.rs` — always-visible bars, timer polling
-9. `config.rs` — bars.toml parsing
+### Phase 2: Bar rendering (new code, vello-native)
+8. `bars.rs` module — state, contexts, timer ticks
+9. `socket.rs` extensions — `bar:*` commands
+10. `renderer_vello.rs` — `draw_top_bar`, `draw_bottom_bar`, clusters, hints
+11. `main.rs` — winit event loop, always-visible bars, timer polling
+12. `config.rs` — bars.toml parsing
+13. Port toast rendering from tiny-skia to vello
+14. Port menu rendering from tiny-skia to vello
+15. Remove tiny-skia + fontdue dependencies
 
 ### Phase 3: Romhoard as primary frontend
-10. Strip topbar/footer from kiosk templates
-11. Add `/api/overlay` relay endpoint
-12. Add `/api/launch` endpoint (calls `batocera-run`)
-13. Add `/kiosk/library` page (owned games, launch action)
-14. Add `/kiosk/settings` page (links to Batocera web manager)
-15. Page context notifications on navigation
+16. Strip topbar/footer from kiosk templates
+17. Add `/api/overlay` relay endpoint
+18. Add `/api/launch` endpoint (calls `batocera-run`)
+19. Add `/kiosk/library` page (owned games, launch action)
+20. Add `/kiosk/settings` page (links to Batocera web manager)
+21. Page context notifications on navigation
 
-### Phase 4: Polish
-16. CSS page transitions (fade/slide between kiosk pages)
-17. Gamepad.js focus management across page transitions
-18. Boot experience: splash screen while romhoard starts
-19. ES as fallback: launchable from settings page
-20. Error recovery: if Chromium crashes, restart loop
+### Phase 4: Batocera integration
+22. Autostart script (replaces ES in boot sequence)
+23. Batocera overlay (filesystem) packaging for custom image
+24. RetroAchievements integration verification (already wired)
+25. batocera-run lifecycle testing (blocking behavior, exit codes)
+26. Chromium kiosk setup (flags, GPU acceleration, touch/gamepad)
+
+### Phase 5: Polish
+27. CSS page transitions (fade/slide between kiosk pages)
+28. Gamepad.js focus management across page transitions
+29. Boot splash screen (overlay renders themed splash while romhoard starts)
+30. ES as fallback: launchable from settings page
+31. Error recovery: if Chromium crashes, restart loop
+32. Bar animations: slide-in/out on context transitions
+
+---
+
+## Existing Overlay Features (already built, carry forward)
+
+These modules are already implemented and working. They carry forward into the new
+rendering stack with minimal changes (just swap tiny-skia draw calls to vello):
+
+| Module | What it does | Status |
+|--------|-------------|--------|
+| `watcher.rs` | Tails RetroArch log for RetroAchievements events | Done |
+| `popup.rs` | Toast animation state machine (SlideIn→Hold→FadeOut→Done) | Done |
+| `menu.rs` | Quick menu state machine (Closed→Opening→Open→Confirming→Closing) | Done |
+| `buttons.rs` | Controller detection (Xbox/PS/Switch/SteamDeck) + SVG icon rasterization | Done |
+| `bindings.rs` | Unified input bindings from `bindings.toml` | Done |
+| `socket.rs` | Unix socket at `/tmp/superkonna-overlay.sock` | Done (extend for bar:*) |
+| `audio.rs` | Sound playback for menu/achievement events | Done |
+| `theme.rs` | ES theme XML color/font loading with color-scheme switching | Done |
+| `config.rs` | Menu TOML config with fallback chain | Done (extend for bars) |
+| `retroarch.rs` | UDP command client for RetroArch network commands | Done |
+
+RetroAchievements are fully wired: log watcher detects unlock events, popup queue
+manages toast display, renderer draws themed notification cards. This works independent
+of whether ES or romhoard is the frontend — it watches RetroArch's log directly.
 
 ---
 
@@ -501,8 +683,8 @@ adaptive_sync = false
 1. **Gamescope viewport centering**: When inner AR differs from output, gamescope may
    top-align. Need to test `-S fit` or contribute a centering patch.
 
-2. **Chromium on Batocera**: Does the Batocera image include Chromium? If not, need to
-   bundle it. Alternatively, use the existing ES webview engine (but that limits us).
+2. **Webview in gamescope**: The GTK3+WebKit2 kiosk webview (`kiosk-webview.py`) works on
+   Batocera v42+ natively. Need to verify it works inside gamescope's nested compositor.
 
 3. **batocera-run integration**: Does it block until the emulator exits? Need to verify
    the process lifecycle so romhoard can detect game-end reliably.
@@ -515,3 +697,9 @@ adaptive_sync = false
 
 6. **ES theme maintenance**: With ES as fallback only, do we keep maintaining the theme?
    Minimal maintenance — it works, just no new features.
+
+7. **vello maturity**: vello is pre-1.0. Need to pin a known-good version and test on
+   Batocera's Vulkan stack. Fallback: tiny-skia stays as a compile-time feature flag.
+
+8. **winit + gamescope**: Does winit's X11 backend properly expose the window for
+   gamescope's external overlay detection? May need raw-window-handle to set the atom.
