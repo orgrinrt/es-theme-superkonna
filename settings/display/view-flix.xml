@@ -81,10 +81,10 @@
     </image>
 
     <!-- === EDGE FADES: Soft left/right bleed on game strip === -->
+    <!-- Color set via scheme.xml (variables don't resolve in customView XML) -->
     <image name="verticalFadeLeft,verticalFadeRight" extra="true">
       <origin>0.5 0.5</origin>
       <size>0.05 0.50</size>
-      <color>${bgColor}</color>
       <path>./assets/fade-hor.png</path>
       <zIndex>6</zIndex>
     </image>
@@ -220,24 +220,21 @@
       <visible>false</visible>
     </datetime>
 
-    <!-- OVERLAY: Named "flix_overlay" to avoid inheriting the fully-opaque
-         background_overlay color from <view name="grid"> in scheme.xml.
-         Semi-transparent so the hero screenshot shows through, dimmed. -->
+    <!-- OVERLAY: Named "flix_overlay" to avoid inheriting background_overlay's
+         opaque color from <view name="grid">. Color set via scheme.xml. -->
     <image name="flix_overlay" extra="true">
       <size>1 1</size>
       <origin>0 0</origin>
       <pos>0 0</pos>
-      <color>${bgColor}${percent.60}</color>
       <zIndex>4</zIndex>
     </image>
 
-    <!-- Top vignette: gradient for preview text readability -->
+    <!-- Top vignette: gradient for preview text readability. Color via scheme.xml. -->
     <image name="flix_vignette" extra="true">
       <path>./assets/fade-ver.png</path>
       <size>1 0.3</size>
       <origin>0 0</origin>
       <pos>0 0</pos>
-      <color>${bgColor}${percent.80}</color>
       <zIndex>4</zIndex>
     </image>
 

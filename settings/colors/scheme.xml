@@ -125,10 +125,10 @@
     </text>
   </view>
 
-  <!-- Flix (Netflix-style) grid tile colors
-       NOTE: overlay, fade, and vignette colors are set INLINE in view-flix.xml
-       to avoid ES customView/view style resolution issues. Only gridtile text
-       colors are set here since they follow standard scheme.xml targeting. -->
+  <!-- Flix (Netflix-style) colors
+       Variables only resolve in scheme.xml, NOT in view-flix.xml customView blocks.
+       Element names use "flix_" prefix to avoid inheriting background_overlay's
+       fully-opaque color from <view name="grid">. -->
   <customView name="flix" inherits="grid">
     <gridtile name="default">
       <backgroundColor>${cardColor}${percent.30}</backgroundColor>
@@ -141,6 +141,41 @@
     <text name="gridtile:selected">
       <color>${fgColor}</color>
     </text>
+
+    <!-- Semi-transparent overlay: dims hero screenshot behind grid -->
+    <image name="flix_overlay" extra="true">
+      <color>${bgColor}${percent.60}</color>
+    </image>
+
+    <!-- Top vignette: gradient for preview text readability -->
+    <image name="flix_vignette" extra="true">
+      <color>${bgColor}${percent.80}</color>
+    </image>
+
+    <!-- Edge fades: blend game strip edges into background -->
+    <image name="verticalFadeLeft,verticalFadeRight" extra="true">
+      <color>${bgColor}</color>
+    </image>
+
+    <!-- Preview area text colors -->
+    <text name="md_description">
+      <color>${fgColor}${percent.80}</color>
+    </text>
+
+    <text name="md_genre">
+      <color>${fgColor}${percent.60}</color>
+    </text>
+
+    <text name="logoText">
+      <color>${fgColor}</color>
+      <glowColor>${mainColor}${percent.20}</glowColor>
+      <glowSize>2</glowSize>
+    </text>
+
+    <rating name="md_rating">
+      <color>${mainColor}</color>
+      <unfilledColor>${subtleColor}${percent.20}</unfilledColor>
+    </rating>
   </customView>
 
   <!-- System carousel colors -->
