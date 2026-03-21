@@ -142,16 +142,6 @@
       <color>${fgColor}</color>
     </text>
 
-    <!-- Semi-transparent overlay: dims hero screenshot behind grid -->
-    <image name="flix_overlay" extra="true">
-      <color>${bgColor}${percent.60}</color>
-    </image>
-
-    <!-- Top vignette: gradient for preview text readability -->
-    <image name="flix_vignette" extra="true">
-      <color>${bgColor}${percent.80}</color>
-    </image>
-
     <!-- Edge fades: blend game strip edges into background -->
     <image name="verticalFadeLeft,verticalFadeRight" extra="true">
       <color>${bgColor}</color>

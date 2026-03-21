@@ -220,23 +220,9 @@
       <visible>false</visible>
     </datetime>
 
-    <!-- OVERLAY: Named "flix_overlay" to avoid inheriting background_overlay's
-         opaque color from <view name="grid">. Color set via scheme.xml. -->
-    <image name="flix_overlay" extra="true">
-      <size>1 1</size>
-      <origin>0 0</origin>
-      <pos>0 0</pos>
-      <zIndex>4</zIndex>
-    </image>
-
-    <!-- Top vignette: gradient for preview text readability. Color via scheme.xml. -->
-    <image name="flix_vignette" extra="true">
-      <path>./assets/fade-ver.png</path>
-      <size>1 0.3</size>
-      <origin>0 0</origin>
-      <pos>0 0</pos>
-      <zIndex>4</zIndex>
-    </image>
+    <!-- No overlay element — ES renders pathless extra images as opaque
+         regardless of color/alpha settings in both view XML and scheme.xml.
+         The hero screenshot shows at full brightness behind the grid. -->
 
     <!-- System name: above game strip -->
     <text name="logoText">
