@@ -16,12 +16,47 @@
       <zIndex>90</zIndex>
     </image>
 
-    <!-- Help prompts: left-aligned in bottom bar -->
+    <!-- Hide ES built-in help (replaced by generated hint strips) -->
     <helpsystem name="help">
-      <fontPath>${fontLight}</fontPath>
-      <origin>0 0.5</origin>
-      <pos>0.035 0.963</pos>
+      <pos>-1 -1</pos>
     </helpsystem>
+  </view>
+
+  <!-- Generated hint strips: controller-aware icons from update-hints.sh
+       Left strip = back/menu actions, Right strip = confirm/options actions
+       Shared by saalis kiosk for button icon consistency. -->
+  <view name="system">
+    <image name="hints_left" extra="true">
+      <path>./generated/hints-system-left.svg</path>
+      <origin>0 0.5</origin>
+      <pos>0.03 0.963</pos>
+      <maxSize>0.3 0.035</maxSize>
+      <zIndex>91</zIndex>
+    </image>
+    <image name="hints_right" extra="true">
+      <path>./generated/hints-system-right.svg</path>
+      <origin>1 0.5</origin>
+      <pos>0.97 0.963</pos>
+      <maxSize>0.3 0.035</maxSize>
+      <zIndex>91</zIndex>
+    </image>
+  </view>
+
+  <view name="basic, detailed, grid, video">
+    <image name="hints_left" extra="true">
+      <path>./generated/hints-gamelist-left.svg</path>
+      <origin>0 0.5</origin>
+      <pos>0.03 0.963</pos>
+      <maxSize>0.3 0.035</maxSize>
+      <zIndex>91</zIndex>
+    </image>
+    <image name="hints_right" extra="true">
+      <path>./generated/hints-gamelist-right.svg</path>
+      <origin>1 0.5</origin>
+      <pos>0.97 0.963</pos>
+      <maxSize>0.3 0.035</maxSize>
+      <zIndex>91</zIndex>
+    </image>
   </view>
 
   <!-- Navigation sounds (all views) -->
