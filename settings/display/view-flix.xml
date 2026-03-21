@@ -1,233 +1,29 @@
 <!--
-  Theme: Superkonna
-  Flix view: Netflix-style horizontal game browser
-
-  HARDCODED COLORS TEST — zero scheme.xml dependency.
-  Dark palette: bg=0E1117, fg=EAEDF3, main=D64060, card=151A26
+  MINIMAL FLIX TEST — stripped to bare essentials to find what's broken
 -->
-
 <theme>
   <formatVersion>7</formatVersion>
 
   <customView name="flix" inherits="grid">
 
-    <!-- === GAME GRID === -->
     <imagegrid name="gamegrid">
-      <pos>0 0.50</pos>
-      <size>1 0.475</size>
-      <size ifHelpPrompts="true">1 0.44</size>
-      <imageSource>thumb</imageSource>
+      <pos>0 0.1</pos>
+      <size>1 0.85</size>
+      <imageSource>thumbnail</imageSource>
       <scrollDirection>horizontal</scrollDirection>
-      <animateSelection>true</animateSelection>
-      <autoLayoutSelectedZoom>1.06</autoLayoutSelectedZoom>
-      <padding>0.07 0.03</padding>
-      <margin>0.02 0.03</margin>
+      <autoLayout>5 1</autoLayout>
+      <animateSelection>false</animateSelection>
+      <autoLayoutSelectedZoom>1.1</autoLayoutSelectedZoom>
       <scrollLoop>true</scrollLoop>
-      <zIndex>5</zIndex>
-      <scrollSound>./assets/sounds/tick.wav</scrollSound>
     </imagegrid>
 
-    <gridtile name="default, selected">
-      <selectionMode>image</selectionMode>
-      <imageSizeMode>maxSize</imageSizeMode>
-    </gridtile>
-
     <gridtile name="default">
-      <imageColor>FFFFFFFF</imageColor>
-      <backgroundColor>151A264D</backgroundColor>
-      <backgroundCornerSize>0.02</backgroundCornerSize>
+      <backgroundColor>FFFFFF20</backgroundColor>
     </gridtile>
 
-    <gridtile name="selected">
-      <backgroundCornerSize>0.02</backgroundCornerSize>
-    </gridtile>
-
-    <image name="gridtile.image">
-      <roundCorners>0.02</roundCorners>
-    </image>
-
-    <image name="gridtile.image:selected">
-      <roundCorners>0.02</roundCorners>
-    </image>
-
-    <image name="gridtile.favorite">
-      <path>./assets/icons/favorite.png</path>
-      <pos>0 0</pos>
-      <maxSize>0.25 0.25</maxSize>
-      <origin>0 0</origin>
-    </image>
-
-    <text name="gridtile">
-      <size>1 0.2</size>
-      <pos>0 0.78</pos>
-      <fontPath>${fontBody}</fontPath>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
-      <alignment>center</alignment>
-      <lineSpacing>1.2</lineSpacing>
-      <color>EAEDF3B3</color>
-    </text>
-
-    <text name="gridtile:selected">
-      <color>EAEDF3</color>
-    </text>
-
-    <image name="gridtile.marquee">
-      <color>00000000</color>
-    </image>
-
-    <!-- === EDGE FADES === -->
-    <image name="verticalFadeLeft,verticalFadeRight" extra="true">
-      <origin>0.5 0.5</origin>
-      <size>0.05 0.50</size>
-      <color>0E1117B3</color>
-      <path>./assets/fade-hor.png</path>
-      <zIndex>6</zIndex>
-    </image>
-
-    <image name="verticalFadeLeft" extra="true">
-      <pos>0.025 0.7375</pos>
-    </image>
-
-    <image name="verticalFadeRight" extra="true">
-      <pos>0.975 0.7375</pos>
-      <rotation>180</rotation>
-    </image>
-
-    <!-- === PREVIEW AREA === -->
-
-    <image name="md_marquee">
-      <pos>0.24 0.11</pos>
-      <origin>0.5 0.5</origin>
-      <maxSize>0.38 0.18</maxSize>
-      <zIndex>6</zIndex>
-      <storyboard>
-        <animation property="opacity" from="0" to="0" duration="60" mode="linear"/>
-        <animation property="opacity" from="0" to="1" begin="120" duration="200" mode="easeOut"/>
-        <animation property="scale" from="0.95" to="1" begin="120" duration="250" mode="Bump"/>
-      </storyboard>
-    </image>
-
-    <image name="md_image">
-      <origin>0.5 0.5</origin>
-      <pos>0.7 0.25</pos>
-      <minSize>0.7 0.55</minSize>
-      <zIndex>-1</zIndex>
-      <roundCorners>0.01</roundCorners>
-      <storyboard>
-        <animation property="opacity" from="0" to="1" begin="0" duration="400" mode="easeOut"/>
-      </storyboard>
-    </image>
-
-    <video name="md_video">
-      <origin>0.5 0.5</origin>
-      <pos>0.7 0.25</pos>
-      <minSize>0.6 0.5</minSize>
-      <zIndex>0</zIndex>
-      <delay>0.5</delay>
-      <showSnapshotNoVideo>false</showSnapshotNoVideo>
-      <showSnapshotDelay>true</showSnapshotDelay>
-      <snapshotSource>thumbnail</snapshotSource>
-      <roundCorners>0.02</roundCorners>
-      <effect>none</effect>
-    </video>
-
-    <rating name="md_rating">
-      <visible>true</visible>
-      <origin>0 0</origin>
-      <filledPath>./assets/icons/star.svg</filledPath>
-      <unfilledPath>./assets/icons/star_border.svg</unfilledPath>
-      <pos>0.05 0.22</pos>
-      <size>0.07 0.022</size>
-      <color>D64060</color>
-      <unfilledColor>A0A8B833</unfilledColor>
-      <zIndex>5</zIndex>
-    </rating>
-
-    <text name="md_genre">
-      <visible>true</visible>
-      <pos>0.05 0.255</pos>
-      <size>0.38 ${fontSizeCaption-medium}</size>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
-      <fontPath>${fontLight}</fontPath>
-      <alignment>left</alignment>
-      <color>EAEDF399</color>
-      <zIndex>5</zIndex>
-    </text>
-
-    <text name="md_description">
-      <visible>true</visible>
-      <pos>0.05 0.29</pos>
-      <size>0.4 0.13</size>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
-      <fontPath>${fontLight}</fontPath>
-      <lineSpacing>1.4</lineSpacing>
-      <color>EAEDF3CC</color>
-      <zIndex>5</zIndex>
-    </text>
-
-    <!-- Badges -->
-    <image name="badge_cheevos" extra="true">
-      <path>./assets/icons/trophy.svg</path>
-      <visible>{game:cheevos}</visible>
-      <pos>0.05 0.44</pos>
-      <maxSize>0.016 0.016</maxSize>
-      <origin>0 0.5</origin>
-      <zIndex>6</zIndex>
-    </image>
-
-    <image name="badge_mature" extra="true">
-      <path>./assets/icons/mature.svg</path>
-      <visible>!{game:kidGame}</visible>
-      <pos>0.07 0.44</pos>
-      <maxSize>0.016 0.016</maxSize>
-      <origin>0 0.5</origin>
-      <zIndex>6</zIndex>
-    </image>
-
-    <image name="badge_savestate" extra="true">
-      <path>./assets/icons/savestate.svg</path>
-      <visible>{game:hasSaveState}</visible>
-      <pos>0.09 0.44</pos>
-      <maxSize>0.016 0.016</maxSize>
-      <origin>0 0.5</origin>
-      <zIndex>6</zIndex>
-    </image>
-
-    <!-- Hide metadata labels -->
-    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_players, md_lastplayed, md_playcount, md_name">
-      <visible>false</visible>
-    </text>
-
-    <datetime name="md_releasedate, md_lastplayed">
-      <visible>false</visible>
-    </datetime>
-
-    <!-- OVERLAY: hardcoded 60% opaque dark (0E111799) -->
-    <image name="background_overlay" extra="true">
-      <size>1 1</size>
-      <origin>0 0</origin>
-      <pos>0 0</pos>
-      <color>0E111799</color>
-      <zIndex>4</zIndex>
-    </image>
-
-    <!-- VIGNETTE: hardcoded 80% opaque dark gradient -->
-    <image name="top_vignette" extra="true">
-      <path>./assets/fade-ver.png</path>
-      <size>1 0.3</size>
-      <origin>0 0</origin>
-      <pos>0 0</pos>
-      <color>0E1117CC</color>
-      <zIndex>4</zIndex>
-    </image>
-
-    <!-- System name -->
     <text name="logoText">
-      <origin>0 0.5</origin>
-      <pos>0.05 0.46</pos>
-      <size>0.4 ${fontSizeH3-medium}</size>
-      <fontSize>${fontSizeH3-medium}</fontSize>
-      <color>EAEDF3</color>
+      <pos>0.05 0.03</pos>
+      <color>FFFFFF</color>
     </text>
 
   </customView>
