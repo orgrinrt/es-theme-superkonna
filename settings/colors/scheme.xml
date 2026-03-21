@@ -169,55 +169,7 @@
     </text>
   </view>
 
-  <!-- Flix (Netflix-style) grid tile + overlay colors -->
-  <customView name="flix" inherits="grid">
-    <gridtile name="default">
-      <backgroundColor>${cardColor}${percent.30}</backgroundColor>
-    </gridtile>
-
-    <text name="gridtile">
-      <color>${fgColor}${percent.70}</color>
-    </text>
-
-    <text name="gridtile:selected">
-      <color>${fgColor}</color>
-    </text>
-
-    <!-- Semi-transparent overlay so hero screenshot shows through -->
-    <image name="background_overlay" extra="true">
-      <color>${bgColor}${percent.60}</color>
-    </image>
-
-    <!-- Edge fades: blend game strip edges into background -->
-    <image name="verticalFadeLeft,verticalFadeRight" extra="true">
-      <color>${bgColor}${percent.70}</color>
-    </image>
-
-    <!-- Flix top vignette -->
-    <image name="top_vignette" extra="true">
-      <color>${bgColor}${percent.80}</color>
-    </image>
-
-    <!-- Preview area text colors -->
-    <text name="md_description">
-      <color>${fgColor}${percent.80}</color>
-    </text>
-
-    <text name="md_genre">
-      <color>${fgColor}${percent.60}</color>
-    </text>
-
-    <text name="logoText">
-      <color>${fgColor}</color>
-      <glowColor>${mainColor}${percent.20}</glowColor>
-      <glowSize>2</glowSize>
-    </text>
-
-    <rating name="md_rating">
-      <color>${mainColor}</color>
-      <unfilledColor>${subtleColor}${percent.20}</unfilledColor>
-    </rating>
-  </customView>
+  <!-- Flix: all colors hardcoded in view-flix.xml, nothing here -->
 
   <!-- System carousel colors -->
   <view name="system">
