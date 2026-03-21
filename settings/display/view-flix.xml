@@ -1,7 +1,6 @@
 <!--
   Theme: Superkonna — Flix view
-  Full-screen game art background (like system carousel), cover strip floating over it.
-  No split screen. No black areas.
+  Full-screen game art, white gradient bottom, covers floating low.
 -->
 <theme>
   <formatVersion>7</formatVersion>
@@ -19,7 +18,6 @@
       </storyboard>
     </image>
 
-    <!-- Video replaces screenshot after delay -->
     <video name="md_video">
       <origin>0.5 0.5</origin>
       <pos>0.5 0.5</pos>
@@ -31,28 +29,28 @@
       <effect>none</effect>
     </video>
 
-    <!-- Bottom gradient: dark fade so covers and text are readable -->
+    <!-- White gradient from bottom — covers float in this zone -->
     <image name="flix_gradient" extra="true">
       <path>./assets/fade-ver.png</path>
       <origin>0 1</origin>
       <pos>0 1</pos>
-      <size>1 0.6</size>
-      <color>0E1117</color>
+      <size>1 0.55</size>
+      <color>FFFFFF</color>
       <rotation>180</rotation>
       <zIndex>1</zIndex>
     </image>
 
-    <!-- === COVER STRIP: Floating in lower area === -->
+    <!-- === COVER STRIP: Low on screen, in the gradient === -->
     <imagegrid name="gamegrid">
-      <pos>0.02 0.58</pos>
-      <size>0.96 0.32</size>
+      <pos>0.03 0.72</pos>
+      <size>0.94 0.22</size>
       <imageSource>thumbnail</imageSource>
       <scrollDirection>horizontal</scrollDirection>
       <autoLayout>7 1</autoLayout>
       <animateSelection>true</animateSelection>
       <autoLayoutSelectedZoom>1.08</autoLayoutSelectedZoom>
-      <padding>0.01 0.02</padding>
-      <margin>0.008 0.015</margin>
+      <padding>0.008 0.012</padding>
+      <margin>0.006 0.01</margin>
       <scrollLoop>true</scrollLoop>
       <zIndex>5</zIndex>
       <scrollSound>./assets/sounds/tick.wav</scrollSound>
@@ -60,30 +58,30 @@
 
     <gridtile name="default, selected">
       <selectionMode>image</selectionMode>
-      <imageSizeMode>maxSize</imageSizeMode>
+      <imageSizeMode>minSize</imageSizeMode>
     </gridtile>
 
     <gridtile name="default">
       <imageColor>FFFFFFDD</imageColor>
       <backgroundColor>00000000</backgroundColor>
-      <backgroundCornerSize>0.01</backgroundCornerSize>
+      <backgroundCornerSize>0.008</backgroundCornerSize>
     </gridtile>
 
     <gridtile name="selected">
       <imageColor>FFFFFFFF</imageColor>
-      <backgroundColor>FFFFFF18</backgroundColor>
-      <backgroundCornerSize>0.01</backgroundCornerSize>
+      <backgroundColor>FFFFFF30</backgroundColor>
+      <backgroundCornerSize>0.008</backgroundCornerSize>
     </gridtile>
 
     <image name="gridtile.image">
-      <roundCorners>0.01</roundCorners>
+      <roundCorners>0.008</roundCorners>
     </image>
 
     <image name="gridtile.image:selected">
-      <roundCorners>0.01</roundCorners>
+      <roundCorners>0.008</roundCorners>
     </image>
 
-    <!-- No text on tiles — clean cover art only -->
+    <!-- No text on tiles -->
     <text name="gridtile">
       <visible>false</visible>
     </text>
@@ -99,65 +97,57 @@
       <origin>0 0</origin>
     </image>
 
-    <!-- === METADATA: Floating over background, upper-left === -->
+    <!-- === SELECTED GAME INFO === -->
 
-    <!-- Game marquee/logo -->
-    <image name="md_marquee">
-      <pos>0.05 0.08</pos>
-      <origin>0 0</origin>
-      <maxSize>0.3 0.12</maxSize>
+    <!-- Game title (prominent, changes with selection) -->
+    <text name="md_name">
+      <visible>true</visible>
+      <pos>0.05 0.55</pos>
+      <size>0.6 0.06</size>
+      <fontSize>${fontSizeH2-medium}</fontSize>
+      <fontPath>${fontDisplay}</fontPath>
+      <color>1E2028</color>
       <zIndex>6</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="60" mode="linear"/>
-        <animation property="opacity" from="0" to="1" begin="120" duration="200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="1" begin="60" duration="200" mode="easeOut"/>
       </storyboard>
-    </image>
+    </text>
 
-    <!-- Genre -->
+    <!-- Genre below title -->
     <text name="md_genre">
       <visible>true</visible>
-      <pos>0.05 0.25</pos>
+      <pos>0.05 0.63</pos>
       <size>0.4 0.03</size>
       <fontSize>${fontSizeCaption-medium}</fontSize>
       <fontPath>${fontLight}</fontPath>
-      <color>EAEDF3</color>
-      <glowColor>000000E6</glowColor>
-      <glowSize>3</glowSize>
+      <color>1E202899</color>
       <zIndex>6</zIndex>
     </text>
 
     <!-- Description -->
     <text name="md_description">
       <visible>true</visible>
-      <pos>0.05 0.30</pos>
-      <size>0.4 0.18</size>
+      <pos>0.05 0.67</pos>
+      <size>0.5 0.04</size>
       <fontSize>${fontSizeCaption-medium}</fontSize>
       <fontPath>${fontLight}</fontPath>
-      <lineSpacing>1.4</lineSpacing>
-      <color>EAEDF3CC</color>
-      <glowColor>000000CC</glowColor>
-      <glowSize>2</glowSize>
+      <lineSpacing>1.3</lineSpacing>
+      <color>1E2028B3</color>
       <zIndex>6</zIndex>
-      <storyboard>
-        <animation property="opacity" from="0" to="0" duration="60" mode="linear"/>
-        <animation property="opacity" from="0" to="0.9" begin="180" duration="220" mode="easeOut"/>
-      </storyboard>
     </text>
 
-    <!-- System/collection name -->
+    <!-- System name (small, above covers) -->
     <text name="logoText">
-      <origin>0 0.5</origin>
-      <pos>0.05 0.53</pos>
-      <size>0.4 ${fontSizeH3-medium}</size>
-      <fontSize>${fontSizeH3-medium}</fontSize>
-      <color>EAEDF3</color>
-      <glowColor>000000E6</glowColor>
-      <glowSize>3</glowSize>
-      <zIndex>6</zIndex>
+      <visible>false</visible>
     </text>
 
-    <!-- Hide everything else -->
-    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_players, md_lastplayed, md_playcount, md_name">
+    <!-- Hide marquee (causes UNKNOWN text) -->
+    <image name="md_marquee">
+      <visible>false</visible>
+    </image>
+
+    <!-- Hide unused metadata -->
+    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_players, md_lastplayed, md_playcount">
       <visible>false</visible>
     </text>
 
