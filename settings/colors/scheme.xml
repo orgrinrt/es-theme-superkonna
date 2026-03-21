@@ -18,8 +18,52 @@
     </image>
   </view>
 
-  <!-- Game list text + metadata colors -->
-  <view name="basic, detailed, grid, video">
+  <!-- Game list text + metadata colors (grid excluded from overlay —
+       flix customView inherits grid and needs semi-transparent overlay) -->
+  <view name="basic, detailed, video">
+    <text name="logoText, md_name">
+      <color>${fgColor}${percent.90}</color>
+      <glowColor>${shadowColor}${percent.30}</glowColor>
+      <glowSize>2</glowSize>
+    </text>
+
+    <textlist name="gamelist">
+      <selectedColor>${onMainColor}</selectedColor>
+      <selectorColor>${mainColor}${percent.80}</selectorColor>
+      <primaryColor>${fgColor}</primaryColor>
+      <secondaryColor>${fgColor}${percent.60}</secondaryColor>
+      <selectorGradientColor>${mainColor}${percent.30}</selectorGradientColor>
+    </textlist>
+
+    <rating name="md_rating">
+      <color>${mainColor}</color>
+      <unfilledColor>${subtleColor}${percent.20}</unfilledColor>
+    </rating>
+
+    <image name="background_overlay" extra="true">
+      <color>${bgColor}</color>
+    </image>
+
+    <text name="md_name">
+      <color>${fgColor}${percent.90}</color>
+    </text>
+
+    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount">
+      <color>${subtleColor}${percent.50}</color>
+    </text>
+
+    <text name="md_releasedate, md_developer, md_publisher, md_genre, md_players, md_lastplayed, md_playcount, md_description">
+      <color>${fgColor}${percent.80}</color>
+    </text>
+
+    <datetime name="md_releasedate, md_lastplayed">
+      <color>${fgColor}${percent.80}</color>
+    </datetime>
+  </view>
+
+  <!-- Grid view: same text colors as above, but overlay is separate
+       so flix customView can override it without view-level conflict -->
+  <view name="grid">
     <text name="logoText, md_name">
       <color>${fgColor}${percent.90}</color>
       <glowColor>${shadowColor}${percent.30}</glowColor>
