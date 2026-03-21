@@ -61,8 +61,8 @@
     </datetime>
   </view>
 
-  <!-- Grid view: same text colors as above, but overlay is separate
-       so flix customView can override it without view-level conflict -->
+  <!-- Grid view: NO background_overlay color here — it cascades into
+       flix customView and overrides inline semi-transparent colors. -->
   <view name="grid">
     <text name="logoText, md_name">
       <color>${fgColor}${percent.90}</color>
@@ -82,10 +82,6 @@
       <color>${mainColor}</color>
       <unfilledColor>${subtleColor}${percent.20}</unfilledColor>
     </rating>
-
-    <image name="background_overlay" extra="true">
-      <color>${bgColor}</color>
-    </image>
 
     <text name="md_name">
       <color>${fgColor}${percent.90}</color>
