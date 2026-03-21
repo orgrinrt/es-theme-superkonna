@@ -25,17 +25,18 @@
 
     <gridtile name="default, selected">
       <selectionMode>image</selectionMode>
-      <imageSizeMode>maxSize</imageSizeMode>
+      <imageSizeMode>minSize</imageSizeMode>
     </gridtile>
 
     <gridtile name="default">
-      <imageColor>FFFFFFFF</imageColor>
+      <imageColor>FFFFFFCC</imageColor>
       <backgroundColor>00000000</backgroundColor>
       <backgroundCornerSize>0.02</backgroundCornerSize>
     </gridtile>
 
     <gridtile name="selected">
-      <backgroundColor>D6406050</backgroundColor>
+      <imageColor>FFFFFFFF</imageColor>
+      <backgroundColor>00000000</backgroundColor>
       <backgroundCornerSize>0.02</backgroundCornerSize>
     </gridtile>
 
@@ -74,9 +75,9 @@
 
     <!-- === HERO PREVIEW: Selected game screenshot fills top half === -->
     <image name="md_image">
-      <origin>0.5 0</origin>
-      <pos>0.5 0</pos>
-      <minSize>1 0.52</minSize>
+      <origin>0.5 0.5</origin>
+      <pos>0.5 0.25</pos>
+      <size>1 0.5</size>
       <zIndex>-1</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="1" begin="0" duration="400" mode="easeOut"/>
@@ -84,9 +85,9 @@
     </image>
 
     <video name="md_video">
-      <origin>0.5 0</origin>
-      <pos>0.5 0</pos>
-      <minSize>1 0.52</minSize>
+      <origin>0.5 0.5</origin>
+      <pos>0.5 0.25</pos>
+      <size>1 0.5</size>
       <zIndex>0</zIndex>
       <delay>1</delay>
       <showSnapshotNoVideo>false</showSnapshotNoVideo>
@@ -110,11 +111,13 @@
     <text name="md_description">
       <visible>true</visible>
       <pos>0.05 0.25</pos>
-      <size>0.4 0.15</size>
+      <size>0.4 0.18</size>
       <fontSize>${fontSizeCaption-medium}</fontSize>
       <fontPath>${fontLight}</fontPath>
       <lineSpacing>1.4</lineSpacing>
-      <color>EAEDF3CC</color>
+      <color>EAEDF3</color>
+      <glowColor>000000CC</glowColor>
+      <glowSize>3</glowSize>
       <zIndex>5</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="60" mode="linear"/>
@@ -129,7 +132,9 @@
       <size>0.38 ${fontSizeCaption-medium}</size>
       <fontSize>${fontSizeCaption-medium}</fontSize>
       <fontPath>${fontLight}</fontPath>
-      <color>EAEDF399</color>
+      <color>EAEDF3</color>
+      <glowColor>000000CC</glowColor>
+      <glowSize>2</glowSize>
       <zIndex>5</zIndex>
     </text>
 
