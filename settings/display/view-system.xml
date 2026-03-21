@@ -73,9 +73,11 @@
       <visible>false</visible>
     </text>
 
-    <!-- System logo SVG (used by carousel internally) -->
+    <!-- System logo (SVG preferred, JPG/PNG fallback) -->
     <image name="logo">
       <path>./assets/logos/${system.theme}.svg</path>
+      <path>./assets/logos/${system.theme}.png</path>
+      <path>./assets/logos/${system.theme}.jpg</path>
     </image>
 
   </view>

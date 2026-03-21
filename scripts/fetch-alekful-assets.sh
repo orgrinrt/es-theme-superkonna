@@ -114,4 +114,28 @@ if [ "$SOUNDS_ONLY" = false ]; then
   fi
 fi
 
+# ── System logos (fill gaps — only copy if we don't already have one) ──
+if [ "$SOUNDS_ONLY" = false ]; then
+  LOGO_SRC="$SOURCE_DIR/assets/logos"
+  LOGO_DST="$THEME_DIR/assets/logos"
+
+  if [ -d "$LOGO_SRC" ]; then
+    mkdir -p "$LOGO_DST"
+    logo_count=0
+
+    for f in "$LOGO_SRC"/*.jpg "$LOGO_SRC"/*.png "$LOGO_SRC"/*.svg; do
+      [ -f "$f" ] || continue
+      name="$(basename "$f")"
+      stem="${name%.*}"
+
+      # Only copy if no logo exists for this system (any format)
+      if [ ! -f "$LOGO_DST/$stem.svg" ] && [ ! -f "$LOGO_DST/$stem.png" ] && [ ! -f "$LOGO_DST/$stem.jpg" ]; then
+        cp "$f" "$LOGO_DST/$name"
+        logo_count=$((logo_count + 1))
+      fi
+    done
+    echo "OK: Copied $logo_count missing logos"
+  fi
+fi
+
 echo "Done."
