@@ -125,7 +125,10 @@
     </text>
   </view>
 
-  <!-- Flix (Netflix-style) grid tile colors -->
+  <!-- Flix (Netflix-style) grid tile colors
+       NOTE: overlay, fade, and vignette colors are set INLINE in view-flix.xml
+       to avoid ES customView/view style resolution issues. Only gridtile text
+       colors are set here since they follow standard scheme.xml targeting. -->
   <customView name="flix" inherits="grid">
     <gridtile name="default">
       <backgroundColor>${cardColor}${percent.30}</backgroundColor>
@@ -138,21 +141,6 @@
     <text name="gridtile:selected">
       <color>${fgColor}</color>
     </text>
-
-    <!-- Semi-transparent overlay so hero screenshot shows through -->
-    <image name="background_overlay" extra="true">
-      <color>${bgColor}${percent.60}</color>
-    </image>
-
-    <!-- Edge fades: blend game strip edges into background -->
-    <image name="verticalFadeLeft,verticalFadeRight" extra="true">
-      <color>${bgColor}${percent.70}</color>
-    </image>
-
-    <!-- Flix top vignette: soft fade for preview text legibility -->
-    <image name="top_vignette" extra="true">
-      <color>${bgColor}${percent.80}</color>
-    </image>
   </customView>
 
   <!-- System carousel colors -->

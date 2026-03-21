@@ -1,11 +1,24 @@
 <!--
   Theme: Superkonna
   Flix view: Netflix-style horizontal game browser
-  Layout: preview area (top 45%) + horizontal game strip (bottom 50%)
-  Three-zone composition:
-  1. Background art (selected game screenshot, full-bleed)
-  2. Overlay (semi-transparent darken, separates art from grid)
-  3. Horizontal game strip with edge fades + video preview
+  Based on Elementerial's elementflix (by mluizvitor, MIT)
+
+  Layout:
+    Top 47.5%  — preview area: hero screenshot/video + marquee + metadata
+    Bottom 52.5% — horizontal game cover strip with edge fades
+
+  Z-ordering:
+    -10  background (solid bgColor, from view-general.xml)
+     -1  md_image (hero screenshot of selected game)
+      0  md_video (video preview, overlays screenshot)
+      2  background_overlay (semi-transparent, dims hero behind grid)
+      3  top_vignette (gradient for preview text readability)
+      5  gamegrid, md_description, md_genre, rating, logoText
+      6  md_marquee, edge fades, badges
+
+  Colors for overlay/fades are set INLINE using theme variables so they
+  adapt to the active color scheme without depending on scheme.xml
+  customView targeting (which has processing-order issues in ES).
 -->
 
 <theme>
@@ -15,42 +28,42 @@
 
     <!-- === GAME GRID: Horizontal strip in lower half === -->
     <imagegrid name="gamegrid">
-      <pos>0 0.50</pos>
-      <size>1 0.475</size>
-      <size ifHelpPrompts="true">1 0.44</size>
+      <pos>0 0.475</pos>
+      <size>1 0.5</size>
+      <size ifHelpPrompts="true">1 0.46</size>
       <imageSource>thumb</imageSource>
       <scrollDirection>horizontal</scrollDirection>
-      <animateSelection>true</animateSelection>
-      <autoLayoutSelectedZoom>1.06</autoLayoutSelectedZoom>
-      <padding>0.07 0.03</padding>
-      <margin>0.02 0.03</margin>
+      <animateSelection>false</animateSelection>
+      <autoLayoutSelectedZoom>1.075</autoLayoutSelectedZoom>
+      <padding>0.065 0.0225</padding>
+      <margin>0.016666667 0.025</margin>
       <scrollLoop>true</scrollLoop>
       <zIndex>5</zIndex>
       <scrollSound>./assets/sounds/tick.wav</scrollSound>
     </imagegrid>
 
-    <!-- Tile rendering: fit box art proportionally -->
+    <!-- Tile rendering -->
+    <gridtile name="default">
+      <imageColor>FFFFFFFF</imageColor>
+      <backgroundCornerSize>0.015</backgroundCornerSize>
+    </gridtile>
+
     <gridtile name="default, selected">
       <selectionMode>image</selectionMode>
       <imageSizeMode>maxSize</imageSizeMode>
     </gridtile>
 
-    <gridtile name="default">
-      <imageColor>FFFFFFFF</imageColor>
-      <backgroundCornerSize>0.02</backgroundCornerSize>
-    </gridtile>
-
     <gridtile name="selected">
-      <backgroundCornerSize>0.02</backgroundCornerSize>
+      <backgroundCornerSize>0.015</backgroundCornerSize>
     </gridtile>
 
     <!-- Rounded corners on cover art -->
     <image name="gridtile.image">
-      <roundCorners>0.02</roundCorners>
+      <roundCorners>0.015</roundCorners>
     </image>
 
     <image name="gridtile.image:selected">
-      <roundCorners>0.02</roundCorners>
+      <roundCorners>0.015</roundCorners>
     </image>
 
     <!-- Favorite badge on tiles -->
@@ -61,20 +74,37 @@
       <origin>0 0</origin>
     </image>
 
+    <!-- Tile label: game name below cover art -->
+    <text name="gridtile">
+      <size>1 0.2</size>
+      <pos>0 0.78</pos>
+      <fontPath>${fontBody}</fontPath>
+      <fontSize>${fontSizeCaption-medium}</fontSize>
+      <alignment>center</alignment>
+      <lineSpacing>1.2</lineSpacing>
+    </text>
+
+    <!-- Hide tile marquee (full marquee shown in preview area) -->
+    <image name="gridtile.marquee">
+      <color>00000000</color>
+    </image>
+
     <!-- === EDGE FADES: Soft left/right bleed on game strip === -->
+    <!-- Colors set INLINE so they work regardless of scheme.xml targeting -->
     <image name="verticalFadeLeft,verticalFadeRight" extra="true">
       <origin>0.5 0.5</origin>
-      <size>0.05 0.50</size>
+      <size>0.075 0.525</size>
+      <color>${bgColor}</color>
       <path>./assets/fade-hor.png</path>
       <zIndex>6</zIndex>
     </image>
 
     <image name="verticalFadeLeft" extra="true">
-      <pos>0.025 0.7375</pos>
+      <pos>0.0375 0.7375</pos>
     </image>
 
     <image name="verticalFadeRight" extra="true">
-      <pos>0.975 0.7375</pos>
+      <pos>0.9625 0.7375</pos>
       <rotation>180</rotation>
     </image>
 
@@ -82,9 +112,9 @@
 
     <!-- Selected game marquee/logo (upper-left area) -->
     <image name="md_marquee">
-      <pos>0.24 0.11</pos>
+      <pos>0.233333333 0.125</pos>
       <origin>0.5 0.5</origin>
-      <maxSize>0.38 0.18</maxSize>
+      <maxSize>0.4 0.225</maxSize>
       <zIndex>6</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="60" mode="linear"/>
@@ -99,63 +129,30 @@
       <pos>0.7 0.25</pos>
       <minSize>0.7 0.55</minSize>
       <zIndex>-1</zIndex>
-      <roundCorners>0.01</roundCorners>
       <storyboard>
         <animation property="opacity" from="0" to="1" begin="0" duration="400" mode="easeOut"/>
       </storyboard>
     </image>
 
-    <!-- Video preview: plays after 0.5s delay over screenshot -->
+    <!-- Video preview: plays after 1s delay over screenshot -->
     <video name="md_video">
       <origin>0.5 0.5</origin>
       <pos>0.7 0.25</pos>
       <minSize>0.6 0.5</minSize>
       <zIndex>0</zIndex>
-      <delay>0.5</delay>
+      <delay>1</delay>
       <showSnapshotNoVideo>false</showSnapshotNoVideo>
-      <showSnapshotDelay>true</showSnapshotDelay>
-      <snapshotSource>thumbnail</snapshotSource>
-      <roundCorners>0.02</roundCorners>
+      <showSnapshotDelay>false</showSnapshotDelay>
       <effect>none</effect>
-      <storyboard>
-        <animation property="opacity" from="0" to="1" begin="0" duration="300" mode="easeOut"/>
-      </storyboard>
     </video>
 
-    <!-- Rating: below marquee -->
-    <rating name="md_rating">
-      <visible>true</visible>
-      <origin>0 0</origin>
-      <filledPath>./assets/icons/star.svg</filledPath>
-      <unfilledPath>./assets/icons/star_border.svg</unfilledPath>
-      <pos>0.05 0.22</pos>
-      <size>0.07 0.022</size>
-      <zIndex>5</zIndex>
-    </rating>
-
-    <!-- Genre: below rating -->
-    <text name="md_genre">
-      <visible>true</visible>
-      <pos>0.05 0.255</pos>
-      <size>0.38 ${fontSizeCaption-medium}</size>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
-      <fontPath>${fontLight}</fontPath>
-      <alignment>left</alignment>
-      <zIndex>5</zIndex>
-      <storyboard>
-        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
-        <animation property="opacity" from="0" to="0.6" begin="200" duration="200" mode="easeOut"/>
-      </storyboard>
-    </text>
-
-    <!-- Game description: below genre, generous line spacing -->
+    <!-- Game description -->
     <text name="md_description">
       <visible>true</visible>
-      <pos>0.05 0.29</pos>
-      <size>0.4 0.13</size>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
+      <pos>0.033333333 0.25</pos>
+      <size>0.433333333 0.15</size>
       <fontPath>${fontLight}</fontPath>
-      <lineSpacing>1.4</lineSpacing>
+      <lineSpacing>1.3</lineSpacing>
       <zIndex>5</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="60" mode="linear"/>
@@ -163,35 +160,27 @@
       </storyboard>
     </text>
 
-    <!-- Badge row: below description, above game strip -->
-    <image name="badge_cheevos" extra="true">
-      <path>./assets/icons/trophy.svg</path>
-      <visible>{game:cheevos}</visible>
-      <pos>0.05 0.44</pos>
-      <maxSize>0.016 0.016</maxSize>
-      <origin>0 0.5</origin>
-      <zIndex>6</zIndex>
+    <!-- Semi-transparent overlay between bg art and grid
+         Color set INLINE — this is the key fix vs relying on scheme.xml -->
+    <image name="background_overlay" extra="true">
+      <size>1 1</size>
+      <origin>0 0</origin>
+      <pos>0 0</pos>
+      <color>${bgColor}${percent.50}</color>
+      <zIndex>2</zIndex>
     </image>
 
-    <image name="badge_mature" extra="true">
-      <path>./assets/icons/mature.svg</path>
-      <visible>!{game:kidGame}</visible>
-      <pos>0.07 0.44</pos>
-      <maxSize>0.016 0.016</maxSize>
-      <origin>0 0.5</origin>
-      <zIndex>6</zIndex>
+    <!-- Top vignette: gradient for preview area text readability -->
+    <image name="top_vignette" extra="true">
+      <path>./assets/fade-ver.png</path>
+      <size>1 0.25</size>
+      <origin>0 0</origin>
+      <pos>0 0</pos>
+      <color>${bgColor}${percent.70}</color>
+      <zIndex>3</zIndex>
     </image>
 
-    <image name="badge_savestate" extra="true">
-      <path>./assets/icons/savestate.svg</path>
-      <visible>{game:hasSaveState}</visible>
-      <pos>0.09 0.44</pos>
-      <maxSize>0.016 0.016</maxSize>
-      <origin>0 0.5</origin>
-      <zIndex>6</zIndex>
-    </image>
-
-    <!-- Hide remaining metadata labels -->
+    <!-- Hide metadata labels (values shown selectively below) -->
     <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_players, md_lastplayed, md_playcount, md_name">
       <visible>false</visible>
     </text>
@@ -200,44 +189,15 @@
       <visible>false</visible>
     </datetime>
 
-    <!-- Semi-transparent overlay between bg art and grid -->
-    <image name="background_overlay" extra="true">
-      <size>1 1</size>
-      <origin>0 0</origin>
-      <pos>0 0</pos>
-      <zIndex>4</zIndex>
-    </image>
+    <!-- Rating: hide in flix (too noisy with the preview area) -->
+    <rating name="md_rating">
+      <visible>false</visible>
+    </rating>
 
-    <!-- Top vignette: subtle fade for preview area text -->
-    <image name="top_vignette" extra="true">
-      <path>./assets/fade-ver.png</path>
-      <size>1 0.3</size>
-      <origin>0 0</origin>
-      <pos>0 0</pos>
-      <zIndex>4</zIndex>
-    </image>
-
-    <!-- Tile label: game name below cover art -->
-    <text name="gridtile">
-      <size>1 0.2</size>
-      <pos>0 0.78</pos>
-      <fontPath>${fontBody}</fontPath>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
-      <alignment>center</alignment>
-      <lineSpacing>1.2</lineSpacing>
-    </text>
-
-    <!-- Hide tile marquee (we show the full marquee in preview area) -->
-    <image name="gridtile.marquee">
-      <color>00000000</color>
-    </image>
-
-    <!-- System name: top-left above game strip -->
+    <!-- System name: above game strip -->
     <text name="logoText">
       <origin>0 0.5</origin>
-      <pos>0.05 0.46</pos>
-      <size>0.4 ${fontSizeH3-medium}</size>
-      <fontSize>${fontSizeH3-medium}</fontSize>
+      <pos>0.033333333 0.45</pos>
     </text>
 
   </customView>
