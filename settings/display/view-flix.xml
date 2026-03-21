@@ -1,15 +1,11 @@
 <!--
   Theme: Superkonna
   Flix view: Netflix-style horizontal game browser
-
-  Design intent (Alekfull-NX + Canvas + Elementerial synthesis):
-    Top 47.5%  — hero preview: selected game screenshot/video + marquee + description
-    Bottom 52.5% — horizontal cover art strip (Netflix-style browsing)
-
-  The overlay element is named "flix_overlay" (NOT "background_overlay") because
-  scheme.xml sets background_overlay to fully opaque ${bgColor} for all grid views,
-  and that cascades into customViews via inherits="grid", overriding any
-  semi-transparent color we set. Using a unique name avoids the conflict entirely.
+  Layout: preview area (top 45%) + horizontal game strip (bottom 50%)
+  Three-zone composition:
+  1. Background art (selected game screenshot, full-bleed)
+  2. Overlay (semi-transparent darken, separates art from grid)
+  3. Horizontal game strip with edge fades + video preview
 -->
 
 <theme>
@@ -17,11 +13,11 @@
 
   <customView name="flix" inherits="grid">
 
-    <!-- === GAME GRID: Horizontal cover strip in lower half === -->
+    <!-- === GAME GRID: Horizontal strip in lower half === -->
     <imagegrid name="gamegrid">
-      <pos>0 0.475</pos>
-      <size>1 0.5</size>
-      <size ifHelpPrompts="true">1 0.46</size>
+      <pos>0 0.50</pos>
+      <size>1 0.475</size>
+      <size ifHelpPrompts="true">1 0.44</size>
       <imageSource>thumb</imageSource>
       <scrollDirection>horizontal</scrollDirection>
       <animateSelection>true</animateSelection>
@@ -33,10 +29,10 @@
       <scrollSound>./assets/sounds/tick.wav</scrollSound>
     </imagegrid>
 
-    <!-- Tile: fill tile area uniformly (Netflix-style uniform covers) -->
+    <!-- Tile rendering: fit box art proportionally -->
     <gridtile name="default, selected">
       <selectionMode>image</selectionMode>
-      <imageSizeMode>minSize</imageSizeMode>
+      <imageSizeMode>maxSize</imageSizeMode>
     </gridtile>
 
     <gridtile name="default">
@@ -65,23 +61,7 @@
       <origin>0 0</origin>
     </image>
 
-    <!-- Tile label: game name below cover art -->
-    <text name="gridtile">
-      <size>1 0.2</size>
-      <pos>0 0.78</pos>
-      <fontPath>${fontBody}</fontPath>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
-      <alignment>center</alignment>
-      <lineSpacing>1.2</lineSpacing>
-    </text>
-
-    <!-- Hide tile marquee (full marquee shown in preview area) -->
-    <image name="gridtile.marquee">
-      <color>00000000</color>
-    </image>
-
     <!-- === EDGE FADES: Soft left/right bleed on game strip === -->
-    <!-- Color set via scheme.xml (variables don't resolve in customView XML) -->
     <image name="verticalFadeLeft,verticalFadeRight" extra="true">
       <origin>0.5 0.5</origin>
       <size>0.05 0.50</size>
@@ -98,9 +78,9 @@
       <rotation>180</rotation>
     </image>
 
-    <!-- === HERO PREVIEW AREA: Top half === -->
+    <!-- === PREVIEW AREA: Top half === -->
 
-    <!-- Selected game marquee/logo (upper-left) -->
+    <!-- Selected game marquee/logo (upper-left area) -->
     <image name="md_marquee">
       <pos>0.24 0.11</pos>
       <origin>0.5 0.5</origin>
@@ -113,7 +93,7 @@
       </storyboard>
     </image>
 
-    <!-- Hero screenshot of selected game (right side, full-bleed) -->
+    <!-- Background screenshot of selected game (right side, full-bleed) -->
     <image name="md_image">
       <origin>0.5 0.5</origin>
       <pos>0.7 0.25</pos>
@@ -125,7 +105,7 @@
       </storyboard>
     </image>
 
-    <!-- Video preview: plays after delay over screenshot -->
+    <!-- Video preview: plays after 0.5s delay over screenshot -->
     <video name="md_video">
       <origin>0.5 0.5</origin>
       <pos>0.7 0.25</pos>
@@ -153,7 +133,7 @@
       <zIndex>5</zIndex>
     </rating>
 
-    <!-- Genre -->
+    <!-- Genre: below rating -->
     <text name="md_genre">
       <visible>true</visible>
       <pos>0.05 0.255</pos>
@@ -168,7 +148,7 @@
       </storyboard>
     </text>
 
-    <!-- Game description -->
+    <!-- Game description: below genre, generous line spacing -->
     <text name="md_description">
       <visible>true</visible>
       <pos>0.05 0.29</pos>
@@ -183,7 +163,7 @@
       </storyboard>
     </text>
 
-    <!-- Badge row -->
+    <!-- Badge row: below description, above game strip -->
     <image name="badge_cheevos" extra="true">
       <path>./assets/icons/trophy.svg</path>
       <visible>{game:cheevos}</visible>
@@ -220,11 +200,39 @@
       <visible>false</visible>
     </datetime>
 
-    <!-- No overlay element — ES renders pathless extra images as opaque
-         regardless of color/alpha settings in both view XML and scheme.xml.
-         The hero screenshot shows at full brightness behind the grid. -->
+    <!-- Semi-transparent overlay between bg art and grid -->
+    <image name="background_overlay" extra="true">
+      <size>1 1</size>
+      <origin>0 0</origin>
+      <pos>0 0</pos>
+      <zIndex>4</zIndex>
+    </image>
 
-    <!-- System name: above game strip -->
+    <!-- Top vignette: subtle fade for preview area text -->
+    <image name="top_vignette" extra="true">
+      <path>./assets/fade-ver.png</path>
+      <size>1 0.3</size>
+      <origin>0 0</origin>
+      <pos>0 0</pos>
+      <zIndex>4</zIndex>
+    </image>
+
+    <!-- Tile label: game name below cover art -->
+    <text name="gridtile">
+      <size>1 0.2</size>
+      <pos>0 0.78</pos>
+      <fontPath>${fontBody}</fontPath>
+      <fontSize>${fontSizeCaption-medium}</fontSize>
+      <alignment>center</alignment>
+      <lineSpacing>1.2</lineSpacing>
+    </text>
+
+    <!-- Hide tile marquee (we show the full marquee in preview area) -->
+    <image name="gridtile.marquee">
+      <color>00000000</color>
+    </image>
+
+    <!-- System name: top-left above game strip -->
     <text name="logoText">
       <origin>0 0.5</origin>
       <pos>0.05 0.46</pos>

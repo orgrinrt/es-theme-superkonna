@@ -125,10 +125,7 @@
     </text>
   </view>
 
-  <!-- Flix (Netflix-style) colors
-       Variables only resolve in scheme.xml, NOT in view-flix.xml customView blocks.
-       Element names use "flix_" prefix to avoid inheriting background_overlay's
-       fully-opaque color from <view name="grid">. -->
+  <!-- Flix (Netflix-style) grid tile + overlay colors -->
   <customView name="flix" inherits="grid">
     <gridtile name="default">
       <backgroundColor>${cardColor}${percent.30}</backgroundColor>
@@ -142,9 +139,19 @@
       <color>${fgColor}</color>
     </text>
 
+    <!-- Semi-transparent overlay so hero screenshot shows through -->
+    <image name="background_overlay" extra="true">
+      <color>${bgColor}${percent.60}</color>
+    </image>
+
     <!-- Edge fades: blend game strip edges into background -->
     <image name="verticalFadeLeft,verticalFadeRight" extra="true">
-      <color>${bgColor}</color>
+      <color>${bgColor}${percent.70}</color>
+    </image>
+
+    <!-- Flix top vignette -->
+    <image name="top_vignette" extra="true">
+      <color>${bgColor}${percent.80}</color>
     </image>
 
     <!-- Preview area text colors -->
