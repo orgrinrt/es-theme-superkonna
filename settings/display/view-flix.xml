@@ -1,23 +1,58 @@
 <!--
   Theme: Superkonna — Flix view
-  Netflix-style: hero preview top, horizontal cover strip bottom
-  Built up from tested minimal base.
+  Full-screen game art background (like system carousel), cover strip floating over it.
+  No split screen. No black areas.
 -->
 <theme>
   <formatVersion>7</formatVersion>
 
   <customView name="flix" inherits="grid">
 
-    <!-- === GAME GRID: Forced 1-row horizontal strip === -->
+    <!-- FULL-SCREEN BACKGROUND: selected game's screenshot -->
+    <image name="md_image">
+      <origin>0.5 0.5</origin>
+      <pos>0.5 0.5</pos>
+      <minSize>1 1</minSize>
+      <zIndex>-2</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="1" begin="0" duration="400" mode="easeOut"/>
+      </storyboard>
+    </image>
+
+    <!-- Video replaces screenshot after delay -->
+    <video name="md_video">
+      <origin>0.5 0.5</origin>
+      <pos>0.5 0.5</pos>
+      <minSize>1 1</minSize>
+      <zIndex>-1</zIndex>
+      <delay>1.5</delay>
+      <showSnapshotNoVideo>false</showSnapshotNoVideo>
+      <showSnapshotDelay>false</showSnapshotDelay>
+      <effect>none</effect>
+    </video>
+
+    <!-- Bottom gradient: dark fade so covers and text are readable -->
+    <image name="flix_gradient" extra="true">
+      <path>./assets/fade-ver.png</path>
+      <origin>0 1</origin>
+      <pos>0 1</pos>
+      <size>1 0.6</size>
+      <color>0E1117</color>
+      <rotation>180</rotation>
+      <zIndex>1</zIndex>
+    </image>
+
+    <!-- === COVER STRIP: Floating in lower area === -->
     <imagegrid name="gamegrid">
-      <pos>0 0.50</pos>
-      <size>1 0.475</size>
-      <size ifHelpPrompts="true">1 0.44</size>
+      <pos>0.02 0.58</pos>
+      <size>0.96 0.32</size>
       <imageSource>thumbnail</imageSource>
       <scrollDirection>horizontal</scrollDirection>
       <autoLayout>7 1</autoLayout>
       <animateSelection>true</animateSelection>
-      <autoLayoutSelectedZoom>1.06</autoLayoutSelectedZoom>
+      <autoLayoutSelectedZoom>1.08</autoLayoutSelectedZoom>
+      <padding>0.01 0.02</padding>
+      <margin>0.008 0.015</margin>
       <scrollLoop>true</scrollLoop>
       <zIndex>5</zIndex>
       <scrollSound>./assets/sounds/tick.wav</scrollSound>
@@ -25,81 +60,52 @@
 
     <gridtile name="default, selected">
       <selectionMode>image</selectionMode>
-      <imageSizeMode>minSize</imageSizeMode>
+      <imageSizeMode>maxSize</imageSizeMode>
     </gridtile>
 
     <gridtile name="default">
-      <imageColor>FFFFFFCC</imageColor>
+      <imageColor>FFFFFFDD</imageColor>
       <backgroundColor>00000000</backgroundColor>
-      <backgroundCornerSize>0.02</backgroundCornerSize>
+      <backgroundCornerSize>0.01</backgroundCornerSize>
     </gridtile>
 
     <gridtile name="selected">
       <imageColor>FFFFFFFF</imageColor>
-      <backgroundColor>00000000</backgroundColor>
-      <backgroundCornerSize>0.02</backgroundCornerSize>
+      <backgroundColor>FFFFFF18</backgroundColor>
+      <backgroundCornerSize>0.01</backgroundCornerSize>
     </gridtile>
 
     <image name="gridtile.image">
-      <roundCorners>0.02</roundCorners>
+      <roundCorners>0.01</roundCorners>
     </image>
 
     <image name="gridtile.image:selected">
-      <roundCorners>0.02</roundCorners>
+      <roundCorners>0.01</roundCorners>
     </image>
 
-    <image name="gridtile.favorite">
-      <path>./assets/icons/favorite.png</path>
-      <pos>0 0</pos>
-      <maxSize>0.25 0.25</maxSize>
-      <origin>0 0</origin>
-    </image>
-
+    <!-- No text on tiles — clean cover art only -->
     <text name="gridtile">
-      <size>1 0.2</size>
-      <pos>0 0.78</pos>
-      <fontPath>${fontBody}</fontPath>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
-      <alignment>center</alignment>
-      <lineSpacing>1.2</lineSpacing>
-      <color>EAEDF3B3</color>
-    </text>
-
-    <text name="gridtile:selected">
-      <color>EAEDF3</color>
+      <visible>false</visible>
     </text>
 
     <image name="gridtile.marquee">
       <color>00000000</color>
     </image>
 
-    <!-- === HERO PREVIEW: Selected game screenshot fills top half === -->
-    <image name="md_image">
-      <origin>0.5 0.5</origin>
-      <pos>0.5 0.25</pos>
-      <size>1 0.5</size>
-      <zIndex>-1</zIndex>
-      <storyboard>
-        <animation property="opacity" from="0" to="1" begin="0" duration="400" mode="easeOut"/>
-      </storyboard>
+    <image name="gridtile.favorite">
+      <path>./assets/icons/favorite.png</path>
+      <pos>0 0</pos>
+      <maxSize>0.2 0.2</maxSize>
+      <origin>0 0</origin>
     </image>
 
-    <video name="md_video">
-      <origin>0.5 0.5</origin>
-      <pos>0.5 0.25</pos>
-      <size>1 0.5</size>
-      <zIndex>0</zIndex>
-      <delay>1</delay>
-      <showSnapshotNoVideo>false</showSnapshotNoVideo>
-      <showSnapshotDelay>false</showSnapshotDelay>
-      <effect>none</effect>
-    </video>
+    <!-- === METADATA: Floating over background, upper-left === -->
 
-    <!-- Game marquee/logo over hero -->
+    <!-- Game marquee/logo -->
     <image name="md_marquee">
-      <pos>0.05 0.05</pos>
+      <pos>0.05 0.08</pos>
       <origin>0 0</origin>
-      <maxSize>0.35 0.15</maxSize>
+      <maxSize>0.3 0.12</maxSize>
       <zIndex>6</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="60" mode="linear"/>
@@ -107,47 +113,50 @@
       </storyboard>
     </image>
 
-    <!-- Game description over hero -->
-    <text name="md_description">
+    <!-- Genre -->
+    <text name="md_genre">
       <visible>true</visible>
       <pos>0.05 0.25</pos>
+      <size>0.4 0.03</size>
+      <fontSize>${fontSizeCaption-medium}</fontSize>
+      <fontPath>${fontLight}</fontPath>
+      <color>EAEDF3</color>
+      <glowColor>000000E6</glowColor>
+      <glowSize>3</glowSize>
+      <zIndex>6</zIndex>
+    </text>
+
+    <!-- Description -->
+    <text name="md_description">
+      <visible>true</visible>
+      <pos>0.05 0.30</pos>
       <size>0.4 0.18</size>
       <fontSize>${fontSizeCaption-medium}</fontSize>
       <fontPath>${fontLight}</fontPath>
       <lineSpacing>1.4</lineSpacing>
-      <color>EAEDF3</color>
+      <color>EAEDF3CC</color>
       <glowColor>000000CC</glowColor>
-      <glowSize>3</glowSize>
-      <zIndex>5</zIndex>
+      <glowSize>2</glowSize>
+      <zIndex>6</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="60" mode="linear"/>
-        <animation property="opacity" from="0" to="0.85" begin="180" duration="220" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0.9" begin="180" duration="220" mode="easeOut"/>
       </storyboard>
     </text>
 
-    <!-- Genre -->
-    <text name="md_genre">
-      <visible>true</visible>
-      <pos>0.05 0.22</pos>
-      <size>0.38 ${fontSizeCaption-medium}</size>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
-      <fontPath>${fontLight}</fontPath>
-      <color>EAEDF3</color>
-      <glowColor>000000CC</glowColor>
-      <glowSize>2</glowSize>
-      <zIndex>5</zIndex>
-    </text>
-
-    <!-- System name above grid -->
+    <!-- System/collection name -->
     <text name="logoText">
       <origin>0 0.5</origin>
-      <pos>0.05 0.46</pos>
+      <pos>0.05 0.53</pos>
       <size>0.4 ${fontSizeH3-medium}</size>
       <fontSize>${fontSizeH3-medium}</fontSize>
       <color>EAEDF3</color>
+      <glowColor>000000E6</glowColor>
+      <glowSize>3</glowSize>
+      <zIndex>6</zIndex>
     </text>
 
-    <!-- Hide metadata labels -->
+    <!-- Hide everything else -->
     <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_developer, md_publisher, md_players, md_lastplayed, md_playcount, md_name">
       <visible>false</visible>
     </text>
