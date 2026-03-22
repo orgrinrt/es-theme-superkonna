@@ -141,9 +141,12 @@
       <visible>false</visible>
     </text>
 
-    <!-- Hide marquee (causes UNKNOWN text) -->
+    <!-- Game logo/marquee (from ScreenScraper wheel images) -->
     <image name="md_marquee">
-      <visible>false</visible>
+      <pos>0.05 0.05</pos>
+      <origin>0 0</origin>
+      <maxSize>0.3 0.12</maxSize>
+      <zIndex>6</zIndex>
     </image>
 
     <!-- Hide unused metadata -->
