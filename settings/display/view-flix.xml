@@ -44,24 +44,24 @@
          Top vignette: subtle, for game logo readability
          ═══════════════════════════════════════════════════════════ -->
 
-    <!-- Bottom gradient — tall, soft fade from transparent to dark -->
+    <!-- Bottom gradient — white, console-like feel -->
     <image name="flix_gradient" extra="true">
       <path>./assets/fade-ver.png</path>
       <origin>0 1</origin>
       <pos>0 1</pos>
       <size>1 0.65</size>
-      <color>0A0D12</color>
+      <color>F2F3F7</color>
       <rotation>180</rotation>
       <zIndex>1</zIndex>
     </image>
 
-    <!-- Top vignette — very subtle, just enough for logo contrast -->
+    <!-- Top vignette — very subtle dark, for logo contrast on bright art -->
     <image name="flix_top_fade" extra="true">
       <path>./assets/fade-ver.png</path>
       <origin>0 0</origin>
       <pos>0 0</pos>
-      <size>1 0.25</size>
-      <color>0A0D12</color>
+      <size>1 0.20</size>
+      <color>1E202866</color>
       <zIndex>1</zIndex>
     </image>
 
@@ -149,7 +149,7 @@
          Cascading fade-in animations for premium feel
          ═══════════════════════════════════════════════════════════ -->
 
-    <!-- Game title — large, bold, white on dark gradient -->
+    <!-- Game title — large, bold, dark on white gradient -->
     <text name="md_name">
       <visible>true</visible>
       <pos>0.05 0.50</pos>
@@ -157,9 +157,9 @@
       <fontSize>${fontSizeH1-medium}</fontSize>
       <fontPath>${fontDisplay}</fontPath>
       <forceUppercase>0</forceUppercase>
-      <color>EAEDF3</color>
-      <glowColor>0A0D12E6</glowColor>
-      <glowSize>4</glowSize>
+      <color>1E2028</color>
+      <glowColor>F2F3F7CC</glowColor>
+      <glowSize>3</glowSize>
       <zIndex>6</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
@@ -168,7 +168,7 @@
       </storyboard>
     </text>
 
-    <!-- Genre + year pill -->
+    <!-- Genre pill -->
     <text name="md_genre">
       <visible>true</visible>
       <pos>0.05 0.59</pos>
@@ -176,10 +176,7 @@
       <fontSize>${fontSizeCaption-medium}</fontSize>
       <fontPath>${fontBody}</fontPath>
       <forceUppercase>1</forceUppercase>
-      <letterCase>1</letterCase>
-      <color>EAEDF399</color>
-      <glowColor>0A0D12CC</glowColor>
-      <glowSize>2</glowSize>
+      <color>1E202880</color>
       <zIndex>6</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
@@ -195,9 +192,7 @@
       <fontSize>${fontSizeCaption-medium}</fontSize>
       <fontPath>${fontLight}</fontPath>
       <lineSpacing>1.5</lineSpacing>
-      <color>EAEDF380</color>
-      <glowColor>0A0D12B3</glowColor>
-      <glowSize>2</glowSize>
+      <color>1E202866</color>
       <zIndex>6</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="150" mode="linear"/>
@@ -213,9 +208,7 @@
       <fontSize>${fontSizeCaption-medium}</fontSize>
       <fontPath>${fontLight}</fontPath>
       <alignment>right</alignment>
-      <color>EAEDF366</color>
-      <glowColor>0A0D12CC</glowColor>
-      <glowSize>2</glowSize>
+      <color>1E202850</color>
       <zIndex>6</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="200" mode="linear"/>
@@ -232,7 +225,7 @@
       <pos>0.05 0.575</pos>
       <size>0.06 0.015</size>
       <color>D64060</color>
-      <unfilledColor>EAEDF320</unfilledColor>
+      <unfilledColor>1E202815</unfilledColor>
       <zIndex>6</zIndex>
     </rating>
 
