@@ -1,48 +1,39 @@
 <!--
   Theme: Superkonna
-  Splash screen: shown during ES boot
+  Splash screen: minimal, unbranded, clean
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
   <view name="splash">
-    <!-- Background color -->
     <splash name="splash">
-      <backgroundColor>${bgColor}</backgroundColor>
+      <backgroundColor>0E1117</backgroundColor>
     </splash>
 
-    <!-- Splash image (optional, falls back to color if missing) -->
-    <image name="background">
-      <path>./splash.png</path>
-      <minSize>1 1</minSize>
-      <origin>0.5 0.5</origin>
-      <pos>0.5 0.5</pos>
-    </image>
-
-    <!-- Progress bar (bottom edge, thin line) -->
+    <!-- Progress bar: thin accent line at bottom -->
     <image name="progressbar">
-      <color>${bgColor}</color>
+      <color>0E1117</color>
       <origin>0.5 1</origin>
-      <pos>0.5 1</pos>
-      <maxSize>1 0.005</maxSize>
-      <minSize>1 0.005</minSize>
+      <pos>0.5 0.98</pos>
+      <maxSize>0.4 0.003</maxSize>
+      <minSize>0.4 0.003</minSize>
+      <roundCorners>0.002</roundCorners>
     </image>
 
-    <!-- Active progress bar: accent color -->
     <image name="progressbar:active">
-      <color>${mainColor}</color>
+      <color>D64060</color>
       <tile>true</tile>
     </image>
 
-    <!-- Loading text: clean, centered -->
+    <!-- Loading text: minimal -->
     <text name="label">
       <alignment>center</alignment>
       <fontPath>${fontLight}</fontPath>
-      <fontSize>0.03</fontSize>
-      <color>${fgColor}${percent.60}</color>
+      <fontSize>0.022</fontSize>
+      <color>EAEDF340</color>
       <origin>0.5 1</origin>
-      <pos>0.5 0.96</pos>
+      <pos>0.5 0.965</pos>
     </text>
   </view>
 </theme>
