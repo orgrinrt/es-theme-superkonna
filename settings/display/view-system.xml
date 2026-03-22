@@ -1,22 +1,20 @@
 <!--
   Theme: Superkonna
-  System view: carousel, background, system info
-  Screen view: top bar (avatar, clock, battery, controllers)
+  System carousel: full-screen art, floating logos, minimal chrome.
+  Screen view: frosted glass top bar.
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
-  <!-- ==========================================
-       SYSTEM VIEW: Carousel + per-system art
-       Three-layer composition:
-       1. Background art (full-screen, per-system)
-       2. Overlay (semi-transparent darken)
-       3. Carousel (oversized Alekfull-NX geometry)
-       ========================================== -->
+  <!-- ════════════════════════════════════════════════════════════
+       SYSTEM VIEW: Immersive carousel
+       Full-screen system art with logos floating over it.
+       Subtle gradient for depth, cascading info on selection.
+       ════════════════════════════════════════════════════════════ -->
   <view name="system">
 
-    <!-- Layer 1: Per-system background — fills entire screen -->
+    <!-- Background art — fills entire screen, slow crossfade -->
     <image name="cover" extra="true">
       <path>./assets/systems/${system.theme}.jpg</path>
       <path>./assets/systems/${system.theme}.webp</path>
@@ -27,11 +25,12 @@
       <minSize>1 1</minSize>
       <zIndex>-9</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="1" begin="0" duration="800" mode="easeOut"/>
+        <animation property="opacity" from="0" to="1" begin="0" duration="1000" mode="easeOut"/>
+        <animation property="scale" from="1.03" to="1" begin="0" duration="1200" mode="easeOut"/>
       </storyboard>
     </image>
 
-    <!-- Layer 2: Darken overlay on system art -->
+    <!-- Darken overlay — from scheme.xml system view section -->
     <image name="background_overlay" extra="true">
       <size>1 1</size>
       <origin>0 0</origin>
@@ -39,8 +38,18 @@
       <zIndex>-7</zIndex>
     </image>
 
-    <!-- Carousel: tight cards, bottom-aligned, selected pops via scale.
-         Alekfull-NX oversized geometry with smaller, tighter logos. -->
+    <!-- Bottom vignette — soft gradient for depth -->
+    <image name="system_bottom_fade" extra="true">
+      <path>./assets/fade-ver.png</path>
+      <origin>0 1</origin>
+      <pos>0 1</pos>
+      <size>1 0.4</size>
+      <color>0A0D12</color>
+      <rotation>180</rotation>
+      <zIndex>-6</zIndex>
+    </image>
+
+    <!-- ── Carousel ──────────────────────────────────────────── -->
     <carousel name="systemcarousel">
       <type>horizontal</type>
       <pos>-0.660 -0.10</pos>
@@ -53,28 +62,68 @@
       <logoAlignment>bottom</logoAlignment>
       <defaultTransition>slide</defaultTransition>
       <systemInfoDelay>200</systemInfoDelay>
-      <minLogoOpacity>0.3</minLogoOpacity>
+      <minLogoOpacity>0.25</minLogoOpacity>
       <scrollSound>./assets/sounds/scroll.wav</scrollSound>
     </carousel>
 
-    <!-- Hide all text — carousel is cards-only -->
+    <!-- System name — subtle, bottom-left, cascading reveal -->
     <text name="systemName" extra="true">
-      <visible>false</visible>
+      <text>${system.fullName}</text>
+      <origin>0 1</origin>
+      <pos>0.05 0.88</pos>
+      <size>0.5 ${fontSizeH2-medium}</size>
+      <fontPath>${fontDisplay}</fontPath>
+      <forceUppercase>1</forceUppercase>
+      <lineSpacing>1</lineSpacing>
+      <alignment>left</alignment>
+      <color>EAEDF3</color>
+      <glowColor>0A0D12E6</glowColor>
+      <glowSize>4</glowSize>
+      <zIndex>50</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="150" mode="linear"/>
+        <animation property="opacity" from="0" to="1" begin="200" duration="300" mode="easeOut"/>
+        <animation property="y" from="0.90" to="0.88" begin="200" duration="350" mode="easeOut"/>
+      </storyboard>
     </text>
 
+    <!-- Game count — small, below system name -->
     <text name="systemInfo">
-      <visible>false</visible>
+      <origin>0 1</origin>
+      <pos>0.05 0.925</pos>
+      <size>0.3 ${fontSizeCaption-medium}</size>
+      <alignment>left</alignment>
+      <fontPath>${fontLight}</fontPath>
+      <lineSpacing>1.3</lineSpacing>
+      <color>EAEDF366</color>
+      <glowColor>0A0D12CC</glowColor>
+      <glowSize>2</glowSize>
+      <zIndex>50</zIndex>
+      <storyboard>
+        <animation property="opacity" from="0" to="0" duration="200" mode="linear"/>
+        <animation property="opacity" from="0" to="0.7" begin="300" duration="250" mode="easeOut"/>
+        <animation property="y" from="0.94" to="0.925" begin="300" duration="300" mode="easeOut"/>
+      </storyboard>
     </text>
 
+    <!-- Manufacturer — hide (redundant with background art) -->
     <text name="systemManufacturer" extra="true">
       <visible>false</visible>
     </text>
 
+    <!-- logoText fallback — shown when no logo SVG exists -->
     <text name="logoText">
-      <visible>false</visible>
+      <origin>0.5 0.5</origin>
+      <fontPath>${fontDisplay}</fontPath>
+      <fontSize>${fontSizeH3-medium}</fontSize>
+      <forceUppercase>1</forceUppercase>
+      <alignment>center</alignment>
+      <color>EAEDF3</color>
+      <glowColor>0A0D12CC</glowColor>
+      <glowSize>3</glowSize>
     </text>
 
-    <!-- System logo (SVG preferred, JPG/PNG fallback) -->
+    <!-- System logo (SVG preferred) -->
     <image name="logo">
       <path>./assets/logos/${system.theme}.svg</path>
       <path>./assets/logos/${system.theme}.png</path>
@@ -93,13 +142,13 @@
     </image>
   </view>
 
-  <!-- ==========================================
-       SCREEN VIEW: Top bar overlay
+  <!-- ════════════════════════════════════════════════════════════
+       SCREEN VIEW: Floating frosted glass top bar
        Persistent across all views.
-       ========================================== -->
+       ════════════════════════════════════════════════════════════ -->
   <view name="screen">
 
-    <!-- Top bar background: floating rounded panel -->
+    <!-- Top bar background: frosted glass pill -->
     <image name="topbar_bg" extra="true">
       <pos>0.015 0.012</pos>
       <origin>0 0</origin>
@@ -108,51 +157,27 @@
       <zIndex>9</zIndex>
     </image>
 
-    <!-- User avatar: top-left inside floating bar -->
-    <image name="avatar" extra="true">
-      <path>./assets/profile/avatar-default.png</path>
-      <pos>0.03 0.02</pos>
-      <origin>0 0</origin>
-      <maxSize>0.03 0.035</maxSize>
-      <zIndex>10</zIndex>
-    </image>
-
-    <!-- Profile badge: user silhouette + name + konnapenni balance
-         Generated by scripts/update-profile.sh from romhoard API.
-         Sits over the avatar (higher z) — the SVG includes its own user icon.
-         When romhoard isn't running, the SVG won't exist and avatar shows through. -->
-    <image name="profile_badge" extra="true">
-      <path>./generated/profile-badge.svg</path>
-      <origin>0 0.5</origin>
-      <pos>0.028 0.039</pos>
-      <maxSize>0.16 0.028</maxSize>
-      <zIndex>12</zIndex>
-      <storyboard>
-        <animation property="opacity" from="0" to="1" begin="200" duration="400" mode="easeOut"/>
-      </storyboard>
-    </image>
-
-    <!-- Controller activity dots: after badge area -->
+    <!-- Controller activity dots -->
     <controllerActivity name="controllerActivity">
       <origin>0 0.5</origin>
-      <pos>0.20 0.039</pos>
-      <size>0.014</size>
+      <pos>0.04 0.039</pos>
+      <size>0.012</size>
       <itemSpacing>0.004</itemSpacing>
       <imagePath>./assets/pin.svg</imagePath>
     </controllerActivity>
 
-    <!-- RetroAchievements username: shown when cheevos enabled, after controller dots -->
+    <!-- RetroAchievements user -->
     <text name="ra_user" extra="true" ifCheevos="true">
       <text>{global:cheevosUser}</text>
       <origin>0 0.5</origin>
-      <pos>0.25 0.039</pos>
+      <pos>0.10 0.039</pos>
       <fontSize>${fontSizeCaption-medium}</fontSize>
       <fontPath>${fontLight}</fontPath>
       <lineSpacing>1</lineSpacing>
       <zIndex>11</zIndex>
     </text>
 
-    <!-- Clock: top-right inside floating bar -->
+    <!-- Clock: right side -->
     <text name="clock">
       <origin>1 0.5</origin>
       <pos>0.97 0.039</pos>
@@ -162,29 +187,10 @@
       <alignment>right</alignment>
     </text>
 
-    <!-- Weather: file-swap icon, updated by scripts/update-weather.sh -->
-    <image name="weather_icon" extra="true">
-      <path>./generated/weather-icon.svg</path>
-      <origin>1 0.5</origin>
-      <pos>0.90 0.039</pos>
-      <maxSize>0.022 0.022</maxSize>
-      <zIndex>11</zIndex>
-    </image>
-
-    <text name="weather_temp" extra="true">
-      <text> </text>
-      <origin>1 0.5</origin>
-      <pos>0.875 0.039</pos>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
-      <fontPath>${fontLight}</fontPath>
-      <alignment>right</alignment>
-      <zIndex>11</zIndex>
-    </text>
-
-    <!-- Battery indicator: left of clock -->
+    <!-- Battery indicator -->
     <batteryIndicator name="batteryIndicator">
       <origin>1 0.5</origin>
-      <pos>0.845 0.039</pos>
+      <pos>0.92 0.039</pos>
       <size>0.016</size>
     </batteryIndicator>
 
