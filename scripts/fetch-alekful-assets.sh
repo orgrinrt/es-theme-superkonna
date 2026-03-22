@@ -128,14 +128,30 @@ if [ "$SOUNDS_ONLY" = false ]; then
       name="$(basename "$f")"
       stem="${name%.*}"
 
-      # Only copy if no logo exists for this system (any format)
-      if [ ! -f "$LOGO_DST/$stem.svg" ] && [ ! -f "$LOGO_DST/$stem.png" ] && [ ! -f "$LOGO_DST/$stem.jpg" ]; then
+      # Only copy if no SVG logo exists (SVG is preferred — JPG fallbacks look square/ugly)
+      if [ ! -f "$LOGO_DST/$stem.svg" ]; then
+        # Don't copy JPG if SVG exists (SVG always wins)
         cp "$f" "$LOGO_DST/$name"
         logo_count=$((logo_count + 1))
       fi
     done
     echo "OK: Copied $logo_count missing logos"
   fi
+fi
+
+# ── Clean up JPG/PNG logos where SVG exists (SVG always preferred) ──
+if [ -d "$THEME_DIR/assets/logos" ]; then
+  cleaned=0
+  for jpg in "$THEME_DIR/assets/logos"/*.jpg "$THEME_DIR/assets/logos"/*.png; do
+    [ -f "$jpg" ] || continue
+    stem="$(basename "$jpg")"
+    stem="${stem%.*}"
+    if [ -f "$THEME_DIR/assets/logos/$stem.svg" ]; then
+      rm "$jpg"
+      cleaned=$((cleaned + 1))
+    fi
+  done
+  [ "$cleaned" -gt 0 ] && echo "OK: Cleaned $cleaned redundant JPG/PNG logos (SVG exists)"
 fi
 
 echo "Done."
