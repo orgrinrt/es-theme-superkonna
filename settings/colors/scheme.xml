@@ -1,106 +1,46 @@
 <!--
   Theme: Superkonna
-  Color scheme application: wires semantic vars into all ES elements
+  Color scheme application: wires semantic color vars into ES elements.
+  No carousel colors here — those come from per-system metadata + itemTemplate.
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
-  <!-- Global background + help system colors -->
-  <view name="system, basic, detailed, grid, video">
-    <helpsystem name="help">
-      <textColor>${fgColor}</textColor>
-      <iconColor>${subtleColor}${percent.60}</iconColor>
-    </helpsystem>
+  <!-- ── Global defaults ─────────────────────────────────────── -->
 
+  <view name="system">
     <image name="background">
       <color>${bgColor}</color>
     </image>
   </view>
 
-  <!-- Game list text + metadata colors (grid excluded from overlay —
-       flix customView inherits grid and needs semi-transparent overlay) -->
-  <view name="basic, detailed, video">
-    <text name="logoText, md_name">
-      <color>${fgColor}${percent.90}</color>
-      <glowColor>${shadowColor}${percent.30}</glowColor>
+  <!-- ── Screen chrome ───────────────────────────────────────── -->
+
+  <view name="screen">
+    <text name="clock">
+      <color>${fgColor}</color>
+      <glowColor>${shadowColor}${percent.60}</glowColor>
       <glowSize>2</glowSize>
     </text>
 
-    <textlist name="gamelist">
-      <selectedColor>${onMainColor}</selectedColor>
-      <selectorColor>${mainColor}${percent.80}</selectorColor>
-      <primaryColor>${fgColor}</primaryColor>
-      <secondaryColor>${fgColor}${percent.60}</secondaryColor>
-      <selectorGradientColor>${mainColor}${percent.30}</selectorGradientColor>
-    </textlist>
+    <batteryIndicator name="batteryIndicator">
+      <color>${fgColor}</color>
+    </batteryIndicator>
 
-    <rating name="md_rating">
-      <color>${mainColor}</color>
-      <unfilledColor>${subtleColor}${percent.20}</unfilledColor>
-    </rating>
+    <controllerActivity name="controllerActivity">
+      <color>${subtleColor}${percent.30}</color>
+      <activityColor>${mainColor}${percent.70}</activityColor>
+      <hotkeyColor>${mainColor}</hotkeyColor>
+    </controllerActivity>
 
-    <image name="background_overlay" extra="true">
-      <color>${bgColor}</color>
+    <image name="topbar_bg" extra="true">
+      <color>${cardColor}${percent.70}</color>
     </image>
-
-    <text name="md_name">
-      <color>${fgColor}${percent.90}</color>
-    </text>
-
-    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount">
-      <color>${subtleColor}${percent.50}</color>
-    </text>
-
-    <text name="md_releasedate, md_developer, md_publisher, md_genre, md_players, md_lastplayed, md_playcount, md_description">
-      <color>${fgColor}${percent.80}</color>
-    </text>
-
-    <datetime name="md_releasedate, md_lastplayed">
-      <color>${fgColor}${percent.80}</color>
-    </datetime>
   </view>
 
-  <!-- Grid view: NO background_overlay color here — it cascades into
-       flix customView and overrides inline semi-transparent colors. -->
-  <view name="grid">
-    <text name="logoText, md_name">
-      <color>${fgColor}${percent.90}</color>
-      <glowColor>${shadowColor}${percent.30}</glowColor>
-      <glowSize>2</glowSize>
-    </text>
+  <!-- ── Menu colors ─────────────────────────────────────────── -->
 
-    <textlist name="gamelist">
-      <selectedColor>${onMainColor}</selectedColor>
-      <selectorColor>${mainColor}${percent.80}</selectorColor>
-      <primaryColor>${fgColor}</primaryColor>
-      <secondaryColor>${fgColor}${percent.60}</secondaryColor>
-      <selectorGradientColor>${mainColor}${percent.30}</selectorGradientColor>
-    </textlist>
-
-    <rating name="md_rating">
-      <color>${mainColor}</color>
-      <unfilledColor>${subtleColor}${percent.20}</unfilledColor>
-    </rating>
-
-    <text name="md_name">
-      <color>${fgColor}${percent.90}</color>
-    </text>
-
-    <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount">
-      <color>${subtleColor}${percent.50}</color>
-    </text>
-
-    <text name="md_releasedate, md_developer, md_publisher, md_genre, md_players, md_lastplayed, md_playcount, md_description">
-      <color>${fgColor}${percent.80}</color>
-    </text>
-
-    <datetime name="md_releasedate, md_lastplayed">
-      <color>${fgColor}${percent.80}</color>
-    </datetime>
-  </view>
-
-  <!-- Menu colors: console-feel modal with themed accents -->
   <view name="menu">
     <menuText name="menutext">
       <selectedColor>${onMainColor}</selectedColor>
@@ -131,158 +71,31 @@
       <color>${fgColor}</color>
     </menuText>
 
-    <!-- Switch: accent when on, muted when off -->
     <menuSwitch name="menuswitch">
       <color>${mainColor}</color>
       <colorOff>${subtleColor}${percent.30}</colorOff>
     </menuSwitch>
 
-    <!-- Button: accent fill -->
     <menuButton name="menubutton">
       <color>${mainColor}</color>
       <textColor>${onMainColor}</textColor>
     </menuButton>
 
-    <!-- Text input: card background -->
     <menuTextEdit name="menutextedit">
       <color>${fgColor}</color>
     </menuTextEdit>
 
-    <!-- Menu icons: subtle by default -->
     <menuIcons name="menuicons">
       <color>${subtleColor}${percent.60}</color>
     </menuIcons>
   </view>
 
-  <!-- Grid tile colors -->
-  <view name="grid">
-    <text name="gridtile">
-      <color>${fgColor}</color>
-    </text>
+  <!-- ── Splash screen ───────────────────────────────────────── -->
 
-    <text name="gridtile:selected">
-      <color>${onMainColor}</color>
-    </text>
-  </view>
-
-  <!-- Flix: all colors hardcoded in view-flix.xml, nothing here -->
-
-  <!-- System carousel colors -->
-  <view name="system">
-    <carousel name="systemcarousel">
-      <color>${cardColor}${percent.40}</color>
-      <selectedColor>${cardColor}${percent.60}</selectedColor>
-    </carousel>
-
-    <text name="systemName">
-      <color>${fgColor}</color>
-      <glowColor>${shadowColor}${percent.80}</glowColor>
-      <glowSize>4</glowSize>
-      <glowOffset>2 2</glowOffset>
-    </text>
-
-    <text name="systemInfo">
-      <color>${fgColor}${percent.70}</color>
-      <glowColor>${shadowColor}${percent.50}</glowColor>
-      <glowSize>3</glowSize>
-    </text>
-
-    <!-- Semi-transparent overlay: lets hero art breathe through -->
-    <image name="background_overlay" extra="true">
-      <color>${bgColor}${percent.50}</color>
-    </image>
-
-    <!-- Bottom vignette: softer gradient for text legibility -->
-    <image name="bottom_vignette" extra="true">
-      <color>${shadowColor}${percent.90}</color>
-    </image>
-
-    <text name="systemManufacturer">
-      <color>${subtleColor}${percent.50}</color>
-      <glowColor>${shadowColor}${percent.40}</glowColor>
-      <glowSize>2</glowSize>
-    </text>
-
-    <text name="logoText">
-      <color>${fgColor}</color>
-      <glowColor>${mainColor}${percent.20}</glowColor>
-      <glowSize>2</glowSize>
-    </text>
-  </view>
-
-  <!-- OSD background -->
-  <view name="system, basic, detailed, grid">
-    <image name="osdBackground" extra="true">
-      <color>${shadowColor}</color>
-    </image>
-  </view>
-
-  <!-- Gamecarousel vignette + overlay -->
-  <view name="gamecarousel">
-    <image name="bottom_vignette" extra="true">
-      <color>${shadowColor}${percent.80}</color>
-    </image>
-
-    <!-- Semi-transparent: let game art show through -->
-    <image name="background_overlay" extra="true">
-      <color>${bgColor}${percent.60}</color>
-    </image>
-
-    <rating name="md_rating">
+  <view name="splash">
+    <image name="progressbar">
       <color>${mainColor}</color>
-      <unfilledColor>${subtleColor}${percent.20}</unfilledColor>
-    </rating>
-
-    <text name="md_name">
-      <color>${fgColor}${percent.90}</color>
-      <glowColor>${shadowColor}${percent.30}</glowColor>
-      <glowSize>2</glowSize>
-    </text>
-
-    <text name="md_developer, md_publisher, md_genre, md_gametime, md_lastplayed_rel">
-      <color>${fgColor}${percent.70}</color>
-    </text>
-  </view>
-
-  <!-- Screen overlay: clock, battery, controller activity -->
-  <view name="screen">
-    <text name="clock">
-      <color>${fgColor}</color>
-      <glowColor>${shadowColor}${percent.60}</glowColor>
-      <glowSize>2</glowSize>
-      <glowOffset>1 1</glowOffset>
-    </text>
-
-    <batteryIndicator name="batteryIndicator">
-      <color>${fgColor}</color>
-    </batteryIndicator>
-
-    <controllerActivity name="controllerActivity">
-      <color>${subtleColor}${percent.30}</color>
-      <activityColor>${mainColor}${percent.70}</activityColor>
-      <hotkeyColor>${mainColor}</hotkeyColor>
-    </controllerActivity>
-
-    <text name="ra_user" extra="true">
-      <color>${subtleColor}</color>
-      <glowColor>${shadowColor}${percent.40}</glowColor>
-      <glowSize>2</glowSize>
-    </text>
-
-    <text name="weather_temp" extra="true">
-      <color>${subtleColor}</color>
-    </text>
-
-    <!-- Top bar: semi-transparent card-colored panel -->
-    <image name="topbar_bg" extra="true">
-      <color>${cardColor}${percent.70}</color>
     </image>
   </view>
 
-  <!-- Bottom bar: semi-transparent card-colored panel -->
-  <view name="system, basic, detailed, grid, video">
-    <image name="bottombar_bg" extra="true">
-      <color>${cardColor}${percent.70}</color>
-    </image>
-  </view>
 </theme>

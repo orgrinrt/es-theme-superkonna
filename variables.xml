@@ -1,40 +1,57 @@
 <!--
   Theme: Superkonna
-  Global variables: fonts, sizes, opacity helpers
+  Global variables: single source of truth for all sizing, timing, fonts, opacity
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
   <variables>
-    <!-- Font size tiers: medium (default)
-         Clear hierarchy: each step ~25-30% smaller than the previous -->
-    <fontSizeH1-medium>0.06</fontSizeH1-medium>
-    <fontSizeH2-medium>0.046</fontSizeH2-medium>
-    <fontSizeH3-medium>0.037</fontSizeH3-medium>
-    <fontSizeBody-medium>0.032</fontSizeBody-medium>
-    <fontSizeCaption-medium>0.025</fontSizeCaption-medium>
-
-    <!-- Font size tiers: large -->
-    <fontSizeH1-large>0.068</fontSizeH1-large>
-    <fontSizeH2-large>0.053</fontSizeH2-large>
-    <fontSizeH3-large>0.043</fontSizeH3-large>
-    <fontSizeBody-large>0.037</fontSizeBody-large>
-    <fontSizeCaption-large>0.029</fontSizeCaption-large>
-
-    <!-- Font size tiers: small -->
-    <fontSizeH1-small>0.054</fontSizeH1-small>
-    <fontSizeH2-small>0.041</fontSizeH2-small>
-    <fontSizeH3-small>0.033</fontSizeH3-small>
-    <fontSizeBody-small>0.028</fontSizeBody-small>
-    <fontSizeCaption-small>0.023</fontSizeCaption-small>
-
-    <!-- Font paths (3-tier hierarchy: display/body/light) -->
+    <!-- ── Fonts ─────────────────────────────────────────────── -->
     <fontDisplay>./assets/fonts/Inter/Inter-Bold.otf</fontDisplay>
     <fontBody>./assets/fonts/Inter/Inter-Regular.otf</fontBody>
     <fontLight>./assets/fonts/Inter/Inter-Light.otf</fontLight>
 
-    <!-- Hex opacity suffixes (append to color vars: ${fgColor}${percent.50}) -->
+    <!-- ── Font size tiers (medium = default) ────────────────── -->
+    <fontSizeH1>0.06</fontSizeH1>
+    <fontSizeH2>0.046</fontSizeH2>
+    <fontSizeH3>0.037</fontSizeH3>
+    <fontSizeBody>0.032</fontSizeBody>
+    <fontSizeCaption>0.025</fontSizeCaption>
+
+    <!-- ── Carousel geometry ─────────────────────────────────── -->
+    <carouselWidth>1.76</carouselWidth>
+    <carouselXOffset>-0.38</carouselXOffset>
+    <carouselY>0.72</carouselY>
+    <carouselH>0.22</carouselH>
+    <cardLogoSize>0.18 0.22</cardLogoSize>
+    <cardLogoScale>1.2</cardLogoScale>
+    <cardMaxVisible>7</cardMaxVisible>
+
+    <!-- ── Card styling ──────────────────────────────────────── -->
+    <cardCornerRadius>20</cardCornerRadius>
+    <cardArtSize>0.92 0.92</cardArtSize>
+    <cardLogoMaxSize>0.7 0.5</cardLogoMaxSize>
+    <cardLogoY>0.45</cardLogoY>
+
+    <!-- ── Animation timing (ms) ─────────────────────────────── -->
+    <animFast>150</animFast>
+    <animMedium>250</animMedium>
+    <animSlow>400</animSlow>
+    <animCrossfade>1000</animCrossfade>
+
+    <!-- ── Opacity levels ────────────────────────────────────── -->
+    <artOverlayOpacity>0.15</artOverlayOpacity>
+    <gradientOverlayOpacity>0.25</gradientOverlayOpacity>
+    <glintPeakOpacity>0.25</glintPeakOpacity>
+    <bgOverlayOpacity>0.50</bgOverlayOpacity>
+    <vignetteOpacity>0.90</vignetteOpacity>
+    <minCardOpacity>0.8</minCardOpacity>
+
+    <!-- ── Scale ─────────────────────────────────────────────── -->
+    <cardActivateScale>1.08</cardActivateScale>
+
+    <!-- ── Hex opacity suffixes ──────────────────────────────── -->
     <percent.90>E6</percent.90>
     <percent.80>CC</percent.80>
     <percent.70>B3</percent.70>

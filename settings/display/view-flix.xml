@@ -1,7 +1,7 @@
 <!--
   Theme: Superkonna — Flix view
-  Modern Netflix-inspired game browser.
-  Full-screen game art → frosted gradient → floating cover rail → metadata.
+  Netflix-inspired game browser: full-screen art, gradient, cover rail, metadata.
+  Inherits grid view. See DESIGN.md for architecture.
 -->
 <theme>
   <formatVersion>7</formatVersion>
@@ -9,18 +9,18 @@
   <customView name="flix" inherits="grid">
 
     <!-- ═══════════════════════════════════════════════════════════
-         LAYER 1: Full-screen background — selected game art
-         Video replaces screenshot after delay for living backgrounds
+         BACKGROUND: Selected game art + video
          ═══════════════════════════════════════════════════════════ -->
 
     <image name="md_image">
       <origin>0.5 0.5</origin>
       <pos>0.5 0.5</pos>
       <minSize>1 1</minSize>
+      <linearSmooth>true</linearSmooth>
       <zIndex>-2</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="1" begin="0" duration="600" mode="easeOut"/>
-        <animation property="scale" from="1.02" to="1" begin="0" duration="800" mode="easeOut"/>
+        <animation property="opacity" from="0" to="1" duration="600" mode="EaseOut"/>
+        <animation property="scale" from="1.02" to="1" duration="800" mode="EaseOut"/>
       </storyboard>
     </image>
 
@@ -34,57 +34,54 @@
       <showSnapshotDelay>false</showSnapshotDelay>
       <effect>none</effect>
       <storyboard>
-        <animation property="opacity" from="0" to="1" begin="0" duration="800" mode="easeOut"/>
+        <animation property="opacity" from="0" to="1" duration="800" mode="EaseOut"/>
       </storyboard>
     </video>
 
     <!-- ═══════════════════════════════════════════════════════════
-         LAYER 2: Gradient overlays for depth and readability
-         Bottom gradient: dark, for cover rail + metadata
-         Top vignette: subtle, for game logo readability
+         OVERLAYS: Gradients for readability
          ═══════════════════════════════════════════════════════════ -->
 
-    <!-- Bottom gradient — white, console-like feel -->
+    <!-- Bottom gradient — light, console-style -->
     <image name="flix_gradient" extra="true">
       <path>./assets/fade-ver.png</path>
       <origin>0 1</origin>
       <pos>0 1</pos>
       <size>1 0.65</size>
-      <color>F2F3F7</color>
+      <color>${bgColor}</color>
       <rotation>180</rotation>
       <zIndex>1</zIndex>
     </image>
 
-    <!-- Top vignette — very subtle dark, for logo contrast on bright art -->
+    <!-- Top vignette — subtle dark for logo contrast -->
     <image name="flix_top_fade" extra="true">
       <path>./assets/fade-ver.png</path>
       <origin>0 0</origin>
       <pos>0 0</pos>
       <size>1 0.20</size>
-      <color>1E202866</color>
+      <color>${fgColor}${percent.40}</color>
       <zIndex>1</zIndex>
     </image>
 
     <!-- ═══════════════════════════════════════════════════════════
-         LAYER 3: Game logo — top left, with entrance animation
-         Falls back gracefully when no marquee exists
+         GAME LOGO: Top left, entrance animation
          ═══════════════════════════════════════════════════════════ -->
 
     <image name="md_marquee">
       <pos>0.05 0.06</pos>
       <origin>0 0</origin>
       <maxSize>0.32 0.13</maxSize>
+      <linearSmooth>true</linearSmooth>
       <zIndex>6</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
-        <animation property="opacity" from="0" to="1" begin="200" duration="300" mode="easeOut"/>
-        <animation property="y" from="0.08" to="0.06" begin="200" duration="350" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="80" mode="Linear"/>
+        <animation property="opacity" from="0" to="1" begin="200" duration="300" mode="EaseOut"/>
+        <animation property="y" from="0.08" to="0.06" begin="200" duration="350" mode="EaseOut"/>
       </storyboard>
     </image>
 
     <!-- ═══════════════════════════════════════════════════════════
-         LAYER 4: Cover rail — horizontal strip, floating in gradient
-         Clean, tight covers with subtle selection glow
+         COVER RAIL: Horizontal strip at bottom
          ═══════════════════════════════════════════════════════════ -->
 
     <imagegrid name="gamegrid">
@@ -98,6 +95,7 @@
       <padding>0.006 0.008</padding>
       <margin>0.004 0.006</margin>
       <scrollLoop>true</scrollLoop>
+      <linearSmooth>true</linearSmooth>
       <zIndex>5</zIndex>
       <scrollSound>./assets/sounds/tick.wav</scrollSound>
     </imagegrid>
@@ -108,14 +106,14 @@
     </gridtile>
 
     <gridtile name="default">
-      <imageColor>FFFFFFCC</imageColor>
+      <imageColor>${fgColor}${percent.80}</imageColor>
       <backgroundColor>00000000</backgroundColor>
       <backgroundCornerSize>0.006</backgroundCornerSize>
     </gridtile>
 
     <gridtile name="selected">
       <imageColor>FFFFFFFF</imageColor>
-      <backgroundColor>FFFFFF15</backgroundColor>
+      <backgroundColor>${cardColor}${percent.10}</backgroundColor>
       <backgroundCornerSize>0.006</backgroundCornerSize>
     </gridtile>
 
@@ -136,105 +134,88 @@
       <color>00000000</color>
     </image>
 
-    <image name="gridtile.favorite">
-      <path>./assets/icons/favorite.png</path>
-      <pos>0.05 0.05</pos>
-      <maxSize>0.15 0.15</maxSize>
-      <origin>0 0</origin>
-    </image>
-
     <!-- ═══════════════════════════════════════════════════════════
-         LAYER 5: Metadata — floating in the gradient zone
-         Title large and bold, supporting info subtle below
-         Cascading fade-in animations for premium feel
+         METADATA: Cascading fade-in text overlays
          ═══════════════════════════════════════════════════════════ -->
 
-    <!-- Game title — large, bold, dark on white gradient -->
     <text name="md_name">
       <visible>true</visible>
       <pos>0.05 0.50</pos>
       <size>0.7 0.07</size>
-      <fontSize>${fontSizeH1-medium}</fontSize>
+      <fontSize>${fontSizeH1}</fontSize>
       <fontPath>${fontDisplay}</fontPath>
       <forceUppercase>0</forceUppercase>
-      <color>1E2028</color>
-      <glowColor>F2F3F7CC</glowColor>
+      <color>${fgColor}</color>
+      <glowColor>${bgColor}${percent.80}</glowColor>
       <glowSize>3</glowSize>
       <zIndex>6</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="80" mode="linear"/>
-        <animation property="opacity" from="0" to="1" begin="100" duration="250" mode="easeOut"/>
-        <animation property="y" from="0.52" to="0.50" begin="100" duration="300" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="80" mode="Linear"/>
+        <animation property="opacity" from="0" to="1" begin="100" duration="${animMedium}" mode="EaseOut"/>
+        <animation property="y" from="0.52" to="0.50" begin="100" duration="300" mode="EaseOut"/>
       </storyboard>
     </text>
 
-    <!-- Genre pill -->
     <text name="md_genre">
       <visible>true</visible>
       <pos>0.05 0.59</pos>
       <size>0.5 0.025</size>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
+      <fontSize>${fontSizeCaption}</fontSize>
       <fontPath>${fontBody}</fontPath>
       <forceUppercase>1</forceUppercase>
-      <color>1E202880</color>
+      <color>${fgColor}${percent.50}</color>
       <zIndex>6</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="120" mode="linear"/>
-        <animation property="opacity" from="0" to="0.7" begin="200" duration="250" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="120" mode="Linear"/>
+        <animation property="opacity" from="0" to="0.7" begin="200" duration="${animMedium}" mode="EaseOut"/>
       </storyboard>
     </text>
 
-    <!-- Description — two lines max, subtle -->
     <text name="md_description">
       <visible>true</visible>
       <pos>0.05 0.63</pos>
       <size>0.55 0.08</size>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
+      <fontSize>${fontSizeCaption}</fontSize>
       <fontPath>${fontLight}</fontPath>
       <lineSpacing>1.5</lineSpacing>
-      <color>1E202866</color>
+      <color>${fgColor}${percent.40}</color>
       <zIndex>6</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="150" mode="linear"/>
-        <animation property="opacity" from="0" to="0.8" begin="300" duration="300" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="150" mode="Linear"/>
+        <animation property="opacity" from="0" to="0.8" begin="300" duration="300" mode="EaseOut"/>
       </storyboard>
     </text>
 
-    <!-- Developer — small, right side -->
     <text name="md_developer">
       <visible>true</visible>
       <pos>0.65 0.59</pos>
       <size>0.3 0.025</size>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
+      <fontSize>${fontSizeCaption}</fontSize>
       <fontPath>${fontLight}</fontPath>
       <alignment>right</alignment>
-      <color>1E202850</color>
+      <color>${fgColor}${percent.30}</color>
       <zIndex>6</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="0" duration="200" mode="linear"/>
-        <animation property="opacity" from="0" to="0.6" begin="350" duration="250" mode="easeOut"/>
+        <animation property="opacity" from="0" to="0" duration="200" mode="Linear"/>
+        <animation property="opacity" from="0" to="0.6" begin="350" duration="${animMedium}" mode="EaseOut"/>
       </storyboard>
     </text>
 
-    <!-- Rating stars -->
     <rating name="md_rating">
       <visible>true</visible>
       <origin>0 0.5</origin>
-      <filledPath>./assets/icons/star.svg</filledPath>
-      <unfilledPath>./assets/icons/star_border.svg</unfilledPath>
       <pos>0.05 0.575</pos>
       <size>0.06 0.015</size>
-      <color>D64060</color>
-      <unfilledColor>1E202815</unfilledColor>
+      <color>${mainColor}</color>
+      <unfilledColor>${fgColor}${percent.10}</unfilledColor>
       <zIndex>6</zIndex>
     </rating>
 
-    <!-- System name — hidden (not needed, user knows what system they're in) -->
+    <!-- Hide everything we don't show -->
     <text name="logoText">
       <visible>false</visible>
     </text>
 
-    <!-- Hide remaining metadata labels -->
     <text name="md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_releasedate, md_publisher, md_players, md_lastplayed, md_playcount">
       <visible>false</visible>
     </text>

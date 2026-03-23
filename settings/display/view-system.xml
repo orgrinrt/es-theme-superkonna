@@ -1,171 +1,211 @@
 <!--
   Theme: Superkonna
-  System carousel: full-screen art, floating logos, minimal chrome.
-  Screen view: frosted glass top bar.
+  System view: full-screen art background + itemTemplate carousel
+  See DESIGN.md for layer architecture and design rationale.
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
-  <!-- ════════════════════════════════════════════════════════════
-       SYSTEM VIEW: Immersive carousel
-       Full-screen system art with logos floating over it.
-       Subtle gradient for depth, cascading info on selection.
-       ════════════════════════════════════════════════════════════ -->
   <view name="system">
 
-    <!-- Default background gradient — shown when no system art exists -->
-    <image name="cover_fallback" extra="true">
+    <!-- ══════════════════════════════════════════════════════════
+         BACKGROUND: Full-screen system art + overlays
+         Three layers: art, darken overlay, bottom vignette
+         ══════════════════════════════════════════════════════════ -->
+
+    <!-- Fallback solid background (when no system art exists) -->
+    <image name="bg_fallback" extra="true">
+      <path>./assets/card-bg.png</path>
       <size>1 1</size>
-      <origin>0 0</origin>
-      <pos>0 0</pos>
       <color>182235</color>
       <zIndex>-10</zIndex>
     </image>
 
-    <!-- Background art — fills entire screen, slow crossfade -->
+    <!-- System background art — fills screen, crossfade on change -->
     <image name="cover" extra="true">
       <path>./assets/systems/${system.theme}.jpg</path>
       <path>./assets/systems/${system.theme}.webp</path>
       <path>./assets/systems/${system.theme}.png</path>
-      <path>./assets/systems/${system.theme}.svg</path>
       <origin>0.5 0.5</origin>
       <pos>0.5 0.5</pos>
       <minSize>1 1</minSize>
+      <linearSmooth>true</linearSmooth>
       <zIndex>-9</zIndex>
       <storyboard>
-        <animation property="opacity" from="0" to="1" begin="0" duration="1000" mode="easeOut"/>
-        <animation property="scale" from="1.03" to="1" begin="0" duration="1200" mode="easeOut"/>
+        <animation property="opacity" from="0" to="1" duration="${animCrossfade}" mode="EaseOut"/>
       </storyboard>
     </image>
 
-    <!-- Darken overlay — from scheme.xml system view section -->
-    <image name="background_overlay" extra="true">
+    <!-- Random game screenshot — layered behind main art for depth -->
+    <image name="bg_random" extra="true">
+      <path>{random:image}</path>
+      <origin>0.5 0.5</origin>
+      <pos>0.5 0.5</pos>
+      <minSize>1 1</minSize>
+      <opacity>0.3</opacity>
+      <linearSmooth>true</linearSmooth>
+      <zIndex>-8</zIndex>
+    </image>
+
+    <!-- Dark overlay for contrast -->
+    <image name="bg_overlay" extra="true">
+      <path>./assets/card-bg.png</path>
       <size>1 1</size>
-      <origin>0 0</origin>
-      <pos>0 0</pos>
+      <color>${bgColor}${percent.50}</color>
       <zIndex>-7</zIndex>
     </image>
 
-    <!-- Bottom vignette — soft gradient for depth -->
-    <image name="system_bottom_fade" extra="true">
+    <!-- Bottom vignette — soft gradient for depth at carousel area -->
+    <image name="bg_vignette" extra="true">
       <path>./assets/fade-ver.png</path>
       <origin>0 1</origin>
       <pos>0 1</pos>
-      <size>1 0.4</size>
-      <color>0A0D12</color>
+      <size>1 0.45</size>
+      <color>${shadowColor}${percent.90}</color>
       <rotation>180</rotation>
       <zIndex>-6</zIndex>
     </image>
 
-    <!-- ── Carousel ──────────────────────────────────────────── -->
+    <!-- ══════════════════════════════════════════════════════════
+         CAROUSEL: Composited card stack via itemTemplate
+         Transparent carousel — all visuals from the template.
+         ══════════════════════════════════════════════════════════ -->
+
     <carousel name="systemcarousel">
       <type>horizontal</type>
-      <pos>-0.660 -0.10</pos>
-      <size>1.76 1</size>
-      <logoScale>1.15</logoScale>
-      <logoSize>0.19 0.21</logoSize>
-      <maxLogoCount>9</maxLogoCount>
-      <zIndex>42</zIndex>
+      <pos>${carouselXOffset} ${carouselY}</pos>
+      <size>${carouselWidth} ${carouselH}</size>
+      <color>00000000</color>
+      <logoSize>${cardLogoSize}</logoSize>
+      <logoScale>${cardLogoScale}</logoScale>
+      <maxLogoCount>${cardMaxVisible}</maxLogoCount>
       <logoAlignment>center</logoAlignment>
       <defaultTransition>slide</defaultTransition>
-      <systemInfoDelay>200</systemInfoDelay>
-      <minLogoOpacity>0.25</minLogoOpacity>
+      <transitionSpeed>350</transitionSpeed>
+      <minLogoOpacity>${minCardOpacity}</minLogoOpacity>
+      <linearSmooth>true</linearSmooth>
       <scrollSound>./assets/sounds/scroll.wav</scrollSound>
+      <systemInfoDelay>0</systemInfoDelay>
+
+      <itemTemplate>
+        <!-- ── Whole-card scale animation ───────────────────── -->
+        <storyboard event="activate">
+          <animation property="scale" from="1" to="${cardActivateScale}" duration="${animFast}" mode="EaseOut"/>
+        </storyboard>
+        <storyboard event="deactivate">
+          <animation property="scale" from="${cardActivateScale}" to="1" duration="${animMedium}" mode="EaseOut"/>
+        </storyboard>
+
+        <!-- Layer 1: Opaque card base (per-system color) -->
+        <image name="cardBg" extra="true">
+          <path>./assets/card-bg.png</path>
+          <pos>0.5 0.5</pos>
+          <origin>0.5 0.5</origin>
+          <size>1 1</size>
+          <color>${cardSystemColor}FF</color>
+          <roundCorners>${cardCornerRadius}</roundCorners>
+          <zIndex>1</zIndex>
+        </image>
+
+        <!-- Layer 2: System art texture (faint, tinted to card color) -->
+        <image name="cardArt" extra="true">
+          <path>./assets/systems/{system:theme}.webp</path>
+          <path>./assets/systems/{system:theme}.jpg</path>
+          <path>./assets/systems/{system:theme}.png</path>
+          <pos>0.5 0.5</pos>
+          <origin>0.5 0.5</origin>
+          <maxSize>${cardArtSize}</maxSize>
+          <opacity>${artOverlayOpacity}</opacity>
+          <color>${cardSystemColor}</color>
+          <roundCorners>${cardCornerRadius}</roundCorners>
+          <linearSmooth>true</linearSmooth>
+          <zIndex>2</zIndex>
+        </image>
+
+        <!-- Layer 3: Gradient overlay (depth) -->
+        <image name="cardGradient" extra="true">
+          <path>./assets/card-gradient.png</path>
+          <pos>0.5 0.5</pos>
+          <origin>0.5 0.5</origin>
+          <size>1 1</size>
+          <opacity>${gradientOverlayOpacity}</opacity>
+          <roundCorners>${cardCornerRadius}</roundCorners>
+          <zIndex>3</zIndex>
+        </image>
+
+        <!-- Layer 4: Glint sweep (horizontal highlight on activate) -->
+        <image name="cardGlint" extra="true">
+          <path>./assets/glint.png</path>
+          <pos>0.5 0.5</pos>
+          <origin>0.5 0.5</origin>
+          <size>1 1</size>
+          <opacity>0</opacity>
+          <roundCorners>${cardCornerRadius}</roundCorners>
+          <zIndex>4</zIndex>
+          <storyboard event="activate">
+            <animation property="x" from="-0.3" to="1.3" duration="500" mode="Linear"/>
+            <animation property="opacity" from="0" to="${glintPeakOpacity}" duration="150" mode="EaseOut"/>
+            <animation property="opacity" from="${glintPeakOpacity}" to="0" begin="350" duration="150" mode="EaseIn"/>
+          </storyboard>
+          <storyboard event="deactivate">
+            <animation property="opacity" to="0" duration="0"/>
+          </storyboard>
+        </image>
+
+        <!-- Layer 5: System logo (centered, clean SVG) -->
+        <image name="theLogo">
+          <path>./assets/logos/{system:theme}.svg</path>
+          <path>./assets/logos/{system:theme}.png</path>
+          <pos>0.5 ${cardLogoY}</pos>
+          <origin>0.5 0.5</origin>
+          <maxSize>${cardLogoMaxSize}</maxSize>
+          <linearSmooth>true</linearSmooth>
+          <zIndex>5</zIndex>
+        </image>
+      </itemTemplate>
     </carousel>
 
-    <!-- System name — subtle, bottom-left, cascading reveal -->
-    <text name="systemName" extra="true">
-      <text>${system.fullName}</text>
-      <origin>0 1</origin>
-      <pos>0.05 0.88</pos>
-      <size>0.5 ${fontSizeH2-medium}</size>
+    <!-- logoText fallback (when no logo image exists at all) -->
+    <text name="logoText">
       <fontPath>${fontDisplay}</fontPath>
+      <fontSize>${fontSizeH3}</fontSize>
       <forceUppercase>1</forceUppercase>
-      <lineSpacing>1</lineSpacing>
-      <alignment>left</alignment>
+      <alignment>center</alignment>
       <color>EAEDF3</color>
-      <glowColor>0A0D12E6</glowColor>
-      <glowSize>4</glowSize>
-      <zIndex>50</zIndex>
-      <storyboard>
-        <animation property="opacity" from="0" to="0" duration="150" mode="linear"/>
-        <animation property="opacity" from="0" to="1" begin="200" duration="300" mode="easeOut"/>
-        <animation property="y" from="0.90" to="0.88" begin="200" duration="350" mode="easeOut"/>
-      </storyboard>
     </text>
 
-    <!-- Game count — small, below system name -->
+    <!-- Hide all text elements — carousel is visual only -->
+    <text name="systemName" extra="true">
+      <visible>false</visible>
+    </text>
+
     <text name="systemInfo">
-      <origin>0 1</origin>
-      <pos>0.05 0.925</pos>
-      <size>0.3 ${fontSizeCaption-medium}</size>
-      <alignment>left</alignment>
-      <fontPath>${fontLight}</fontPath>
-      <lineSpacing>1.3</lineSpacing>
-      <color>EAEDF366</color>
-      <glowColor>0A0D12CC</glowColor>
-      <glowSize>2</glowSize>
-      <zIndex>50</zIndex>
-      <storyboard>
-        <animation property="opacity" from="0" to="0" duration="200" mode="linear"/>
-        <animation property="opacity" from="0" to="0.7" begin="300" duration="250" mode="easeOut"/>
-        <animation property="y" from="0.94" to="0.925" begin="300" duration="300" mode="easeOut"/>
-      </storyboard>
+      <visible>false</visible>
     </text>
 
-    <!-- Manufacturer — hide (redundant with background art) -->
     <text name="systemManufacturer" extra="true">
       <visible>false</visible>
     </text>
 
-    <!-- logoText fallback — shown when no logo SVG exists -->
-    <text name="logoText">
-      <origin>0.5 0.5</origin>
-      <fontPath>${fontDisplay}</fontPath>
-      <fontSize>${fontSizeH3-medium}</fontSize>
-      <forceUppercase>1</forceUppercase>
-      <alignment>center</alignment>
-      <color>EAEDF3</color>
-      <glowColor>0A0D12CC</glowColor>
-      <glowSize>3</glowSize>
-    </text>
-
-    <!-- System logo (SVG preferred) -->
-    <image name="logo">
-      <path>./assets/logos/${system.theme}.svg</path>
-      <path>./assets/logos/${system.theme}.png</path>
-      <path>./assets/logos/${system.theme}.jpg</path>
-    </image>
-
   </view>
 
-  <!-- OSD background (all game views) -->
-  <view name="system, basic, detailed, grid">
-    <image name="osdBackground" extra="true">
-      <pos>0 0</pos>
-      <origin>0 0</origin>
-      <size>1 1</size>
-      <zIndex>100</zIndex>
-    </image>
-  </view>
+  <!-- ══════════════════════════════════════════════════════════
+       SCREEN VIEW: Minimal top bar
+       ══════════════════════════════════════════════════════════ -->
 
-  <!-- ════════════════════════════════════════════════════════════
-       SCREEN VIEW: Floating frosted glass top bar
-       Persistent across all views.
-       ════════════════════════════════════════════════════════════ -->
   <view name="screen">
-
-    <!-- Top bar background: frosted glass pill -->
+    <!-- Top bar background -->
     <image name="topbar_bg" extra="true">
+      <path>./assets/card-bg.png</path>
       <pos>0.015 0.012</pos>
       <origin>0 0</origin>
       <size>0.97 0.055</size>
-      <roundCorners>0.012</roundCorners>
+      <roundCorners>8</roundCorners>
       <zIndex>9</zIndex>
     </image>
 
-    <!-- Controller activity dots -->
+    <!-- Controller activity -->
     <controllerActivity name="controllerActivity">
       <origin>0 0.5</origin>
       <pos>0.04 0.039</pos>
@@ -174,33 +214,22 @@
       <imagePath>./assets/pin.svg</imagePath>
     </controllerActivity>
 
-    <!-- RetroAchievements user -->
-    <text name="ra_user" extra="true" ifCheevos="true">
-      <text>{global:cheevosUser}</text>
-      <origin>0 0.5</origin>
-      <pos>0.10 0.039</pos>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
-      <fontPath>${fontLight}</fontPath>
-      <lineSpacing>1</lineSpacing>
-      <zIndex>11</zIndex>
-    </text>
-
-    <!-- Clock: right side -->
+    <!-- Clock -->
     <text name="clock">
       <origin>1 0.5</origin>
       <pos>0.97 0.039</pos>
-      <fontSize>${fontSizeCaption-medium}</fontSize>
+      <fontSize>${fontSizeCaption}</fontSize>
       <fontPath>${fontLight}</fontPath>
       <lineSpacing>1</lineSpacing>
       <alignment>right</alignment>
     </text>
 
-    <!-- Battery indicator -->
+    <!-- Battery -->
     <batteryIndicator name="batteryIndicator">
       <origin>1 0.5</origin>
       <pos>0.92 0.039</pos>
       <size>0.016</size>
     </batteryIndicator>
-
   </view>
+
 </theme>

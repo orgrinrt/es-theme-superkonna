@@ -15,7 +15,6 @@
     <cardColor>151A26</cardColor>
     <shadowColor>000000</shadowColor>
     <subtleColor>A0A8B8</subtleColor>
+    <cardSystemColor>1E2840</cardSystemColor>
   </variables>
-
-  <include>./../dark-base.xml</include>
 </theme>

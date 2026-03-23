@@ -1,37 +1,30 @@
 <!--
   Theme: Superkonna
-  A custom ES theme for Batocera.
+  An asset-agnostic ES theme for Batocera.
   Forked from Elementerial by mluizvitor (MIT License).
-  Button icons: Kenney Input Prompts (CC0)
-  UI sounds: Kenney Interface Sounds (CC0)
+  See DESIGN.md for architecture and design decisions.
 -->
 
 <theme>
   <formatVersion>7</formatVersion>
 
+  <!-- Shared variables (single source of truth) -->
   <include>./variables.xml</include>
 
-  <!-- Color scheme selection (first = automatic default) -->
+  <!-- Per-system metadata (card colors) -->
+  <include>./_inc/metadata/${system.theme}.xml</include>
+
+  <!-- Color scheme selection -->
   <subset name="Color scheme" displayName="Color scheme">
     <include name="light" displayName="Light (default)">./settings/colors/light/main.xml</include>
     <include name="dark" displayName="Dark">./settings/colors/dark/main.xml</include>
-    <include name="pastel" displayName="Pastel">./settings/colors/pastel/main.xml</include>
-    <include name="snes" displayName="SNES">./settings/colors/snes/main.xml</include>
-    <include name="custom" displayName="Custom (edit this file)">./settings/colors/custom/main.xml</include>
   </subset>
 
-  <!-- Font size selection (first = automatic default) -->
+  <!-- Font size selection -->
   <subset name="FontSize" displayName="Font Size">
     <include name="medium">./settings/fontSize/medium.xml</include>
     <include name="small">./settings/fontSize/small.xml</include>
     <include name="large">./settings/fontSize/large.xml</include>
-  </subset>
-
-  <!-- Status bar visibility -->
-  <subset name="Status Bar" displayName="Status Bar">
-    <include name="full" displayName="Full (Clock + Battery + Network)">./settings/display/statusbar/full.xml</include>
-    <include name="clock" displayName="Clock only">./settings/display/statusbar/clock.xml</include>
-    <include name="hidden" displayName="Hidden">./settings/display/statusbar/hidden.xml</include>
   </subset>
 
   <!-- Aspect ratio -->
@@ -40,15 +33,11 @@
     <include name="4-3" displayName="4:3">./settings/aspect/4-3.xml</include>
   </subset>
 
-  <!-- Apply color scheme to all elements -->
+  <!-- Apply color scheme to elements -->
   <include>./settings/colors/scheme.xml</include>
 
-  <!-- View definitions -->
-  <include>./settings/display/view-general.xml</include>
+  <!-- View definitions (only two: system carousel + flix) -->
   <include>./settings/display/view-system.xml</include>
-  <include>./settings/display/view-grid.xml</include>
   <include>./settings/display/view-flix.xml</include>
-  <include>./settings/display/view-gamecarousel.xml</include>
-  <include>./settings/display/view-menu.xml</include>
 
 </theme>

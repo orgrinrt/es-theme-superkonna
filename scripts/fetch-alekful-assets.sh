@@ -114,44 +114,8 @@ if [ "$SOUNDS_ONLY" = false ]; then
   fi
 fi
 
-# ── System logos (fill gaps — only copy if we don't already have one) ──
-if [ "$SOUNDS_ONLY" = false ]; then
-  LOGO_SRC="$SOURCE_DIR/assets/logos"
-  LOGO_DST="$THEME_DIR/assets/logos"
-
-  if [ -d "$LOGO_SRC" ]; then
-    mkdir -p "$LOGO_DST"
-    logo_count=0
-
-    for f in "$LOGO_SRC"/*.jpg "$LOGO_SRC"/*.png "$LOGO_SRC"/*.svg; do
-      [ -f "$f" ] || continue
-      name="$(basename "$f")"
-      stem="${name%.*}"
-
-      # Only copy if no SVG logo exists (SVG is preferred — JPG fallbacks look square/ugly)
-      if [ ! -f "$LOGO_DST/$stem.svg" ]; then
-        # Don't copy JPG if SVG exists (SVG always wins)
-        cp "$f" "$LOGO_DST/$name"
-        logo_count=$((logo_count + 1))
-      fi
-    done
-    echo "OK: Copied $logo_count missing logos"
-  fi
-fi
-
-# ── Clean up JPG/PNG logos where SVG exists (SVG always preferred) ──
-if [ -d "$THEME_DIR/assets/logos" ]; then
-  cleaned=0
-  for jpg in "$THEME_DIR/assets/logos"/*.jpg "$THEME_DIR/assets/logos"/*.png; do
-    [ -f "$jpg" ] || continue
-    stem="$(basename "$jpg")"
-    stem="${stem%.*}"
-    if [ -f "$THEME_DIR/assets/logos/$stem.svg" ]; then
-      rm "$jpg"
-      cleaned=$((cleaned + 1))
-    fi
-  done
-  [ "$cleaned" -gt 0 ] && echo "OK: Cleaned $cleaned redundant JPG/PNG logos (SVG exists)"
-fi
+# NOTE: Alekfull logos are NOT fetched — they use baked-in card backgrounds
+# which is the wrong approach. Logos come from saalis (primary), Canvas, and
+# Elementerial via their respective fetch scripts.
 
 echo "Done."

@@ -2,3 +2,9 @@
 generated/*
 !generated/.gitkeep
 projects/overlay/preview-output/
+
+# Art assets — populated on-box via fetch scripts (scripts/fetch-*.sh)
+# and deploy pipeline. Never committed due to unclear licensing/credits.
+assets/logos/
+assets/systems/
+assets/sounds/
