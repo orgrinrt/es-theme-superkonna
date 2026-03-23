@@ -67,7 +67,20 @@ We do not copy implementations from other themes. We learn ideas from their visu
 | `exists("path")` / `!exists()` | Let missing images fail gracefully; ES has built-in `logoText` fallback |
 | `formatseconds()` | Not available |
 | Ternary expressions in `<text>` | Not available |
-| `<rectangle>` element | Use 1x1 white PNG tinted via `<color>` |
+| `<rectangle>` element | Use 64x64 white PNG tinted via `<color>` |
+| `${system.theme}` in `<include>` | Does NOT resolve — per-system includes silently fail |
+| `{system:theme}` in `<path>` inside `<itemTemplate>` | Does NOT resolve — use `{system:image}` instead |
+
+### Confirmed Working in itemTemplate (tested 2026-03-23)
+
+| Feature | Notes |
+|---------|-------|
+| `{system:image}` in `<path>` | Resolves to the system's logo path (defined by `<image name="logo">`) |
+| Static `<path>` | `./assets/card-bg.png` etc. — always works |
+| `<roundCorners>` | Works on static images; may drop on selected card during scale animation |
+| `<storyboard event="activate/deactivate">` | Works — scale, opacity, x position all animate |
+| `<color>` tinting | Works on static images |
+| `${variable}` references | Static theme variables resolve correctly |
 
 ## System View Design
 

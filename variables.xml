@@ -20,19 +20,19 @@
     <fontSizeCaption>0.025</fontSizeCaption>
 
     <!-- ── Carousel geometry ─────────────────────────────────── -->
-    <carouselWidth>1.76</carouselWidth>
-    <carouselXOffset>-0.38</carouselXOffset>
+    <carouselWidth>2.5</carouselWidth>
+    <carouselXOffset>-0.85</carouselXOffset>
     <carouselY>0.72</carouselY>
     <carouselH>0.22</carouselH>
     <cardLogoSize>0.18 0.22</cardLogoSize>
-    <cardLogoScale>1.2</cardLogoScale>
-    <cardMaxVisible>7</cardMaxVisible>
+    <cardLogoScale>1.0</cardLogoScale>
+    <cardMaxVisible>11</cardMaxVisible>
 
     <!-- ── Card styling ──────────────────────────────────────── -->
-    <cardCornerRadius>20</cardCornerRadius>
+    <cardCornerRadius>16</cardCornerRadius>
     <cardArtSize>0.92 0.92</cardArtSize>
-    <cardLogoMaxSize>0.7 0.5</cardLogoMaxSize>
-    <cardLogoY>0.45</cardLogoY>
+    <cardLogoMaxSize>0.85 0.3</cardLogoMaxSize>
+    <cardLogoY>0.5</cardLogoY>
 
     <!-- ── Animation timing (ms) ─────────────────────────────── -->
     <animFast>150</animFast>

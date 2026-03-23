@@ -36,8 +36,9 @@
   <!-- Apply color scheme to elements -->
   <include>./settings/colors/scheme.xml</include>
 
-  <!-- View definitions (only two: system carousel + flix) -->
+  <!-- View definitions -->
   <include>./settings/display/view-system.xml</include>
+  <include>./settings/display/view-grid.xml</include>
   <include>./settings/display/view-flix.xml</include>
 
 </theme>

@@ -22,7 +22,19 @@
       <zIndex>-10</zIndex>
     </image>
 
-    <!-- System background art — fills screen, crossfade on change -->
+    <!-- Random game screenshot — fallback when no system art exists -->
+    <image name="bg_random" extra="true">
+      <path>{random:fanart}</path>
+      <path>{random:image}</path>
+      <path>{random:thumbnail}</path>
+      <origin>0.5 0.5</origin>
+      <pos>0.5 0.5</pos>
+      <minSize>1 1</minSize>
+      <linearSmooth>true</linearSmooth>
+      <zIndex>-9</zIndex>
+    </image>
+
+    <!-- System background art — fills screen, covers random image when present -->
     <image name="cover" extra="true">
       <path>./assets/systems/${system.theme}.jpg</path>
       <path>./assets/systems/${system.theme}.webp</path>
@@ -31,28 +43,17 @@
       <pos>0.5 0.5</pos>
       <minSize>1 1</minSize>
       <linearSmooth>true</linearSmooth>
-      <zIndex>-9</zIndex>
+      <zIndex>-8</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="1" duration="${animCrossfade}" mode="EaseOut"/>
       </storyboard>
-    </image>
-
-    <!-- Random game screenshot — layered behind main art for depth -->
-    <image name="bg_random" extra="true">
-      <path>{random:image}</path>
-      <origin>0.5 0.5</origin>
-      <pos>0.5 0.5</pos>
-      <minSize>1 1</minSize>
-      <opacity>0.3</opacity>
-      <linearSmooth>true</linearSmooth>
-      <zIndex>-8</zIndex>
     </image>
 
     <!-- Dark overlay for contrast -->
     <image name="bg_overlay" extra="true">
       <path>./assets/card-bg.png</path>
       <size>1 1</size>
-      <color>${bgColor}${percent.50}</color>
+      <color>${shadowColor}${percent.40}</color>
       <zIndex>-7</zIndex>
     </image>
 
@@ -89,15 +90,10 @@
       <systemInfoDelay>0</systemInfoDelay>
 
       <itemTemplate>
-        <!-- ── Whole-card scale animation ───────────────────── -->
-        <storyboard event="activate">
-          <animation property="scale" from="1" to="${cardActivateScale}" duration="${animFast}" mode="EaseOut"/>
-        </storyboard>
-        <storyboard event="deactivate">
-          <animation property="scale" from="${cardActivateScale}" to="1" duration="${animMedium}" mode="EaseOut"/>
-        </storyboard>
+        <!-- No template-level scale — it breaks roundCorners on the selected card.
+             The carousel's built-in logoScale handles the size pop natively. -->
 
-        <!-- Layer 1: Opaque card base (per-system color) -->
+        <!-- Layer 1: Opaque card base -->
         <image name="cardBg" extra="true">
           <path>./assets/card-bg.png</path>
           <pos>0.5 0.5</pos>
@@ -108,22 +104,7 @@
           <zIndex>1</zIndex>
         </image>
 
-        <!-- Layer 2: System art texture (faint, tinted to card color) -->
-        <image name="cardArt" extra="true">
-          <path>./assets/systems/{system:theme}.webp</path>
-          <path>./assets/systems/{system:theme}.jpg</path>
-          <path>./assets/systems/{system:theme}.png</path>
-          <pos>0.5 0.5</pos>
-          <origin>0.5 0.5</origin>
-          <maxSize>${cardArtSize}</maxSize>
-          <opacity>${artOverlayOpacity}</opacity>
-          <color>${cardSystemColor}</color>
-          <roundCorners>${cardCornerRadius}</roundCorners>
-          <linearSmooth>true</linearSmooth>
-          <zIndex>2</zIndex>
-        </image>
-
-        <!-- Layer 3: Gradient overlay (depth) -->
+        <!-- Layer 2: Gradient overlay (depth) -->
         <image name="cardGradient" extra="true">
           <path>./assets/card-gradient.png</path>
           <pos>0.5 0.5</pos>
@@ -131,10 +112,10 @@
           <size>1 1</size>
           <opacity>${gradientOverlayOpacity}</opacity>
           <roundCorners>${cardCornerRadius}</roundCorners>
-          <zIndex>3</zIndex>
+          <zIndex>2</zIndex>
         </image>
 
-        <!-- Layer 4: Glint sweep (horizontal highlight on activate) -->
+        <!-- Layer 3: Glint sweep (horizontal highlight on activate) -->
         <image name="cardGlint" extra="true">
           <path>./assets/glint.png</path>
           <pos>0.5 0.5</pos>
@@ -142,7 +123,7 @@
           <size>1 1</size>
           <opacity>0</opacity>
           <roundCorners>${cardCornerRadius}</roundCorners>
-          <zIndex>4</zIndex>
+          <zIndex>3</zIndex>
           <storyboard event="activate">
             <animation property="x" from="-0.3" to="1.3" duration="500" mode="Linear"/>
             <animation property="opacity" from="0" to="${glintPeakOpacity}" duration="150" mode="EaseOut"/>
@@ -153,10 +134,10 @@
           </storyboard>
         </image>
 
-        <!-- Layer 5: System logo (centered, clean SVG) -->
+        <!-- Layer 4: System logo — try {system:image} binding (ES resolves natively) -->
+        <!-- DEBUG: testing multiple binding syntaxes to find what works -->
         <image name="theLogo">
-          <path>./assets/logos/{system:theme}.svg</path>
-          <path>./assets/logos/{system:theme}.png</path>
+          <path>{system:image}</path>
           <pos>0.5 ${cardLogoY}</pos>
           <origin>0.5 0.5</origin>
           <maxSize>${cardLogoMaxSize}</maxSize>
@@ -165,6 +146,12 @@
         </image>
       </itemTemplate>
     </carousel>
+
+    <!-- System logo path resolution (ES uses this for {system:image} binding) -->
+    <image name="logo">
+      <path>./assets/logos/${system.theme}.svg</path>
+      <path>./assets/logos/${system.theme}.png</path>
+    </image>
 
     <!-- logoText fallback (when no logo image exists at all) -->
     <text name="logoText">
@@ -195,7 +182,7 @@
        ══════════════════════════════════════════════════════════ -->
 
   <view name="screen">
-    <!-- Top bar background -->
+    <!-- Top bar background — frosted glass pill -->
     <image name="topbar_bg" extra="true">
       <path>./assets/card-bg.png</path>
       <pos>0.015 0.012</pos>
@@ -204,6 +191,24 @@
       <roundCorners>8</roundCorners>
       <zIndex>9</zIndex>
     </image>
+
+    <!-- Bottom bar background — matching frosted glass pill for help prompts -->
+    <image name="bottombar_bg" extra="true">
+      <path>./assets/card-bg.png</path>
+      <pos>0.015 0.935</pos>
+      <origin>0 0</origin>
+      <size>0.97 0.055</size>
+      <roundCorners>8</roundCorners>
+      <zIndex>9</zIndex>
+    </image>
+
+    <!-- Help system styling -->
+    <helpsystem name="help">
+      <pos>0.04 0.955</pos>
+      <origin>0 0.5</origin>
+      <fontSize>${fontSizeCaption}</fontSize>
+      <fontPath>${fontLight}</fontPath>
+    </helpsystem>
 
     <!-- Controller activity -->
     <controllerActivity name="controllerActivity">

@@ -16,7 +16,7 @@
     <shadowColor>8090A0</shadowColor>
     <subtleColor>6B7280</subtleColor>
 
-    <!-- Default card base (overridden per-system via metadata) -->
+    <!-- Default card base (metadata includes don't work in Batocera ES) -->
     <cardSystemColor>1E2840</cardSystemColor>
   </variables>
 </theme>

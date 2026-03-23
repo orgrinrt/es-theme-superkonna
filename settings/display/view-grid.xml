@@ -1,0 +1,33 @@
+<!--
+  Theme: Superkonna — Grid base view
+  Minimal grid definition required for flix customView to inherit from.
+  This view is not intended to be used directly — only flix inherits it.
+-->
+<theme>
+  <formatVersion>7</formatVersion>
+
+  <view name="grid">
+    <imagegrid name="gamegrid">
+      <pos>0 0.15</pos>
+      <size>1 0.80</size>
+      <imageSource>thumbnail</imageSource>
+      <scrollDirection>horizontal</scrollDirection>
+      <animateSelection>true</animateSelection>
+      <autoLayoutSelectedZoom>1.05</autoLayoutSelectedZoom>
+      <linearSmooth>true</linearSmooth>
+      <zIndex>5</zIndex>
+    </imagegrid>
+
+    <image name="logo">
+      <path>./assets/logos/${system.theme}.svg</path>
+      <path>./assets/logos/${system.theme}.png</path>
+    </image>
+
+    <text name="logoText">
+      <fontPath>${fontDisplay}</fontPath>
+      <fontSize>${fontSizeH3}</fontSize>
+      <alignment>center</alignment>
+      <color>${fgColor}</color>
+    </text>
+  </view>
+</theme>

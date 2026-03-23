@@ -1,6 +1,6 @@
 <!--
   Theme: Superkonna — Flix view
-  Netflix-inspired game browser: full-screen art, gradient, cover rail, metadata.
+  Netflix-inspired game browser: full-screen fanart, gradient, cover rail, metadata.
   Inherits grid view. See DESIGN.md for architecture.
 -->
 <theme>
@@ -9,7 +9,8 @@
   <customView name="flix" inherits="grid">
 
     <!-- ═══════════════════════════════════════════════════════════
-         BACKGROUND: Selected game art + video
+         BACKGROUND: Selected game fanart + video
+         Uses md_image for fanart (full-screen), falls back gracefully.
          ═══════════════════════════════════════════════════════════ -->
 
     <image name="md_image">
@@ -58,42 +59,53 @@
       <path>./assets/fade-ver.png</path>
       <origin>0 0</origin>
       <pos>0 0</pos>
-      <size>1 0.20</size>
-      <color>${fgColor}${percent.40}</color>
+      <size>1 0.15</size>
+      <color>${fgColor}${percent.30}</color>
       <zIndex>1</zIndex>
     </image>
 
     <!-- ═══════════════════════════════════════════════════════════
-         GAME LOGO: Top left, entrance animation
+         SYSTEM LOGO: Small, top-left corner, subtle
          ═══════════════════════════════════════════════════════════ -->
 
-    <image name="md_marquee">
-      <pos>0.05 0.06</pos>
+    <image name="logo">
+      <pos>0.03 0.03</pos>
       <origin>0 0</origin>
-      <maxSize>0.32 0.13</maxSize>
+      <maxSize>0.10 0.04</maxSize>
+      <opacity>0.5</opacity>
+      <linearSmooth>true</linearSmooth>
+      <zIndex>6</zIndex>
+    </image>
+
+    <!-- Game marquee/logo — below system logo -->
+    <image name="md_marquee">
+      <pos>0.05 0.08</pos>
+      <origin>0 0</origin>
+      <maxSize>0.28 0.10</maxSize>
       <linearSmooth>true</linearSmooth>
       <zIndex>6</zIndex>
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="80" mode="Linear"/>
         <animation property="opacity" from="0" to="1" begin="200" duration="300" mode="EaseOut"/>
-        <animation property="y" from="0.08" to="0.06" begin="200" duration="350" mode="EaseOut"/>
+        <animation property="y" from="0.10" to="0.08" begin="200" duration="350" mode="EaseOut"/>
       </storyboard>
     </image>
 
     <!-- ═══════════════════════════════════════════════════════════
-         COVER RAIL: Horizontal strip at bottom
+         COVER RAIL: Vertical CD-box style cards at bottom
          ═══════════════════════════════════════════════════════════ -->
 
     <imagegrid name="gamegrid">
-      <pos>0.03 0.74</pos>
-      <size>0.94 0.20</size>
+      <pos>0.02 0.68</pos>
+      <size>0.96 0.28</size>
       <imageSource>thumbnail</imageSource>
       <scrollDirection>horizontal</scrollDirection>
       <autoLayout>8 1</autoLayout>
+      <cellProportion>0.7</cellProportion>
       <animateSelection>true</animateSelection>
-      <autoLayoutSelectedZoom>1.05</autoLayoutSelectedZoom>
-      <padding>0.006 0.008</padding>
-      <margin>0.004 0.006</margin>
+      <autoLayoutSelectedZoom>1.08</autoLayoutSelectedZoom>
+      <padding>0.005 0.006</padding>
+      <margin>0.003 0.005</margin>
       <scrollLoop>true</scrollLoop>
       <linearSmooth>true</linearSmooth>
       <zIndex>5</zIndex>
@@ -106,23 +118,23 @@
     </gridtile>
 
     <gridtile name="default">
-      <imageColor>${fgColor}${percent.80}</imageColor>
+      <imageColor>FFFFFFCC</imageColor>
       <backgroundColor>00000000</backgroundColor>
-      <backgroundCornerSize>0.006</backgroundCornerSize>
+      <backgroundCornerSize>0.008</backgroundCornerSize>
     </gridtile>
 
     <gridtile name="selected">
       <imageColor>FFFFFFFF</imageColor>
       <backgroundColor>${cardColor}${percent.10}</backgroundColor>
-      <backgroundCornerSize>0.006</backgroundCornerSize>
+      <backgroundCornerSize>0.008</backgroundCornerSize>
     </gridtile>
 
     <image name="gridtile.image">
-      <roundCorners>0.006</roundCorners>
+      <roundCorners>0.008</roundCorners>
     </image>
 
     <image name="gridtile.image:selected">
-      <roundCorners>0.006</roundCorners>
+      <roundCorners>0.008</roundCorners>
       <saturation>1.1</saturation>
     </image>
 
@@ -140,8 +152,8 @@
 
     <text name="md_name">
       <visible>true</visible>
-      <pos>0.05 0.50</pos>
-      <size>0.7 0.07</size>
+      <pos>0.05 0.42</pos>
+      <size>0.55 0.07</size>
       <fontSize>${fontSizeH1}</fontSize>
       <fontPath>${fontDisplay}</fontPath>
       <forceUppercase>0</forceUppercase>
@@ -152,14 +164,14 @@
       <storyboard>
         <animation property="opacity" from="0" to="0" duration="80" mode="Linear"/>
         <animation property="opacity" from="0" to="1" begin="100" duration="${animMedium}" mode="EaseOut"/>
-        <animation property="y" from="0.52" to="0.50" begin="100" duration="300" mode="EaseOut"/>
+        <animation property="y" from="0.44" to="0.42" begin="100" duration="300" mode="EaseOut"/>
       </storyboard>
     </text>
 
     <text name="md_genre">
       <visible>true</visible>
-      <pos>0.05 0.59</pos>
-      <size>0.5 0.025</size>
+      <pos>0.05 0.51</pos>
+      <size>0.4 0.025</size>
       <fontSize>${fontSizeCaption}</fontSize>
       <fontPath>${fontBody}</fontPath>
       <forceUppercase>1</forceUppercase>
@@ -173,11 +185,11 @@
 
     <text name="md_description">
       <visible>true</visible>
-      <pos>0.05 0.63</pos>
-      <size>0.55 0.08</size>
+      <pos>0.05 0.55</pos>
+      <size>0.50 0.10</size>
       <fontSize>${fontSizeCaption}</fontSize>
       <fontPath>${fontLight}</fontPath>
-      <lineSpacing>1.5</lineSpacing>
+      <lineSpacing>1.4</lineSpacing>
       <color>${fgColor}${percent.40}</color>
       <zIndex>6</zIndex>
       <storyboard>
@@ -188,11 +200,11 @@
 
     <text name="md_developer">
       <visible>true</visible>
-      <pos>0.65 0.59</pos>
+      <pos>0.05 0.505</pos>
       <size>0.3 0.025</size>
       <fontSize>${fontSizeCaption}</fontSize>
       <fontPath>${fontLight}</fontPath>
-      <alignment>right</alignment>
+      <alignment>left</alignment>
       <color>${fgColor}${percent.30}</color>
       <zIndex>6</zIndex>
       <storyboard>
@@ -204,14 +216,14 @@
     <rating name="md_rating">
       <visible>true</visible>
       <origin>0 0.5</origin>
-      <pos>0.05 0.575</pos>
+      <pos>0.05 0.495</pos>
       <size>0.06 0.015</size>
       <color>${mainColor}</color>
       <unfilledColor>${fgColor}${percent.10}</unfilledColor>
       <zIndex>6</zIndex>
     </rating>
 
-    <!-- Hide everything we don't show -->
+    <!-- Hide everything else -->
     <text name="logoText">
       <visible>false</visible>
     </text>
