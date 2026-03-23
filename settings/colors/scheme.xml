@@ -38,10 +38,6 @@
       <color>${cardColor}${percent.70}</color>
     </image>
 
-    <image name="bottombar_bg" extra="true">
-      <color>${cardColor}${percent.70}</color>
-    </image>
-
     <helpsystem name="help">
       <textColor>${fgColor}${percent.80}</textColor>
       <iconColor>${subtleColor}${percent.60}</iconColor>

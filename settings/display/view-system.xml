@@ -11,18 +11,22 @@
 
     <!-- ══════════════════════════════════════════════════════════
          BACKGROUND: Full-screen system art + overlays
-         Three layers: art, darken overlay, bottom vignette
          ══════════════════════════════════════════════════════════ -->
 
-    <!-- Fallback solid background (when no system art exists) -->
+    <!-- Background layers (deepest to shallowest):
+         -10: fallback gradient (always renders, covers empty state)
+         -9:  random game screenshot (for systems with scraped media)
+         -8:  system-specific art (highest priority, covers everything below) -->
+
     <image name="bg_fallback" extra="true">
-      <path>./assets/card-bg.png</path>
-      <size>1 1</size>
-      <color>182235</color>
+      <path>./assets/fallback-bg.png</path>
+      <origin>0.5 0.5</origin>
+      <pos>0.5 0.5</pos>
+      <minSize>1 1</minSize>
+      <linearSmooth>true</linearSmooth>
       <zIndex>-10</zIndex>
     </image>
 
-    <!-- Random game screenshot — fallback when no system art exists -->
     <image name="bg_random" extra="true">
       <path>{random:fanart}</path>
       <path>{random:image}</path>
@@ -34,10 +38,9 @@
       <zIndex>-9</zIndex>
     </image>
 
-    <!-- System background art — fills screen, covers random image when present -->
     <image name="cover" extra="true">
-      <path>./assets/systems/${system.theme}.jpg</path>
       <path>./assets/systems/${system.theme}.webp</path>
+      <path>./assets/systems/${system.theme}.jpg</path>
       <path>./assets/systems/${system.theme}.png</path>
       <origin>0.5 0.5</origin>
       <pos>0.5 0.5</pos>
@@ -57,7 +60,7 @@
       <zIndex>-7</zIndex>
     </image>
 
-    <!-- Bottom vignette — soft gradient for depth at carousel area -->
+    <!-- Bottom vignette -->
     <image name="bg_vignette" extra="true">
       <path>./assets/fade-ver.png</path>
       <origin>0 1</origin>
@@ -70,7 +73,6 @@
 
     <!-- ══════════════════════════════════════════════════════════
          CAROUSEL: Composited card stack via itemTemplate
-         Transparent carousel — all visuals from the template.
          ══════════════════════════════════════════════════════════ -->
 
     <carousel name="systemcarousel">
@@ -90,16 +92,13 @@
       <systemInfoDelay>0</systemInfoDelay>
 
       <itemTemplate>
-        <!-- No template-level scale — it breaks roundCorners on the selected card.
-             The carousel's built-in logoScale handles the size pop natively. -->
-
-        <!-- Layer 1: Opaque card base -->
+        <!-- Layer 1: Opaque card base (per-system color PNG) -->
         <image name="cardBg" extra="true">
-          <path>./assets/card-bg.png</path>
+          <path>./assets/cards/${system.theme}.png</path>
+          <path>./assets/cards/_default.png</path>
           <pos>0.5 0.5</pos>
           <origin>0.5 0.5</origin>
           <size>1 1</size>
-          <color>${cardSystemColor}FF</color>
           <roundCorners>${cardCornerRadius}</roundCorners>
           <zIndex>1</zIndex>
         </image>
@@ -115,7 +114,7 @@
           <zIndex>2</zIndex>
         </image>
 
-        <!-- Layer 3: Glint sweep (horizontal highlight on activate) -->
+        <!-- Layer 3: Glint sweep (on activate only) -->
         <image name="cardGlint" extra="true">
           <path>./assets/glint.png</path>
           <pos>0.5 0.5</pos>
@@ -125,17 +124,16 @@
           <roundCorners>${cardCornerRadius}</roundCorners>
           <zIndex>3</zIndex>
           <storyboard event="activate">
-            <animation property="x" from="-0.3" to="1.3" duration="500" mode="Linear"/>
-            <animation property="opacity" from="0" to="${glintPeakOpacity}" duration="150" mode="EaseOut"/>
-            <animation property="opacity" from="${glintPeakOpacity}" to="0" begin="350" duration="150" mode="EaseIn"/>
+            <animation property="x" from="0" to="1.0" duration="400" mode="EaseOut"/>
+            <animation property="opacity" from="0" to="${glintPeakOpacity}" duration="100" mode="EaseOut"/>
+            <animation property="opacity" from="${glintPeakOpacity}" to="0" begin="250" duration="150" mode="EaseIn"/>
           </storyboard>
           <storyboard event="deactivate">
             <animation property="opacity" to="0" duration="0"/>
           </storyboard>
         </image>
 
-        <!-- Layer 4: System logo — try {system:image} binding (ES resolves natively) -->
-        <!-- DEBUG: testing multiple binding syntaxes to find what works -->
+        <!-- Layer 4: System logo -->
         <image name="theLogo">
           <path>{system:image}</path>
           <pos>0.5 ${cardLogoY}</pos>
@@ -147,13 +145,13 @@
       </itemTemplate>
     </carousel>
 
-    <!-- System logo path resolution (ES uses this for {system:image} binding) -->
+    <!-- Logo path resolution (ES uses this for {system:image}) -->
     <image name="logo">
       <path>./assets/logos/${system.theme}.svg</path>
       <path>./assets/logos/${system.theme}.png</path>
     </image>
 
-    <!-- logoText fallback (when no logo image exists at all) -->
+    <!-- logoText fallback -->
     <text name="logoText">
       <fontPath>${fontDisplay}</fontPath>
       <fontSize>${fontSizeH3}</fontSize>
@@ -162,7 +160,7 @@
       <color>EAEDF3</color>
     </text>
 
-    <!-- Hide all text elements — carousel is visual only -->
+    <!-- Hide all text -->
     <text name="systemName" extra="true">
       <visible>false</visible>
     </text>
@@ -178,11 +176,10 @@
   </view>
 
   <!-- ══════════════════════════════════════════════════════════
-       SCREEN VIEW: Minimal top bar
+       SCREEN VIEW: Top bar
        ══════════════════════════════════════════════════════════ -->
 
   <view name="screen">
-    <!-- Top bar background — frosted glass pill -->
     <image name="topbar_bg" extra="true">
       <path>./assets/card-bg.png</path>
       <pos>0.015 0.012</pos>
@@ -192,25 +189,6 @@
       <zIndex>9</zIndex>
     </image>
 
-    <!-- Bottom bar background — matching frosted glass pill for help prompts -->
-    <image name="bottombar_bg" extra="true">
-      <path>./assets/card-bg.png</path>
-      <pos>0.015 0.935</pos>
-      <origin>0 0</origin>
-      <size>0.97 0.055</size>
-      <roundCorners>8</roundCorners>
-      <zIndex>9</zIndex>
-    </image>
-
-    <!-- Help system styling -->
-    <helpsystem name="help">
-      <pos>0.04 0.955</pos>
-      <origin>0 0.5</origin>
-      <fontSize>${fontSizeCaption}</fontSize>
-      <fontPath>${fontLight}</fontPath>
-    </helpsystem>
-
-    <!-- Controller activity -->
     <controllerActivity name="controllerActivity">
       <origin>0 0.5</origin>
       <pos>0.04 0.039</pos>
@@ -219,7 +197,6 @@
       <imagePath>./assets/pin.svg</imagePath>
     </controllerActivity>
 
-    <!-- Clock -->
     <text name="clock">
       <origin>1 0.5</origin>
       <pos>0.97 0.039</pos>
@@ -229,12 +206,17 @@
       <alignment>right</alignment>
     </text>
 
-    <!-- Battery -->
     <batteryIndicator name="batteryIndicator">
       <origin>1 0.5</origin>
       <pos>0.92 0.039</pos>
       <size>0.016</size>
     </batteryIndicator>
+
+    <!-- Help system -->
+    <helpsystem name="help">
+      <fontSize>${fontSizeCaption}</fontSize>
+      <fontPath>${fontLight}</fontPath>
+    </helpsystem>
   </view>
 
 </theme>
