@@ -170,7 +170,8 @@
   <!-- System carousel colors -->
   <view name="system">
     <carousel name="systemcarousel">
-      <color>${bgColor}00</color>
+      <color>${cardColor}${percent.40}</color>
+      <selectedColor>${cardColor}${percent.60}</selectedColor>
     </carousel>
 
     <text name="systemName">
