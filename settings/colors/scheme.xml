@@ -38,9 +38,10 @@
       <color>${cardColor}${percent.70}</color>
     </image>
 
+    <!-- Built-in helpsystem hidden — custom hint strips used instead -->
     <helpsystem name="help">
-      <textColor>${fgColor}${percent.80}</textColor>
-      <iconColor>${subtleColor}${percent.60}</iconColor>
+      <textColor>00000000</textColor>
+      <iconColor>00000000</iconColor>
     </helpsystem>
   </view>
 
